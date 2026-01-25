@@ -79,13 +79,16 @@
   transform: translateX(-50%) translateY(0);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .chore-list-container {
     padding: 16px;
     padding-bottom: 100px;
   }
 
   .chore-columns {
+    flex-direction: column;
     gap: 16px;
+    overflow-x: visible;
+    align-items: stretch;
   }
 }

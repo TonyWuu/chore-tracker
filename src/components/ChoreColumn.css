@@ -436,8 +436,14 @@
 
 @media (max-width: 768px) {
   .chore-column {
-    min-width: 300px;
+    min-width: unset;
     max-width: none;
-    width: 88vw;
+    width: 100%;
+    max-height: none;
+  }
+
+  .column-items {
+    max-height: none;
+    overflow-y: visible;
   }
 }
