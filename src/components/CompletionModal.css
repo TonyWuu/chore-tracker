@@ -1,5 +1,5 @@
 .completion-modal {
-  background: #fff;
+  background: var(--bg-secondary);
   border-radius: 16px;
   padding: 24px;
   width: 100%;
@@ -11,7 +11,7 @@
 
 .completion-modal h3 {
   margin: 0 0 6px;
-  color: #1f1635;
+  color: var(--text-primary);
   font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -19,7 +19,7 @@
 
 .completion-modal p {
   margin: 0 0 20px;
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 14px;
 }
 
@@ -36,21 +36,21 @@
   align-items: center;
   gap: 8px;
   padding: 20px 16px;
-  background: #fafafa;
-  border: 2px solid #e5e7eb;
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-medium);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .completion-option:hover {
-  border-color: #7c3aed;
-  background: #f5f3ff;
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
 }
 
 .completion-option.collaborative:hover {
-  border-color: #22c55e;
-  background: #f0fdf4;
+  border-color: var(--status-comfortable-dot);
+  background: var(--status-comfortable-bg);
 }
 
 .option-icon {
@@ -58,7 +58,7 @@
 }
 
 .option-text {
-  color: #1f1635;
+  color: var(--text-primary);
   font-weight: 600;
   font-size: 14px;
 }
@@ -66,10 +66,10 @@
 .completion-cancel {
   width: 100%;
   padding: 12px;
-  background: #fafafa;
-  border: 1px solid #e5e7eb;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-medium);
   border-radius: 10px;
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -77,6 +77,6 @@
 }
 
 .completion-cancel:hover {
-  background: #f3f4f6;
-  color: #4b5563;
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }

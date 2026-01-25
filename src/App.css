@@ -1,6 +1,6 @@
 .app {
   min-height: 100vh;
-  background: #f8f6fc;
+  background: var(--bg-primary);
 }
 
 .loading-screen,
@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8f6fc;
+  background: var(--bg-primary);
 }
 
 .loading-content {
@@ -19,8 +19,8 @@
 .loading-spinner {
   width: 36px;
   height: 36px;
-  border: 3px solid #e9e3f5;
-  border-top-color: #7c3aed;
+  border: 3px solid var(--border-medium);
+  border-top-color: var(--accent-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }

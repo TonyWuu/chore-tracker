@@ -3,10 +3,12 @@ import './Header.css';
 
 interface HeaderProps {
   user: User;
+  theme: 'light' | 'dark';
+  onToggleTheme: () => void;
   onLogout: () => void;
 }
 
-export function Header({ user, onLogout }: HeaderProps) {
+export function Header({ user, theme, onToggleTheme, onLogout }: HeaderProps) {
   return (
     <header className="header">
       <h1 className="header-title">
@@ -14,6 +16,13 @@ export function Header({ user, onLogout }: HeaderProps) {
         <span className="title-text">Choresy</span>
       </h1>
       <div className="header-user">
+        <button
+          onClick={onToggleTheme}
+          className="theme-toggle"
+          title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+        >
+          {theme === 'light' ? '🌙' : '☀️'}
+        </button>
         {user.photoURL && (
           <img
             src={user.photoURL}

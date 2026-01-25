@@ -3,9 +3,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  background: #fff;
-  border-bottom: 1px solid rgba(124, 58, 237, 0.08);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
 }
 
 .header-title {
@@ -42,19 +42,39 @@
   gap: 12px;
 }
 
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--border-medium);
+  background: var(--bg-tertiary);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  transform: scale(1.05);
+}
+
 .header-avatar {
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  border: 2px solid #f3f0ff;
+  border: 2px solid var(--accent-bg);
 }
 
 .logout-button {
   padding: 8px 16px;
-  background: #fafafa;
-  border: 1px solid #e5e1eb;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-medium);
   border-radius: 8px;
-  color: #6b7280;
+  color: var(--text-muted);
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;
@@ -62,7 +82,7 @@
 }
 
 .logout-button:hover {
-  background: #f3f0ff;
-  border-color: #c4b5fd;
-  color: #7c3aed;
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
 }

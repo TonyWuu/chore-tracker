@@ -1,5 +1,5 @@
 .skip-modal {
-  background: #fff;
+  background: var(--bg-secondary);
   border-radius: 16px;
   padding: 24px;
   width: 100%;
@@ -10,7 +10,7 @@
 
 .skip-modal h3 {
   margin: 0 0 6px;
-  color: #1f1635;
+  color: var(--text-primary);
   font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -18,7 +18,7 @@
 
 .skip-modal p {
   margin: 0 0 20px;
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 14px;
 }
 
@@ -31,8 +31,8 @@
 
 .skip-option {
   padding: 16px;
-  background: #fafafa;
-  border: 2px solid #e5e7eb;
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-medium);
   border-radius: 12px;
   text-align: left;
   cursor: pointer;
@@ -40,13 +40,13 @@
 }
 
 .skip-option.reset:hover {
-  border-color: #7c3aed;
-  background: #f5f3ff;
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
 }
 
 .skip-option-title {
   display: block;
-  color: #1f1635;
+  color: var(--text-primary);
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 4px;
@@ -54,7 +54,7 @@
 
 .skip-option-desc {
   display: block;
-  color: #9ca3af;
+  color: var(--text-faint);
   font-size: 13px;
 }
 
@@ -67,23 +67,23 @@
 
 .skip-option.snooze input[type="date"] {
   padding: 10px 12px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
   border-radius: 8px;
-  color: #1f1635;
+  color: var(--text-primary);
   font-size: 14px;
   font-family: inherit;
 }
 
 .skip-option.snooze input[type="date"]:focus {
   outline: none;
-  border-color: #7c3aed;
+  border-color: var(--accent-primary);
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
 }
 
 .snooze-button {
   padding: 10px 16px;
-  background: #f59e0b;
+  background: var(--status-due-soon-dot);
   border: none;
   border-radius: 8px;
   color: #fff;
@@ -94,16 +94,16 @@
 }
 
 .snooze-button:hover {
-  background: #d97706;
+  opacity: 0.9;
 }
 
 .skip-cancel {
   width: 100%;
   padding: 12px;
-  background: #fafafa;
-  border: 1px solid #e5e7eb;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-medium);
   border-radius: 10px;
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -111,6 +111,6 @@
 }
 
 .skip-cancel:hover {
-  background: #f3f4f6;
-  color: #4b5563;
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }

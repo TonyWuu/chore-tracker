@@ -6,6 +6,7 @@ import { useAuth } from './hooks/useAuth';
 import { useChores } from './hooks/useChores';
 import { useCompletions } from './hooks/useCompletions';
 import { useCategories } from './hooks/useCategories';
+import { useTheme } from './hooks/useTheme';
 import { calculateChoreStatus, sortByPriority } from './lib/priority';
 import type { ChoreWithStatus, User } from './lib/types';
 import { Header } from './components/Header';
@@ -20,6 +21,7 @@ import './App.css';
 
 function App() {
   const { user, loading: authLoading, signIn, logOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const { chores, loading: choresLoading, addChore, updateChore, deleteChore } = useChores();
   const {
     completions,
@@ -254,7 +256,7 @@ function App() {
 
   return (
     <div className="app">
-      <Header user={user} onLogout={logOut} />
+      <Header user={user} theme={theme} onToggleTheme={toggleTheme} onLogout={logOut} />
 
       {isLoading ? (
         <div className="loading-content">

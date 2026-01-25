@@ -1,5 +1,5 @@
 .chore-column {
-  background: #fff;
+  background: var(--bg-secondary);
   border-radius: 16px;
   min-width: 320px;
   max-width: 380px;
@@ -7,9 +7,8 @@
   display: flex;
   flex-direction: column;
   max-height: calc(100vh - 140px);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04),
-              0 4px 12px rgba(124, 58, 237, 0.06);
-  border: 1px solid rgba(124, 58, 237, 0.08);
+  box-shadow: var(--shadow-sm), var(--shadow-md);
+  border: 1px solid var(--border-light);
 }
 
 .chore-column.completed {
@@ -21,8 +20,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  border-bottom: 1px solid rgba(124, 58, 237, 0.08);
-  background: #fff;
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-secondary);
   border-radius: 16px 16px 0 0;
 }
 
@@ -30,7 +29,7 @@
   margin: 0;
   font-size: 15px;
   font-weight: 600;
-  color: #1f1635;
+  color: var(--text-primary);
   letter-spacing: -0.01em;
 }
 
@@ -43,18 +42,18 @@
 }
 
 .column-title.editable:hover {
-  background: #f3f0ff;
+  background: var(--accent-bg);
 }
 
 .column-title-input {
   font-size: 15px;
   font-weight: 600;
-  color: #1f1635;
+  color: var(--text-primary);
   letter-spacing: -0.01em;
-  border: 1px solid #7c3aed;
+  border: 1px solid var(--accent-primary);
   border-radius: 6px;
   padding: 4px 8px;
-  background: #fff;
+  background: var(--bg-input);
   outline: none;
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
   width: auto;
@@ -68,8 +67,8 @@
 }
 
 .column-count {
-  background: #f3f0ff;
-  color: #6d28d9;
+  background: var(--accent-bg);
+  color: var(--accent-text);
   font-size: 12px;
   padding: 4px 10px;
   border-radius: 20px;
@@ -81,7 +80,7 @@
   height: 32px;
   border-radius: 10px;
   border: none;
-  background: #7c3aed;
+  background: var(--accent-primary);
   color: #fff;
   font-size: 20px;
   font-weight: 400;
@@ -94,7 +93,7 @@
 }
 
 .column-add-btn:hover {
-  background: #6d28d9;
+  background: var(--accent-secondary);
   transform: scale(1.05);
 }
 
@@ -106,9 +105,9 @@
   width: 32px;
   height: 32px;
   border-radius: 10px;
-  border: 1px solid #e5e1eb;
-  background: #fafafa;
-  color: #9ca3af;
+  border: 1px solid var(--border-medium);
+  background: var(--bg-tertiary);
+  color: var(--text-faint);
   font-size: 18px;
   cursor: pointer;
   display: flex;
@@ -119,9 +118,9 @@
 }
 
 .column-delete-btn:hover {
-  background: #fef2f2;
-  border-color: #fecaca;
-  color: #dc2626;
+  background: var(--delete-bg);
+  border-color: var(--delete-border);
+  color: var(--delete-text);
 }
 
 .column-delete-confirm {
@@ -141,7 +140,7 @@
 }
 
 .column-delete-yes {
-  background: #dc2626;
+  background: var(--delete-text);
   color: #fff;
 }
 
@@ -150,12 +149,12 @@
 }
 
 .column-delete-no {
-  background: #f3f4f6;
-  color: #4b5563;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
 }
 
 .column-delete-no:hover {
-  background: #e5e7eb;
+  background: var(--bg-hover);
 }
 
 .column-items {
@@ -168,21 +167,21 @@
 }
 
 .column-item {
-  background: #fafafa;
+  background: var(--bg-tertiary);
   border-radius: 12px;
   transition: all 0.15s ease;
   border: 1px solid transparent;
 }
 
 .column-item:hover {
-  background: #f5f3ff;
-  border-color: rgba(124, 58, 237, 0.12);
+  background: var(--bg-hover);
+  border-color: var(--border-light);
 }
 
 .column-item.expanded {
-  background: #f5f3ff;
-  border-color: rgba(124, 58, 237, 0.2);
-  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08);
+  background: var(--bg-hover);
+  border-color: var(--border-light);
+  box-shadow: var(--shadow-lg);
 }
 
 .column-item.item-completed {
@@ -205,22 +204,22 @@
 }
 
 .item-status.status-comfortable {
-  background: #22c55e;
+  background: var(--status-comfortable-dot);
   box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
 }
 
 .item-status.status-due-soon {
-  background: #f59e0b;
+  background: var(--status-due-soon-dot);
   box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
 }
 
 .item-status.status-overdue {
-  background: #ef4444;
+  background: var(--status-overdue-dot);
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
 }
 
 .item-status.status-severely-overdue {
-  background: #dc2626;
+  background: var(--status-severe-dot);
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.25);
   animation: pulse 2s infinite;
 }
@@ -241,7 +240,7 @@
 .item-name {
   font-size: 14px;
   font-weight: 500;
-  color: #1f1635;
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -258,28 +257,28 @@
 }
 
 .item-status-text.status-comfortable {
-  color: #15803d;
-  background: #dcfce7;
+  color: var(--status-comfortable-text);
+  background: var(--status-comfortable-bg);
 }
 
 .item-status-text.status-due-soon {
-  color: #b45309;
-  background: #fef3c7;
+  color: var(--status-due-soon-text);
+  background: var(--status-due-soon-bg);
 }
 
 .item-status-text.status-overdue {
-  color: #dc2626;
-  background: #fee2e2;
+  color: var(--status-overdue-text);
+  background: var(--status-overdue-bg);
 }
 
 .item-status-text.status-severely-overdue {
-  color: #991b1b;
-  background: #fee2e2;
+  color: var(--status-severe-text);
+  background: var(--status-severe-bg);
 }
 
 .item-details {
   padding: 0 16px 16px;
-  border-top: 1px solid rgba(124, 58, 237, 0.08);
+  border-top: 1px solid var(--border-light);
   margin-top: 4px;
   animation: slideDown 0.2s ease-out;
 }
@@ -311,34 +310,34 @@
 }
 
 .action-btn.edit {
-  background: #fff;
-  border: 1px solid #e5e1eb;
-  color: #6d28d9;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  color: var(--accent-text);
 }
 
 .action-btn.edit:hover {
-  background: #f5f3ff;
-  border-color: #c4b5fd;
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
 }
 
 .action-btn.skip {
-  background: #fffbeb;
-  border: 1px solid #fde68a;
-  color: #b45309;
+  background: var(--status-due-soon-bg);
+  border: 1px solid var(--status-due-soon-dot);
+  color: var(--status-due-soon-text);
 }
 
 .action-btn.skip:hover {
-  background: #fef3c7;
+  opacity: 0.8;
 }
 
 .action-btn.done {
-  background: #7c3aed;
+  background: var(--accent-primary);
   border: none;
   color: #fff;
 }
 
 .action-btn.done:hover {
-  background: #6d28d9;
+  background: var(--accent-secondary);
 }
 
 .item-history {
@@ -350,7 +349,7 @@
   justify-content: space-between;
   align-items: center;
   padding-bottom: 10px;
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -359,14 +358,14 @@
 
 .item-history .history-count {
   font-size: 11px;
-  color: #9ca3af;
+  color: var(--text-faint);
   text-transform: none;
   font-weight: 500;
   letter-spacing: 0;
 }
 
 .item-history .history-empty {
-  color: #9ca3af;
+  color: var(--text-faint);
   font-size: 13px;
   margin: 0;
   padding: 4px 0;
@@ -386,8 +385,8 @@
   gap: 10px;
   padding: 8px 0;
   font-size: 13px;
-  color: #4b5563;
-  border-bottom: 1px solid #f3f4f6;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .item-history .history-list li:last-child {
@@ -395,27 +394,27 @@
 }
 
 .item-history .history-date {
-  color: #1f1635;
+  color: var(--text-primary);
   font-size: 13px;
   font-weight: 500;
 }
 
 .item-history .history-date.editable {
   cursor: pointer;
-  border-bottom: 1px dashed #a78bfa;
+  border-bottom: 1px dashed var(--accent-primary);
   transition: all 0.15s;
 }
 
 .item-history .history-date.editable:hover {
-  border-color: #7c3aed;
-  color: #7c3aed;
+  border-color: var(--accent-secondary);
+  color: var(--accent-primary);
 }
 
 .item-history .history-date-input {
-  background: #fff;
-  border: 1px solid #7c3aed;
+  background: var(--bg-input);
+  border: 1px solid var(--accent-primary);
   border-radius: 6px;
-  color: #1f1635;
+  color: var(--text-primary);
   padding: 6px 10px;
   font-size: 13px;
   font-family: inherit;
@@ -428,14 +427,14 @@
 
 .item-history .history-who {
   flex: 1;
-  color: #9ca3af;
+  color: var(--text-faint);
   font-size: 13px;
 }
 
 .item-history .history-delete {
   background: none;
   border: none;
-  color: #d1d5db;
+  color: var(--text-faint);
   font-size: 16px;
   cursor: pointer;
   padding: 2px 4px;
@@ -445,8 +444,8 @@
 }
 
 .item-history .history-delete:hover {
-  color: #ef4444;
-  background: #fef2f2;
+  color: var(--delete-text);
+  background: var(--delete-bg);
 }
 
 @media (max-width: 768px) {

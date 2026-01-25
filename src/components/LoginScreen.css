@@ -3,12 +3,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8f6fc;
+  background: var(--bg-primary);
   padding: 16px;
 }
 
 .login-card {
-  background: #fff;
+  background: var(--bg-secondary);
   border-radius: 16px;
   padding: 48px 40px;
   text-align: center;
@@ -21,13 +21,13 @@
   margin: 0 0 8px 0;
   font-size: 28px;
   font-weight: 700;
-  color: #7c3aed;
+  color: var(--accent-primary);
   letter-spacing: -0.02em;
 }
 
 .login-subtitle {
   margin: 0 0 32px 0;
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 15px;
 }
 
@@ -38,21 +38,21 @@
   gap: 12px;
   width: 100%;
   padding: 14px 20px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
   border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
-  color: #1f1635;
+  color: var(--text-primary);
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .google-sign-in-button:hover {
-  background: #fafafa;
-  border-color: #d1d5db;
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
 }
 
 .google-sign-in-button:active {
-  background: #f3f4f6;
+  background: var(--bg-hover);
 }
