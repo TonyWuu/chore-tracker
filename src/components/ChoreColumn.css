@@ -190,7 +190,7 @@
 
 .item-main {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   padding: 14px 16px;
   cursor: pointer;
@@ -201,6 +201,7 @@
   height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
+  margin-top: 5px;
 }
 
 .item-status.status-comfortable {
