@@ -1,4 +1,4 @@
-import { differenceInDays } from 'date-fns';
+import { differenceInCalendarDays } from 'date-fns';
 import type { Chore, Completion, ChoreWithStatus } from './types';
 
 export function calculateChoreStatus(
@@ -12,7 +12,7 @@ export function calculateChoreStatus(
     ? lastCompletion.completedAt.toDate()
     : chore.createdAt.toDate();
 
-  const daysSinceLastDone = differenceInDays(now, lastDoneDate);
+  const daysSinceLastDone = differenceInCalendarDays(now, lastDoneDate);
   const daysUntilOverdue = chore.maxDays - daysSinceLastDone;
 
   let status: ChoreWithStatus['status'];
