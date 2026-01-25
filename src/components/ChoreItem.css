@@ -1,17 +1,19 @@
 .chore-item {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.25rem;
+  flex-direction: column;
   background: #1f1f3a;
   border-radius: 12px;
   margin-bottom: 0.75rem;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: box-shadow 0.2s;
+  overflow: hidden;
 }
 
 .chore-item:hover {
-  transform: translateX(4px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.chore-item.expanded {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .chore-completed {
@@ -22,7 +24,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex: 1;
+  padding: 1rem 1.25rem;
   cursor: pointer;
   min-width: 0;
 }
@@ -34,25 +36,21 @@
   flex-shrink: 0;
 }
 
-.status-comfortable .chore-status-indicator,
 .chore-status-indicator.status-comfortable {
   background: #22c55e;
   box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
 }
 
-.status-due-soon .chore-status-indicator,
 .chore-status-indicator.status-due-soon {
   background: #f59e0b;
   box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
 }
 
-.status-overdue .chore-status-indicator,
 .chore-status-indicator.status-overdue {
   background: #ef4444;
   box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
 }
 
-.status-severely-overdue .chore-status-indicator,
 .chore-status-indicator.status-severely-overdue {
   background: #dc2626;
   box-shadow: 0 0 12px rgba(220, 38, 38, 0.6);
@@ -90,7 +88,6 @@
   font-size: 0.875rem;
   font-weight: 500;
   white-space: nowrap;
-  padding-right: 1rem;
 }
 
 .chore-status-text.status-comfortable {
@@ -109,10 +106,39 @@
   color: #dc2626;
 }
 
+.chore-expand-icon {
+  color: #6b7280;
+  font-size: 0.75rem;
+  transition: transform 0.2s;
+  margin-left: 0.5rem;
+}
+
+.chore-expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
 .chore-actions {
   display: flex;
   gap: 0.5rem;
   flex-shrink: 0;
+  padding: 0 1.25rem 1rem;
+}
+
+.edit-button {
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  border: 1px solid #4a4a6a;
+  border-radius: 8px;
+  color: #9ca3af;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.edit-button:hover {
+  background: #2d2d44;
+  color: #fff;
+  border-color: #6b7280;
 }
 
 .done-button {
@@ -147,22 +173,110 @@
   color: #fff;
 }
 
-@media (max-width: 600px) {
-  .chore-item {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
-  }
+.chore-history {
+  padding: 0 1.25rem 1rem;
+  border-top: 1px solid #2d2d44;
+  animation: slideDown 0.2s ease-out;
+}
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  color: #8888a0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.history-count {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: none;
+}
+
+.history-empty {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0;
+  padding: 0.5rem 0;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.history-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+  color: #a0a0b0;
+  border-bottom: 1px solid #2d2d44;
+}
+
+.history-list li:last-child {
+  border-bottom: none;
+}
+
+.history-date {
+  color: #fff;
+}
+
+.history-who {
+  flex: 1;
+  color: #8888a0;
+}
+
+.history-delete {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  line-height: 1;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.history-delete:hover {
+  opacity: 1;
+  color: #ef4444;
+}
+
+@media (max-width: 600px) {
   .chore-main {
-    flex-direction: row;
+    flex-wrap: wrap;
   }
 
   .chore-status-text {
-    padding-right: 0;
+    order: 3;
+    width: 100%;
+    margin-top: 0.25rem;
+    padding-left: 1.75rem;
   }
 
-  .chore-actions {
-    justify-content: flex-end;
+  .chore-expand-icon {
+    order: 4;
+    position: absolute;
+    right: 1.25rem;
   }
 }

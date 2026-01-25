@@ -1,4 +1,4 @@
-import type { ChoreWithStatus, User } from '../lib/types';
+import type { ChoreWithStatus, User, Completion } from '../lib/types';
 import { ChoreItem } from './ChoreItem';
 import './ChoreList.css';
 
@@ -6,9 +6,11 @@ interface ChoreListProps {
   chores: ChoreWithStatus[];
   users: Map<string, User>;
   currentUserId: string;
+  getCompletionHistory: (choreId: string) => Completion[];
   onMarkDone: (choreId: string) => void;
   onEdit: (chore: ChoreWithStatus) => void;
   onSkip: (choreId: string) => void;
+  onDeleteCompletion: (completionId: string) => void;
   onAddChore: () => void;
 }
 
@@ -16,9 +18,11 @@ export function ChoreList({
   chores,
   users,
   currentUserId,
+  getCompletionHistory,
   onMarkDone,
   onEdit,
   onSkip,
+  onDeleteCompletion,
   onAddChore
 }: ChoreListProps) {
   const activeChores = chores.filter(c => !(c.isOneTime && c.lastCompletion));
@@ -40,9 +44,11 @@ export function ChoreList({
                 chore={chore}
                 users={users}
                 currentUserId={currentUserId}
+                completionHistory={getCompletionHistory(chore.id)}
                 onMarkDone={onMarkDone}
                 onEdit={onEdit}
                 onSkip={onSkip}
+                onDeleteCompletion={onDeleteCompletion}
               />
             ))}
             {completedOneTimes.length > 0 && (
@@ -54,9 +60,11 @@ export function ChoreList({
                     chore={chore}
                     users={users}
                     currentUserId={currentUserId}
+                    completionHistory={getCompletionHistory(chore.id)}
                     onMarkDone={onMarkDone}
                     onEdit={onEdit}
                     onSkip={onSkip}
+                    onDeleteCompletion={onDeleteCompletion}
                   />
                 ))}
               </>

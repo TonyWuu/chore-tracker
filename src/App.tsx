@@ -177,9 +177,11 @@ function App() {
           chores={choresWithStatus}
           users={users}
           currentUserId={user.uid}
+          getCompletionHistory={getCompletionHistory}
           onMarkDone={handleMarkDone}
           onEdit={handleEditChore}
           onSkip={handleSkip}
+          onDeleteCompletion={deleteCompletion}
           onAddChore={handleAddChore}
         />
       )}
