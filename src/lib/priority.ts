@@ -22,7 +22,7 @@ export function calculateChoreStatus(
   if (chore.isOneTime && lastCompletion) {
     status = 'comfortable';
   } else if (!lastCompletion) {
-    status = 'overdue';
+    status = 'never-done';
   } else if (daysSinceLastDone < chore.minDays) {
     status = 'comfortable';
   } else if (daysSinceLastDone < chore.maxDays) {

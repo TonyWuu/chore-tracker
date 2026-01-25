@@ -224,6 +224,11 @@
   animation: pulse 2s infinite;
 }
 
+.item-status.status-never-done {
+  background: var(--text-muted);
+  box-shadow: 0 0 0 3px rgba(128, 128, 128, 0.15);
+}
+
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.2); }
@@ -292,6 +297,12 @@
 .item-status-text.status-severely-overdue {
   color: var(--status-severe-text);
   background: var(--status-severe-bg);
+}
+
+.item-status-text.status-never-done {
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-medium);
 }
 
 .item-details {

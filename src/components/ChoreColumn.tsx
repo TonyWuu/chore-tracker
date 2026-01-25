@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import type { ChoreWithStatus, User, Completion } from '../lib/types';
 import './ChoreColumn.css';
 
 interface ChoreColumnProps {
-  columnKey?: string;
   title: string;
   chores: ChoreWithStatus[];
   users: Map<string, User>;
@@ -19,8 +18,7 @@ interface ChoreColumnProps {
   onDeleteColumn?: () => void;
   onRenameColumn?: (newName: string) => void;
   isCompleted?: boolean;
-  isActiveColumn?: boolean;
-  onColumnActivate?: () => void;
+  collapseSignal?: number;
 }
 
 export function ChoreColumn({
@@ -38,13 +36,16 @@ export function ChoreColumn({
   onDeleteColumn,
   onRenameColumn,
   isCompleted = false,
-  isActiveColumn = true,
-  onColumnActivate
+  collapseSignal = 0
 }: ChoreColumnProps) {
   const [expandedChoreId, setExpandedChoreId] = useState<string | null>(null);
 
-  // Collapse when this column is no longer active
-  const effectiveExpandedId = isActiveColumn ? expandedChoreId : null;
+  // Collapse when signal changes (background was clicked)
+  useEffect(() => {
+    if (collapseSignal > 0) {
+      setExpandedChoreId(null);
+    }
+  }, [collapseSignal]);
   const [editingCompletionId, setEditingCompletionId] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -60,6 +61,8 @@ export function ChoreColumn({
         return 'status-overdue';
       case 'severely-overdue':
         return 'status-severely-overdue';
+      case 'never-done':
+        return 'status-never-done';
       default:
         return '';
     }
@@ -174,7 +177,7 @@ export function ChoreColumn({
 
       <div className="column-items">
         {chores.map((chore) => {
-          const isExpanded = effectiveExpandedId === chore.id;
+          const isExpanded = expandedChoreId === chore.id;
           const completionHistory = getCompletionHistory(chore.id);
           const choreCompleted = chore.isOneTime && chore.lastCompletion;
 
@@ -185,12 +188,7 @@ export function ChoreColumn({
             >
               <div
                 className="item-main"
-                onClick={() => {
-                  setExpandedChoreId(isExpanded ? null : chore.id);
-                  if (!isExpanded && onColumnActivate) {
-                    onColumnActivate();
-                  }
-                }}
+                onClick={() => setExpandedChoreId(isExpanded ? null : chore.id)}
               >
                 <div className={`item-status ${getStatusColor(chore.status)}`} />
                 <div className="item-content">

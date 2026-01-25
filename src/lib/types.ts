@@ -30,6 +30,6 @@ export interface ChoreWithStatus extends Chore {
   lastCompletion: Completion | null;
   daysSinceLastDone: number;
   daysUntilOverdue: number;
-  status: 'comfortable' | 'due-soon' | 'overdue' | 'severely-overdue';
+  status: 'comfortable' | 'due-soon' | 'overdue' | 'severely-overdue' | 'never-done';
   statusText: string;
 }
