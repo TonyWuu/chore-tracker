@@ -279,7 +279,7 @@
 .item-status-date {
   font-size: 11px;
   font-weight: 500;
-  opacity: 0.8;
+  color: var(--text-muted);
   padding-right: 2px;
 }
 
@@ -288,17 +288,9 @@
   background: var(--status-comfortable-bg);
 }
 
-.item-status-badge.status-comfortable .item-status-date {
-  color: var(--status-comfortable-text);
-}
-
 .item-status-badge.status-due-soon .item-status-text {
   color: var(--status-due-soon-text);
   background: var(--status-due-soon-bg);
-}
-
-.item-status-badge.status-due-soon .item-status-date {
-  color: var(--status-due-soon-text);
 }
 
 .item-status-badge.status-overdue .item-status-text {
@@ -306,17 +298,9 @@
   background: var(--status-overdue-bg);
 }
 
-.item-status-badge.status-overdue .item-status-date {
-  color: var(--status-overdue-text);
-}
-
 .item-status-badge.status-severely-overdue .item-status-text {
   color: var(--status-severe-text);
   background: var(--status-severe-bg);
-}
-
-.item-status-badge.status-severely-overdue .item-status-date {
-  color: var(--status-severe-text);
 }
 
 .item-details {
