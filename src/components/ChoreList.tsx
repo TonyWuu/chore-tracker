@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
 import type { ChoreWithStatus, User, Completion } from '../lib/types';
+import type { Category } from '../hooks/useCategories';
 import { ChoreColumn } from './ChoreColumn';
 import './ChoreList.css';
 
 interface ChoreListProps {
   chores: ChoreWithStatus[];
+  categories: Category[];
   users: Map<string, User>;
   currentUserId: string;
   getCompletionHistory: (choreId: string) => Completion[];
@@ -19,6 +21,7 @@ interface ChoreListProps {
 
 export function ChoreList({
   chores,
+  categories,
   users,
   currentUserId,
   getCompletionHistory,
@@ -33,10 +36,16 @@ export function ChoreList({
   const activeChores = chores.filter(c => !(c.isOneTime && c.lastCompletion));
   const completedOneTimes = chores.filter(c => c.isOneTime && c.lastCompletion);
 
-  // Group active chores by category
+  // Group active chores by category, including empty categories
   const groupedChores = useMemo(() => {
     const groups = new Map<string, ChoreWithStatus[]>();
 
+    // Start with all categories from the categories collection
+    for (const cat of categories) {
+      groups.set(cat.name, []);
+    }
+
+    // Add chores to their categories
     for (const chore of activeChores) {
       const category = chore.category || 'Uncategorized';
       if (!groups.has(category)) {
@@ -56,7 +65,7 @@ export function ChoreList({
       category,
       chores: groups.get(category)!
     }));
-  }, [activeChores]);
+  }, [activeChores, categories]);
 
   // Group completed one-time tasks
   const completedGroups = useMemo(() => {

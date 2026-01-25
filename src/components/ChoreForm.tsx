@@ -53,9 +53,8 @@ export function ChoreForm({
     e.preventDefault();
     if (!name.trim()) return;
 
-    // Category is required when creating new (not editing and no preset)
-    const finalCategory = presetCategory || category.trim();
-    if (!isEditing && !finalCategory) return;
+    // Use preset category or existing chore category
+    const finalCategory = presetCategory || chore?.category || '';
 
     const frequency = parseInt(frequencyStr) || 7;
     const minDays = frequency;
@@ -100,9 +99,7 @@ export function ChoreForm({
           <h2>
             {isEditing
               ? 'Edit Item'
-              : presetCategory
-                ? `Add to ${presetCategory}`
-                : 'Add Category'}
+              : `Add to ${presetCategory}`}
           </h2>
           <button className="close-button" onClick={onClose}>
             &times;
@@ -110,34 +107,16 @@ export function ChoreForm({
         </div>
 
         <form onSubmit={handleSubmit}>
-          {!presetCategory && (
-            <div className="form-group">
-              <label htmlFor="category">Category Name</label>
-              <input
-                type="text"
-                id="category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                placeholder="e.g., Vacuuming, Cleaning, Laundry"
-                autoFocus={!presetCategory && !isEditing}
-              />
-              <span className="helper-text">This will create a new column</span>
-            </div>
-          )}
-
           <div className="form-group">
-            <label htmlFor="name">{presetCategory ? 'Item Name' : 'First Item'}</label>
+            <label htmlFor="name">Item Name</label>
             <input
               type="text"
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., Living Room, Bedroom, Kitchen"
-              autoFocus={!!presetCategory || isEditing}
+              autoFocus
             />
-            <span className="helper-text">
-              {presetCategory ? 'Add a new item to this category' : 'Add your first item to this category'}
-            </span>
           </div>
 
           <div className="form-group checkbox-group">
@@ -263,11 +242,7 @@ export function ChoreForm({
                 Cancel
               </button>
               <button type="submit" className="save-button">
-                {isEditing
-                  ? 'Save'
-                  : presetCategory
-                    ? 'Add Item'
-                    : 'Create Category'}
+                {isEditing ? 'Save' : 'Add Item'}
               </button>
             </div>
           </div>

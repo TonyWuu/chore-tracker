@@ -4,12 +4,14 @@ import { db } from './lib/firebase';
 import { useAuth } from './hooks/useAuth';
 import { useChores } from './hooks/useChores';
 import { useCompletions } from './hooks/useCompletions';
+import { useCategories } from './hooks/useCategories';
 import { calculateChoreStatus, sortByPriority } from './lib/priority';
 import type { ChoreWithStatus, User } from './lib/types';
 import { Header } from './components/Header';
 import { LoginScreen } from './components/LoginScreen';
 import { ChoreList } from './components/ChoreList';
 import { ChoreForm } from './components/ChoreForm';
+import { CategoryForm } from './components/CategoryForm';
 import { CompletionModal } from './components/CompletionModal';
 import { SkipModal } from './components/SkipModal';
 import { Toast } from './components/Toast';
@@ -30,9 +32,11 @@ function App() {
     deleteCompletion,
     updateCompletionDate
   } = useCompletions();
+  const { categories, addCategory } = useCategories();
 
   const [users, setUsers] = useState<Map<string, User>>(new Map());
   const [showChoreForm, setShowChoreForm] = useState(false);
+  const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [editingChore, setEditingChore] = useState<ChoreWithStatus | null>(null);
   const [presetCategory, setPresetCategory] = useState<string | null>(null);
   const [completingChoreId, setCompletingChoreId] = useState<string | null>(null);
@@ -75,9 +79,13 @@ function App() {
   }, [users, user]);
 
   const handleAddCategory = () => {
-    setEditingChore(null);
-    setPresetCategory(null);
-    setShowChoreForm(true);
+    setShowCategoryForm(true);
+  };
+
+  const handleSaveCategory = async (name: string) => {
+    await addCategory(name);
+    setShowCategoryForm(false);
+    setToastMessage('Category created');
   };
 
   const handleAddToCategory = (category: string) => {
@@ -186,6 +194,7 @@ function App() {
       ) : (
         <ChoreList
           chores={choresWithStatus}
+          categories={categories}
           users={users}
           currentUserId={user.uid}
           getCompletionHistory={getCompletionHistory}
@@ -216,6 +225,13 @@ function App() {
             setEditingChore(null);
             setPresetCategory(null);
           }}
+        />
+      )}
+
+      {showCategoryForm && (
+        <CategoryForm
+          onSave={handleSaveCategory}
+          onClose={() => setShowCategoryForm(false)}
         />
       )}
 
