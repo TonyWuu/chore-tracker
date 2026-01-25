@@ -112,7 +112,7 @@ export function ChoreColumn({
         <div className="column-header-right">
           <span className="column-count">{chores.length}</span>
           {onAddItem && (
-            <button className="column-add-btn" onClick={onAddItem} title="Add item">
+            <button className="column-add-btn" onClick={onAddItem} title="Add task">
               +
             </button>
           )}

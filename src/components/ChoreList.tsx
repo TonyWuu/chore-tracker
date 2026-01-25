@@ -92,8 +92,8 @@ export function ChoreList({
     <div className="chore-list-container">
       {!hasContent ? (
         <div className="empty-state">
-          <p>No categories yet!</p>
-          <p className="empty-hint">Add your first category to get started.</p>
+          <p>No chores yet!</p>
+          <p className="empty-hint">Add your first chore to get started.</p>
         </div>
       ) : (
         <div className="chore-columns">
@@ -132,7 +132,7 @@ export function ChoreList({
         </div>
       )}
       <button className="add-chore-button" onClick={onAddCategory}>
-        + Add Category
+        + Add Chore
       </button>
     </div>
   );

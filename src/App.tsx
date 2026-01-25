@@ -85,7 +85,7 @@ function App() {
   const handleSaveCategory = async (name: string) => {
     await addCategory(name);
     setShowCategoryForm(false);
-    setToastMessage('Category created');
+    setToastMessage('Chore created');
   };
 
   const handleAddToCategory = (category: string) => {

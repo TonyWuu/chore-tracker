@@ -94,8 +94,8 @@ export function ChoreForm({
         <div className="modal-header">
           <h2>
             {isEditing
-              ? 'Edit Item'
-              : `Add to ${presetCategory}`}
+              ? 'Edit Task'
+              : `Add Task to ${presetCategory}`}
           </h2>
           <button className="close-button" onClick={onClose}>
             &times;
@@ -104,7 +104,7 @@ export function ChoreForm({
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="name">Item Name</label>
+            <label htmlFor="name">Task Name</label>
             <input
               type="text"
               id="name"
@@ -238,7 +238,7 @@ export function ChoreForm({
                 Cancel
               </button>
               <button type="submit" className="save-button">
-                {isEditing ? 'Save' : 'Add Item'}
+                {isEditing ? 'Save' : 'Add Task'}
               </button>
             </div>
           </div>

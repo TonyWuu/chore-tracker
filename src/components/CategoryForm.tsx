@@ -37,7 +37,7 @@ export function CategoryForm({ onSave, onClose }: CategoryFormProps) {
     >
       <div className="modal-content" onMouseDown={() => setMouseDownOnOverlay(false)}>
         <div className="modal-header">
-          <h2>Add Category</h2>
+          <h2>Add Chore</h2>
           <button className="close-button" onClick={onClose}>
             &times;
           </button>
@@ -45,7 +45,7 @@ export function CategoryForm({ onSave, onClose }: CategoryFormProps) {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="category-name">Category Name</label>
+            <label htmlFor="category-name">Chore Name</label>
             <input
               type="text"
               id="category-name"
@@ -63,7 +63,7 @@ export function CategoryForm({ onSave, onClose }: CategoryFormProps) {
                 Cancel
               </button>
               <button type="submit" className="save-button">
-                Create Category
+                Create Chore
               </button>
             </div>
           </div>
