@@ -76,19 +76,20 @@
 }
 
 .column-done-all-btn {
-  width: 32px;
   height: 32px;
+  padding: 0 12px;
   border-radius: 10px;
   border: 1px solid var(--status-comfortable-dot);
   background: var(--status-comfortable-bg);
   color: var(--status-comfortable-text);
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
+  gap: 4px;
+  white-space: nowrap;
   transition: all 0.15s ease;
 }
 

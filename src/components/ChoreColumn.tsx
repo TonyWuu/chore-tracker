@@ -156,7 +156,7 @@ export function ChoreColumn({
               onClick={() => onMarkAllDone(chores.map(c => c.id))}
               title="Mark all done"
             >
-              ✓
+              ✓ All Done
             </button>
           )}
           {onAddItem && (
