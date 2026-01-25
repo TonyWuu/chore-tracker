@@ -128,6 +128,12 @@ export function useCompletions() {
     await deleteDoc(doc(db, 'completions', completionId));
   };
 
+  const updateCompletionDate = async (completionId: string, newDate: Date) => {
+    await updateDoc(doc(db, 'completions', completionId), {
+      completedAt: Timestamp.fromDate(newDate)
+    });
+  };
+
   return {
     completions,
     loading,
@@ -137,6 +143,7 @@ export function useCompletions() {
     markDone,
     skipChore,
     deleteCompletionsForChore,
-    deleteCompletion
+    deleteCompletion,
+    updateCompletionDate
   };
 }

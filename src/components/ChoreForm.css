@@ -189,6 +189,32 @@ form {
   color: #fff;
 }
 
+.history-date.editable {
+  cursor: pointer;
+  border-bottom: 1px dashed #6b7280;
+  transition: border-color 0.2s;
+}
+
+.history-date.editable:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.history-date-input {
+  background: #2d2d44;
+  border: 1px solid #3b82f6;
+  border-radius: 4px;
+  color: #fff;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+}
+
+.history-date-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
 .history-who {
   color: #6b7280;
 }

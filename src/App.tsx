@@ -27,7 +27,8 @@ function App() {
     markDone,
     skipChore,
     deleteCompletionsForChore,
-    deleteCompletion
+    deleteCompletion,
+    updateCompletionDate
   } = useCompletions();
 
   const [users, setUsers] = useState<Map<string, User>>(new Map());
@@ -182,6 +183,7 @@ function App() {
           onEdit={handleEditChore}
           onSkip={handleSkip}
           onDeleteCompletion={deleteCompletion}
+          onUpdateCompletionDate={updateCompletionDate}
           onAddChore={handleAddChore}
         />
       )}
@@ -196,6 +198,7 @@ function App() {
           onSave={handleSaveChore}
           onDelete={editingChore ? handleDeleteChore : undefined}
           onDeleteCompletion={deleteCompletion}
+          onUpdateCompletionDate={updateCompletionDate}
           onClose={() => {
             setShowChoreForm(false);
             setEditingChore(null);

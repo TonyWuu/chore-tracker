@@ -12,6 +12,7 @@ interface ChoreFormProps {
   onSave: (name: string, minDays: number, maxDays: number, isOneTime: boolean) => void;
   onDelete?: () => void;
   onDeleteCompletion?: (completionId: string) => void;
+  onUpdateCompletionDate?: (completionId: string, newDate: Date) => void;
   onClose: () => void;
 }
 
@@ -24,6 +25,7 @@ export function ChoreForm({
   onSave,
   onDelete,
   onDeleteCompletion,
+  onUpdateCompletionDate,
   onClose
 }: ChoreFormProps) {
   const [name, setName] = useState(chore?.name || '');
@@ -31,6 +33,7 @@ export function ChoreForm({
   const [isOneTime, setIsOneTime] = useState(chore?.isOneTime || false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
+  const [editingCompletionId, setEditingCompletionId] = useState<string | null>(null);
 
   useEffect(() => {
     if (chore) {
@@ -134,32 +137,77 @@ export function ChoreForm({
             <div className="history-section">
               <h3>History</h3>
               <ul className="history-list">
-                {completionHistory.map((completion) => (
-                  <li key={completion.id}>
-                    <span className="history-date">
-                      {format(completion.completedAt.toDate(), 'MMM d, yyyy h:mm a')}
-                    </span>
-                    <span className="history-who">
-                      {completion.collaborative
-                        ? 'Together'
-                        : completion.completedBy.map(id => {
-                            if (id === currentUserId) return 'You';
-                            const user = users?.get(id);
-                            return user?.displayName?.split(' ')[0] || 'Unknown';
-                          }).join(', ')}
-                    </span>
-                    {onDeleteCompletion && (
-                      <button
-                        type="button"
-                        className="history-delete"
-                        onClick={() => onDeleteCompletion(completion.id)}
-                        title="Delete this entry"
-                      >
-                        &times;
-                      </button>
-                    )}
-                  </li>
-                ))}
+                {completionHistory.map((completion) => {
+                  const isEditingDate = editingCompletionId === completion.id;
+                  const completionDate = completion.completedAt.toDate();
+
+                  const formatDateTimeLocal = (date: Date) => {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    return `${year}-${month}-${day}T${hours}:${minutes}`;
+                  };
+
+                  return (
+                    <li key={completion.id}>
+                      {isEditingDate && onUpdateCompletionDate ? (
+                        <input
+                          type="datetime-local"
+                          className="history-date-input"
+                          defaultValue={formatDateTimeLocal(completionDate)}
+                          onBlur={(e) => {
+                            const newDate = new Date(e.target.value);
+                            if (!isNaN(newDate.getTime())) {
+                              onUpdateCompletionDate(completion.id, newDate);
+                            }
+                            setEditingCompletionId(null);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const newDate = new Date((e.target as HTMLInputElement).value);
+                              if (!isNaN(newDate.getTime())) {
+                                onUpdateCompletionDate(completion.id, newDate);
+                              }
+                              setEditingCompletionId(null);
+                            } else if (e.key === 'Escape') {
+                              setEditingCompletionId(null);
+                            }
+                          }}
+                          autoFocus
+                        />
+                      ) : (
+                        <span
+                          className={`history-date ${onUpdateCompletionDate ? 'editable' : ''}`}
+                          onClick={() => onUpdateCompletionDate && setEditingCompletionId(completion.id)}
+                          title={onUpdateCompletionDate ? 'Click to edit date' : undefined}
+                        >
+                          {format(completionDate, 'MMM d, yyyy h:mm a')}
+                        </span>
+                      )}
+                      <span className="history-who">
+                        {completion.collaborative
+                          ? 'Together'
+                          : completion.completedBy.map(id => {
+                              if (id === currentUserId) return 'You';
+                              const user = users?.get(id);
+                              return user?.displayName?.split(' ')[0] || 'Unknown';
+                            }).join(', ')}
+                      </span>
+                      {onDeleteCompletion && (
+                        <button
+                          type="button"
+                          className="history-delete"
+                          onClick={() => onDeleteCompletion(completion.id)}
+                          title="Delete this entry"
+                        >
+                          &times;
+                        </button>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}

@@ -11,6 +11,7 @@ interface ChoreListProps {
   onEdit: (chore: ChoreWithStatus) => void;
   onSkip: (choreId: string) => void;
   onDeleteCompletion: (completionId: string) => void;
+  onUpdateCompletionDate: (completionId: string, newDate: Date) => void;
   onAddChore: () => void;
 }
 
@@ -23,6 +24,7 @@ export function ChoreList({
   onEdit,
   onSkip,
   onDeleteCompletion,
+  onUpdateCompletionDate,
   onAddChore
 }: ChoreListProps) {
   const activeChores = chores.filter(c => !(c.isOneTime && c.lastCompletion));
@@ -49,6 +51,7 @@ export function ChoreList({
                 onEdit={onEdit}
                 onSkip={onSkip}
                 onDeleteCompletion={onDeleteCompletion}
+                onUpdateCompletionDate={onUpdateCompletionDate}
               />
             ))}
             {completedOneTimes.length > 0 && (
@@ -65,6 +68,7 @@ export function ChoreList({
                     onEdit={onEdit}
                     onSkip={onSkip}
                     onDeleteCompletion={onDeleteCompletion}
+                    onUpdateCompletionDate={onUpdateCompletionDate}
                   />
                 ))}
               </>

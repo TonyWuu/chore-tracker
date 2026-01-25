@@ -12,6 +12,7 @@ interface ChoreItemProps {
   onEdit: (chore: ChoreWithStatus) => void;
   onSkip: (choreId: string) => void;
   onDeleteCompletion: (completionId: string) => void;
+  onUpdateCompletionDate: (completionId: string, newDate: Date) => void;
 }
 
 export function ChoreItem({
@@ -22,9 +23,11 @@ export function ChoreItem({
   onMarkDone,
   onEdit,
   onSkip,
-  onDeleteCompletion
+  onDeleteCompletion,
+  onUpdateCompletionDate
 }: ChoreItemProps) {
   const [expanded, setExpanded] = useState(false);
+  const [editingCompletionId, setEditingCompletionId] = useState<string | null>(null);
 
   const getStatusColor = () => {
     switch (chore.status) {
@@ -154,26 +157,75 @@ export function ChoreItem({
             <p className="history-empty">No history yet</p>
           ) : (
             <ul className="history-list">
-              {completionHistory.map((completion) => (
-                <li key={completion.id}>
-                  <span className="history-date">
-                    {format(completion.completedAt.toDate(), 'MMM d, yyyy h:mm a')}
-                  </span>
-                  <span className="history-who">
-                    {getCompletedByText(completion)}
-                  </span>
-                  <button
-                    className="history-delete"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDeleteCompletion(completion.id);
-                    }}
-                    title="Delete this entry"
-                  >
-                    ×
-                  </button>
-                </li>
-              ))}
+              {completionHistory.map((completion) => {
+                const isEditing = editingCompletionId === completion.id;
+                const completionDate = completion.completedAt.toDate();
+
+                const formatDateTimeLocal = (date: Date) => {
+                  const year = date.getFullYear();
+                  const month = String(date.getMonth() + 1).padStart(2, '0');
+                  const day = String(date.getDate()).padStart(2, '0');
+                  const hours = String(date.getHours()).padStart(2, '0');
+                  const minutes = String(date.getMinutes()).padStart(2, '0');
+                  return `${year}-${month}-${day}T${hours}:${minutes}`;
+                };
+
+                return (
+                  <li key={completion.id}>
+                    {isEditing ? (
+                      <input
+                        type="datetime-local"
+                        className="history-date-input"
+                        defaultValue={formatDateTimeLocal(completionDate)}
+                        onBlur={(e) => {
+                          const newDate = new Date(e.target.value);
+                          if (!isNaN(newDate.getTime())) {
+                            onUpdateCompletionDate(completion.id, newDate);
+                          }
+                          setEditingCompletionId(null);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            const newDate = new Date((e.target as HTMLInputElement).value);
+                            if (!isNaN(newDate.getTime())) {
+                              onUpdateCompletionDate(completion.id, newDate);
+                            }
+                            setEditingCompletionId(null);
+                          } else if (e.key === 'Escape') {
+                            setEditingCompletionId(null);
+                          }
+                        }}
+                        autoFocus
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ) : (
+                      <span
+                        className="history-date editable"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditingCompletionId(completion.id);
+                        }}
+                        title="Click to edit date"
+                      >
+                        {format(completionDate, 'MMM d, yyyy h:mm a')}
+                      </span>
+                    )}
+                    <span className="history-who">
+                      {getCompletedByText(completion)}
+                    </span>
+                    <button
+                      className="history-delete"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDeleteCompletion(completion.id);
+                      }}
+                      title="Delete this entry"
+                    >
+                      ×
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>
