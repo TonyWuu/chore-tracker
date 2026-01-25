@@ -104,9 +104,14 @@ export function ChoreItem({
             {nextDueDate && <span className="chore-due-date"> · Due {nextDueDate}</span>}
           </span>
         </div>
-        <span className={`chore-status-text ${getStatusColor()}`}>
-          {chore.statusText}
-        </span>
+        <div className={`chore-status-badge ${getStatusColor()}`}>
+          <span className="chore-status-text">{chore.statusText}</span>
+          {chore.lastCompletion && chore.daysSinceLastDone > 0 && (
+            <span className="chore-status-date">
+              {format(chore.lastCompletion.completedAt.toDate(), 'MMM d')}
+            </span>
+          )}
+        </div>
         <span className={`chore-expand-icon ${expanded ? 'expanded' : ''}`}>
           ▼
         </span>

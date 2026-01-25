@@ -1,4 +1,4 @@
-import { differenceInCalendarDays, format } from 'date-fns';
+import { differenceInCalendarDays } from 'date-fns';
 import type { Chore, Completion, ChoreWithStatus } from './types';
 
 export function calculateChoreStatus(
@@ -38,13 +38,10 @@ export function calculateChoreStatus(
     statusText = 'Never done';
   } else if (daysSinceLastDone === 0) {
     statusText = 'Today';
+  } else if (daysSinceLastDone === 1) {
+    statusText = '1 day ago';
   } else {
-    const dateStr = format(lastDoneDate, 'MMM d');
-    if (daysSinceLastDone === 1) {
-      statusText = `1 day ago\n${dateStr}`;
-    } else {
-      statusText = `${daysSinceLastDone} days ago\n${dateStr}`;
-    }
+    statusText = `${daysSinceLastDone} days ago`;
   }
 
   return {
