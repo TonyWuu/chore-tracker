@@ -25,7 +25,7 @@ export function calculateChoreStatus(
   } else if (!lastCompletion) {
     // Never been done - show as overdue
     status = 'overdue';
-    statusText = 'Never done';
+    statusText = 'Due';
   } else if (daysSinceLastDone < chore.minDays) {
     status = 'comfortable';
     const daysLeft = chore.minDays - daysSinceLastDone;
