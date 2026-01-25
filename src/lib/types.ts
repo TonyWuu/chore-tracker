@@ -3,6 +3,7 @@ import { Timestamp } from 'firebase/firestore';
 export interface Chore {
   id: string;
   name: string;
+  description?: string;
   minDays: number;
   maxDays: number;
   isOneTime: boolean;

@@ -33,6 +33,7 @@ export function useChores() {
 
   const addChore = async (
     name: string,
+    description: string,
     minDays: number,
     maxDays: number,
     isOneTime: boolean,
@@ -40,6 +41,7 @@ export function useChores() {
   ) => {
     await addDoc(collection(db, 'chores'), {
       name,
+      description: description || '',
       minDays,
       maxDays,
       isOneTime,
@@ -50,7 +52,7 @@ export function useChores() {
 
   const updateChore = async (
     choreId: string,
-    updates: Partial<Pick<Chore, 'name' | 'minDays' | 'maxDays'>>
+    updates: Partial<Pick<Chore, 'name' | 'description' | 'minDays' | 'maxDays'>>
   ) => {
     await updateDoc(doc(db, 'chores', choreId), updates);
   };
