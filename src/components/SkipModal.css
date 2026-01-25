@@ -1,119 +1,116 @@
 .skip-modal {
-  background: linear-gradient(145deg, #fefefe 0%, #f8f4ff 100%);
-  border-radius: 24px;
-  padding: 1.5rem;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
   width: 100%;
-  max-width: 400px;
-  animation: slideUp 0.3s ease-out;
-  box-shadow: 0 10px 40px rgba(139, 92, 246, 0.2),
-              0 4px 12px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(147, 112, 219, 0.1);
+  max-width: 380px;
+  animation: slideUp 0.25s ease-out;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 .skip-modal h3 {
-  margin: 0 0 0.5rem;
-  color: #5a4a7a;
-  font-size: 1.125rem;
-  font-weight: 700;
+  margin: 0 0 6px;
+  color: #1f1635;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .skip-modal p {
-  margin: 0 0 1.5rem;
-  color: #7a6a9a;
-  font-size: 0.9rem;
+  margin: 0 0 20px;
+  color: #6b7280;
+  font-size: 14px;
 }
 
 .skip-options {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .skip-option {
-  padding: 1rem;
-  background: #fff;
-  border: 2px solid rgba(147, 112, 219, 0.15);
-  border-radius: 16px;
+  padding: 16px;
+  background: #fafafa;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
   text-align: left;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .skip-option.reset:hover {
-  border-color: #a78bfa;
-  background: #f8f4ff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
+  border-color: #7c3aed;
+  background: #f5f3ff;
 }
 
 .skip-option-title {
   display: block;
-  color: #5a4a7a;
+  color: #1f1635;
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  font-size: 14px;
+  margin-bottom: 4px;
 }
 
 .skip-option-desc {
   display: block;
-  color: #9a8ab0;
-  font-size: 0.8rem;
+  color: #9ca3af;
+  font-size: 13px;
 }
 
 .skip-option.snooze {
   cursor: default;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
 .skip-option.snooze input[type="date"] {
-  padding: 0.625rem;
-  background: #f8f4ff;
-  border: 1px solid rgba(147, 112, 219, 0.2);
-  border-radius: 10px;
-  color: #4a3a6a;
-  font-size: 0.9rem;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  color: #1f1635;
+  font-size: 14px;
+  font-family: inherit;
 }
 
 .skip-option.snooze input[type="date"]:focus {
   outline: none;
-  border-color: #a78bfa;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
 }
 
 .snooze-button {
-  padding: 0.625rem 1rem;
-  background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
+  padding: 10px 16px;
+  background: #f59e0b;
   border: none;
-  border-radius: 10px;
-  color: #78350f;
+  border-radius: 8px;
+  color: #fff;
   font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+  transition: all 0.15s ease;
 }
 
 .snooze-button:hover {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+  background: #d97706;
 }
 
 .skip-cancel {
   width: 100%;
-  padding: 0.75rem;
-  background: #f8f4ff;
-  border: 1px solid rgba(139, 92, 246, 0.2);
-  border-radius: 12px;
-  color: #7c3aed;
-  font-size: 0.9rem;
+  padding: 12px;
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  color: #6b7280;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .skip-cancel:hover {
-  background: #ede9fe;
-  border-color: rgba(139, 92, 246, 0.4);
+  background: #f3f4f6;
+  color: #4b5563;
 }

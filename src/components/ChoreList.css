@@ -1,92 +1,91 @@
 .chore-list-container {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 73px);
-  padding: 1.5rem;
+  min-height: calc(100vh - 69px);
+  padding: 24px;
   padding-bottom: 100px;
 }
 
 .chore-columns {
   display: flex;
-  gap: 1.25rem;
+  gap: 20px;
   overflow-x: auto;
-  padding-bottom: 1rem;
+  padding-bottom: 16px;
   flex: 1;
   align-items: flex-start;
 }
 
 .chore-columns::-webkit-scrollbar {
-  height: 10px;
+  height: 8px;
 }
 
 .chore-columns::-webkit-scrollbar-track {
-  background: rgba(147, 112, 219, 0.1);
-  border-radius: 5px;
+  background: rgba(124, 58, 237, 0.05);
+  border-radius: 4px;
 }
 
 .chore-columns::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 100%);
-  border-radius: 5px;
+  background: rgba(124, 58, 237, 0.2);
+  border-radius: 4px;
 }
 
 .chore-columns::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+  background: rgba(124, 58, 237, 0.3);
 }
 
 .empty-state {
   text-align: center;
-  padding: 4rem 2rem;
-  color: #7a6a9a;
+  padding: 80px 32px;
   width: 100%;
 }
 
 .empty-state p {
-  margin: 0.5rem 0;
+  margin: 8px 0;
+  font-size: 16px;
+  color: #6b7280;
   font-weight: 500;
 }
 
 .empty-hint {
-  font-size: 0.875rem;
-  color: #9a8ab0;
+  font-size: 14px;
+  color: #9ca3af;
 }
 
 .add-chore-button {
   position: fixed;
-  bottom: 1.5rem;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 1rem 2rem;
-  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+  padding: 14px 28px;
+  background: #7c3aed;
   border: none;
-  border-radius: 50px;
+  border-radius: 12px;
   color: #fff;
-  font-size: 1rem;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4),
-              0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+  transition: all 0.15s ease;
   z-index: 10;
 }
 
 .add-chore-button:hover {
-  transform: translateX(-50%) translateY(-3px);
-  box-shadow: 0 8px 30px rgba(139, 92, 246, 0.5),
-              0 4px 12px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  background: #6d28d9;
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
 }
 
 .add-chore-button:active {
-  transform: translateX(-50%) translateY(-1px);
+  transform: translateX(-50%) translateY(0);
 }
 
 @media (max-width: 600px) {
   .chore-list-container {
-    padding: 1rem;
+    padding: 16px;
     padding-bottom: 100px;
   }
 
   .chore-columns {
-    gap: 1rem;
+    gap: 16px;
   }
 }

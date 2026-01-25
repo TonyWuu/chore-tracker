@@ -3,62 +3,56 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg, #f5f0ff 0%, #ede4ff 50%, #e8dcff 100%);
-  padding: 1rem;
+  background: #f8f6fc;
+  padding: 16px;
 }
 
 .login-card {
-  background: linear-gradient(145deg, #fefefe 0%, #f8f4ff 100%);
-  border-radius: 24px;
-  padding: 3rem 2.5rem;
+  background: #fff;
+  border-radius: 16px;
+  padding: 48px 40px;
   text-align: center;
-  box-shadow: 0 10px 40px rgba(139, 92, 246, 0.15),
-              0 4px 12px rgba(0, 0, 0, 0.05);
-  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  max-width: 380px;
   width: 100%;
-  border: 1px solid rgba(147, 112, 219, 0.1);
 }
 
 .login-title {
-  margin: 0 0 0.5rem 0;
-  font-size: 2rem;
+  margin: 0 0 8px 0;
+  font-size: 28px;
   font-weight: 700;
-  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #7c3aed;
+  letter-spacing: -0.02em;
 }
 
 .login-subtitle {
-  margin: 0 0 2rem 0;
-  color: #7a6a9a;
-  font-size: 1rem;
+  margin: 0 0 32px 0;
+  color: #6b7280;
+  font-size: 15px;
 }
 
 .google-sign-in-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 12px;
   width: 100%;
-  padding: 0.875rem 1.5rem;
+  padding: 14px 20px;
   background: #fff;
-  border: 2px solid rgba(147, 112, 219, 0.15);
-  border-radius: 14px;
-  font-size: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 15px;
   font-weight: 600;
-  color: #4a3a6a;
+  color: #1f1635;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+  transition: all 0.15s ease;
 }
 
 .google-sign-in-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.2);
-  border-color: rgba(139, 92, 246, 0.3);
+  background: #fafafa;
+  border-color: #d1d5db;
 }
 
 .google-sign-in-button:active {
-  transform: translateY(0);
+  background: #f3f4f6;
 }
