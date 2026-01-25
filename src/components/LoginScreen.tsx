@@ -8,26 +8,32 @@ interface LoginScreenProps {
 
 export function LoginScreen({ onSignIn }: LoginScreenProps) {
   const [showSafariOption, setShowSafariOption] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const appUrl = typeof window !== 'undefined'
+    ? window.location.origin + window.location.pathname
+    : '';
 
   useEffect(() => {
     setShowSafariOption(isIOSPWA());
   }, []);
 
-  const openInSafari = () => {
-    // Get the current URL
-    const url = window.location.origin + window.location.pathname;
-
-    // Create a temporary anchor element and click it
-    // This is more reliable for opening in Safari from iOS PWA
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.target = '_blank';
-    anchor.rel = 'noopener noreferrer';
-
-    // Append to body, click, and remove
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(appUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = appUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
@@ -62,16 +68,25 @@ export function LoginScreen({ onSignIn }: LoginScreenProps) {
         {showSafariOption && (
           <div className="safari-fallback">
             <p className="safari-hint">
-              Having trouble with the keyboard?
+              Keyboard not working? Open this app in Safari:
             </p>
-            <button onClick={openInSafari} className="open-safari-button">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.243 5.757L11.5 12.5 7.757 8.757l-.014.014L12 4.528l4.243 4.243v-1.014zM12 19.472l-4.243-4.243.014-.014L12.5 11.5l4.743 4.743-1.014-.014L12 19.472z"/>
-              </svg>
-              Open in Safari
-            </button>
-            <p className="safari-alt-hint">
-              Or long-press the Sign in button and tap "Open in Safari"
+            <div className="safari-options">
+              <a
+                href={appUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="safari-link"
+                onClick={(e) => e.preventDefault()}
+              >
+                {appUrl.replace('https://', '')}
+              </a>
+              <button onClick={copyToClipboard} className="copy-button">
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+            <p className="safari-instructions">
+              Long-press the link above → "Open in Safari"<br />
+              or copy and paste in Safari
             </p>
           </div>
         )}

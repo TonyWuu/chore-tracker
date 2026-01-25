@@ -66,38 +66,56 @@
 .safari-hint {
   margin: 0 0 12px 0;
   font-size: 13px;
-  color: var(--text-faint);
+  color: var(--text-muted);
+  font-weight: 500;
 }
 
-.open-safari-button {
+.safari-options {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.safari-link {
+  flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 12px 16px;
+  padding: 10px 12px;
   background: var(--bg-tertiary);
   border: 1px solid var(--border-medium);
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-muted);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--accent-primary);
+  text-decoration: none;
+  word-break: break-all;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.copy-button {
+  padding: 10px 16px;
+  background: var(--accent-primary);
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
   cursor: pointer;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
-.open-safari-button:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
+.copy-button:hover {
+  background: var(--accent-secondary);
 }
 
-.open-safari-button:active {
-  background: var(--bg-tertiary);
+.copy-button:active {
+  transform: scale(0.98);
 }
 
-.safari-alt-hint {
+.safari-instructions {
   margin: 12px 0 0 0;
   font-size: 12px;
   color: var(--text-faint);
-  font-style: italic;
+  line-height: 1.5;
 }
