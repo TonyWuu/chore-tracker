@@ -2,17 +2,31 @@ import { useState, useEffect } from 'react';
 import type { User as FirebaseUser } from 'firebase/auth';
 import {
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   onAuthStateChanged
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../lib/firebase';
 
+// Detect if running as iOS PWA (standalone mode)
+export function isIOSPWA(): boolean {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isStandalone = (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
+  return isIOS && isStandalone;
+}
+
 export function useAuth() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Check for redirect result (for iOS PWA flow)
+    getRedirectResult(auth).catch((error) => {
+      console.error('Error getting redirect result:', error);
+    });
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         // Check if user document exists, create if not
@@ -40,7 +54,12 @@ export function useAuth() {
 
   const signIn = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      // Use redirect for iOS PWA, popup for everything else
+      if (isIOSPWA()) {
+        await signInWithRedirect(auth, googleProvider);
+      } else {
+        await signInWithPopup(auth, googleProvider);
+      }
     } catch (error) {
       console.error('Error signing in:', error);
     }

@@ -56,3 +56,48 @@
 .google-sign-in-button:active {
   background: var(--bg-hover);
 }
+
+.safari-fallback {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-light);
+}
+
+.safari-hint {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+.open-safari-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-medium);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.open-safari-button:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.open-safari-button:active {
+  background: var(--bg-tertiary);
+}
+
+.safari-alt-hint {
+  margin: 12px 0 0 0;
+  font-size: 12px;
+  color: var(--text-faint);
+  font-style: italic;
+}
