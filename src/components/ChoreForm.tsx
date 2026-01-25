@@ -45,7 +45,7 @@ export function ChoreForm({
     if (!name.trim()) return;
 
     const frequency = parseInt(frequencyStr) || 7;
-    const minDays = Math.max(1, Math.floor(frequency * 0.7));
+    const minDays = frequency;
     const maxDays = frequency;
     const finalMinDays = isOneTime ? 0 : minDays;
     const finalMaxDays = isOneTime ? 0 : maxDays;
@@ -116,7 +116,7 @@ export function ChoreForm({
 
           {!isOneTime && (
             <div className="form-group">
-              <label htmlFor="frequency">Every how many days?</label>
+              <label htmlFor="frequency">Frequency (days)</label>
               <input
                 type="text"
                 inputMode="numeric"
@@ -126,6 +126,7 @@ export function ChoreForm({
                 onChange={(e) => setFrequencyStr(e.target.value.replace(/\D/g, ''))}
                 placeholder="7"
               />
+              <span className="helper-text">How often this should be done</span>
             </div>
           )}
 
