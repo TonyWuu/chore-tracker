@@ -157,7 +157,7 @@ export function ChoreItem({
               {completionHistory.map((completion) => (
                 <li key={completion.id}>
                   <span className="history-date">
-                    {format(completion.completedAt.toDate(), 'MMM d, yyyy')}
+                    {format(completion.completedAt.toDate(), 'MMM d, yyyy h:mm a')}
                   </span>
                   <span className="history-who">
                     {getCompletedByText(completion)}
