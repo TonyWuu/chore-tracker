@@ -86,12 +86,14 @@ export function ChoreList({
     }));
   }, [completedOneTimes]);
 
+  const hasContent = groupedChores.length > 0 || completedOneTimes.length > 0;
+
   return (
     <div className="chore-list-container">
-      {activeChores.length === 0 && completedOneTimes.length === 0 ? (
+      {!hasContent ? (
         <div className="empty-state">
-          <p>No chores yet!</p>
-          <p className="empty-hint">Add your first chore to get started.</p>
+          <p>No categories yet!</p>
+          <p className="empty-hint">Add your first category to get started.</p>
         </div>
       ) : (
         <div className="chore-columns">
