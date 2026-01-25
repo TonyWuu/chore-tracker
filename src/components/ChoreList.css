@@ -8,11 +8,13 @@
 
 .chore-columns {
   display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   gap: 20px;
+  align-content: flex-start;
+  max-height: calc(100vh - 160px);
   overflow-x: auto;
   padding-bottom: 16px;
-  flex: 1;
-  align-items: flex-start;
 }
 
 .chore-columns::-webkit-scrollbar {
