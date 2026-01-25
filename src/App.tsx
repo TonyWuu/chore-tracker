@@ -46,6 +46,7 @@ function App() {
   const [completingChoreId, setCompletingChoreId] = useState<string | null>(null);
   const [skippingChoreId, setSkippingChoreId] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [celebrationMessage, setCelebrationMessage] = useState<string | null>(null);
 
   // Load all users
   useEffect(() => {
@@ -137,6 +138,23 @@ function App() {
   const celebrate = useCallback(() => {
     const duration = 800;
     const end = Date.now() + duration;
+
+    // Show random congratulatory message
+    const messages = [
+      'Nice work!',
+      'Awesome!',
+      'Crushed it!',
+      'Well done!',
+      'Great job!',
+      'You rock!',
+      'Fantastic!',
+      'Nailed it!',
+      'Way to go!',
+      'Boom!'
+    ];
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    setCelebrationMessage(randomMessage);
+    setTimeout(() => setCelebrationMessage(null), 1500);
 
     const frame = () => {
       confetti({
@@ -338,6 +356,12 @@ function App() {
 
       {toastMessage && (
         <Toast message={toastMessage} onClose={() => setToastMessage(null)} />
+      )}
+
+      {celebrationMessage && (
+        <div className="celebration-overlay">
+          <span className="celebration-text">{celebrationMessage}</span>
+        </div>
       )}
     </div>
   );
