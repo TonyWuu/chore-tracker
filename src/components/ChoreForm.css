@@ -152,7 +152,8 @@ form {
 
 .history-list li {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
   padding: 0.5rem 0;
   font-size: 0.875rem;
   color: #a0a0b0;
@@ -161,6 +162,27 @@ form {
 
 .history-list li:last-child {
   border-bottom: none;
+}
+
+.history-who {
+  flex: 1;
+}
+
+.history-delete {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  line-height: 1;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.history-delete:hover {
+  opacity: 1;
+  color: #ef4444;
 }
 
 .history-date {

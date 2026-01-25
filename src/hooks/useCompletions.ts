@@ -123,6 +123,11 @@ export function useCompletions() {
     await batch.commit();
   };
 
+  const deleteCompletion = async (completionId: string) => {
+    const { deleteDoc } = await import('firebase/firestore');
+    await deleteDoc(doc(db, 'completions', completionId));
+  };
+
   return {
     completions,
     loading,
@@ -131,6 +136,7 @@ export function useCompletions() {
     getCompletionCount,
     markDone,
     skipChore,
-    deleteCompletionsForChore
+    deleteCompletionsForChore,
+    deleteCompletion
   };
 }

@@ -26,7 +26,8 @@ function App() {
     getCompletionCount,
     markDone,
     skipChore,
-    deleteCompletionsForChore
+    deleteCompletionsForChore,
+    deleteCompletion
   } = useCompletions();
 
   const [users, setUsers] = useState<Map<string, User>>(new Map());
@@ -190,6 +191,7 @@ function App() {
           completionCount={editingChore ? getCompletionCount(editingChore.id) : 0}
           onSave={handleSaveChore}
           onDelete={editingChore ? handleDeleteChore : undefined}
+          onDeleteCompletion={deleteCompletion}
           onClose={() => {
             setShowChoreForm(false);
             setEditingChore(null);

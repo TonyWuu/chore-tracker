@@ -9,6 +9,7 @@ interface ChoreFormProps {
   completionCount?: number;
   onSave: (name: string, minDays: number, maxDays: number, isOneTime: boolean) => void;
   onDelete?: () => void;
+  onDeleteCompletion?: (completionId: string) => void;
   onClose: () => void;
 }
 
@@ -18,6 +19,7 @@ export function ChoreForm({
   completionCount = 0,
   onSave,
   onDelete,
+  onDeleteCompletion,
   onClose
 }: ChoreFormProps) {
   const [name, setName] = useState(chore?.name || '');
@@ -77,7 +79,7 @@ export function ChoreForm({
       onMouseDown={handleOverlayMouseDown}
       onMouseUp={handleOverlayMouseUp}
     >
-      <div className="modal-content" onMouseDown={(e) => setMouseDownOnOverlay(false)}>
+      <div className="modal-content" onMouseDown={() => setMouseDownOnOverlay(false)}>
         <div className="modal-header">
           <h2>{isEditing ? 'Edit Chore' : 'Add Chore'}</h2>
           <button className="close-button" onClick={onClose}>
@@ -141,9 +143,9 @@ export function ChoreForm({
 
           {isEditing && completionHistory.length > 0 && (
             <div className="history-section">
-              <h3>Recent History</h3>
+              <h3>History</h3>
               <ul className="history-list">
-                {completionHistory.slice(0, 5).map((completion) => (
+                {completionHistory.map((completion) => (
                   <li key={completion.id}>
                     <span className="history-date">
                       {format(completion.completedAt.toDate(), 'MMM d, yyyy')}
@@ -151,14 +153,19 @@ export function ChoreForm({
                     <span className="history-who">
                       {completion.collaborative ? 'Together' : 'Solo'}
                     </span>
+                    {onDeleteCompletion && (
+                      <button
+                        type="button"
+                        className="history-delete"
+                        onClick={() => onDeleteCompletion(completion.id)}
+                        title="Delete this entry"
+                      >
+                        &times;
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
-              {completionHistory.length > 5 && (
-                <p className="history-more">
-                  +{completionHistory.length - 5} more entries
-                </p>
-              )}
             </div>
           )}
 
