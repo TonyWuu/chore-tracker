@@ -34,6 +34,7 @@ function App() {
   const [users, setUsers] = useState<Map<string, User>>(new Map());
   const [showChoreForm, setShowChoreForm] = useState(false);
   const [editingChore, setEditingChore] = useState<ChoreWithStatus | null>(null);
+  const [presetCategory, setPresetCategory] = useState<string | null>(null);
   const [completingChoreId, setCompletingChoreId] = useState<string | null>(null);
   const [skippingChoreId, setSkippingChoreId] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -73,13 +74,21 @@ function App() {
     return undefined;
   }, [users, user]);
 
-  const handleAddChore = () => {
+  const handleAddCategory = () => {
     setEditingChore(null);
+    setPresetCategory(null);
+    setShowChoreForm(true);
+  };
+
+  const handleAddToCategory = (category: string) => {
+    setEditingChore(null);
+    setPresetCategory(category);
     setShowChoreForm(true);
   };
 
   const handleEditChore = (chore: ChoreWithStatus) => {
     setEditingChore(chore);
+    setPresetCategory(null);
     setShowChoreForm(true);
   };
 
@@ -185,13 +194,15 @@ function App() {
           onSkip={handleSkip}
           onDeleteCompletion={deleteCompletion}
           onUpdateCompletionDate={updateCompletionDate}
-          onAddChore={handleAddChore}
+          onAddCategory={handleAddCategory}
+          onAddToCategory={handleAddToCategory}
         />
       )}
 
       {showChoreForm && (
         <ChoreForm
           chore={editingChore}
+          presetCategory={presetCategory}
           completionHistory={editingChore ? getCompletionHistory(editingChore.id) : []}
           completionCount={editingChore ? getCompletionCount(editingChore.id) : 0}
           users={users}
@@ -203,6 +214,7 @@ function App() {
           onClose={() => {
             setShowChoreForm(false);
             setEditingChore(null);
+            setPresetCategory(null);
           }}
         />
       )}

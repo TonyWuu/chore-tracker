@@ -33,6 +33,12 @@
   color: #fff;
 }
 
+.column-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .column-count {
   background: #2d2d44;
   color: #8888a0;
@@ -40,6 +46,28 @@
   padding: 0.25rem 0.5rem;
   border-radius: 10px;
   font-weight: 500;
+}
+
+.column-add-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.column-add-btn:hover {
+  background: #2563eb;
+  transform: scale(1.1);
 }
 
 .column-items {

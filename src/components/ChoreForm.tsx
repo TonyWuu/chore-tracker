@@ -5,6 +5,7 @@ import './ChoreForm.css';
 
 interface ChoreFormProps {
   chore?: ChoreWithStatus | null;
+  presetCategory?: string | null;
   completionHistory?: Completion[];
   completionCount?: number;
   users?: Map<string, { displayName: string }>;
@@ -18,6 +19,7 @@ interface ChoreFormProps {
 
 export function ChoreForm({
   chore,
+  presetCategory,
   completionHistory = [],
   completionCount = 0,
   users,
@@ -29,7 +31,7 @@ export function ChoreForm({
   onClose
 }: ChoreFormProps) {
   const [name, setName] = useState(chore?.name || '');
-  const [category, setCategory] = useState(chore?.category || '');
+  const [category, setCategory] = useState(chore?.category || presetCategory || '');
   const [frequencyStr, setFrequencyStr] = useState(String(chore?.maxDays || 7));
   const [isOneTime, setIsOneTime] = useState(chore?.isOneTime || false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -42,12 +44,18 @@ export function ChoreForm({
       setCategory(chore.category || '');
       setFrequencyStr(String(chore.maxDays));
       setIsOneTime(chore.isOneTime);
+    } else if (presetCategory) {
+      setCategory(presetCategory);
     }
-  }, [chore]);
+  }, [chore, presetCategory]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
+
+    // Category is required when creating new (not editing and no preset)
+    const finalCategory = presetCategory || category.trim();
+    if (!isEditing && !finalCategory) return;
 
     const frequency = parseInt(frequencyStr) || 7;
     const minDays = frequency;
@@ -55,7 +63,7 @@ export function ChoreForm({
     const finalMinDays = isOneTime ? 0 : minDays;
     const finalMaxDays = isOneTime ? 0 : maxDays;
 
-    onSave(name.trim(), category.trim(), finalMinDays, finalMaxDays, isOneTime);
+    onSave(name.trim(), finalCategory, finalMinDays, finalMaxDays, isOneTime);
   };
 
   const handleDelete = () => {
@@ -89,35 +97,47 @@ export function ChoreForm({
     >
       <div className="modal-content" onMouseDown={() => setMouseDownOnOverlay(false)}>
         <div className="modal-header">
-          <h2>{isEditing ? 'Edit Chore' : 'Add Chore'}</h2>
+          <h2>
+            {isEditing
+              ? 'Edit Item'
+              : presetCategory
+                ? `Add to ${presetCategory}`
+                : 'Add Category'}
+          </h2>
           <button className="close-button" onClick={onClose}>
             &times;
           </button>
         </div>
 
         <form onSubmit={handleSubmit}>
+          {!presetCategory && (
+            <div className="form-group">
+              <label htmlFor="category">Category Name</label>
+              <input
+                type="text"
+                id="category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                placeholder="e.g., Vacuuming, Cleaning, Laundry"
+                autoFocus={!presetCategory && !isEditing}
+              />
+              <span className="helper-text">This will create a new column</span>
+            </div>
+          )}
+
           <div className="form-group">
-            <label htmlFor="name">Chore Name</label>
+            <label htmlFor="name">{presetCategory ? 'Item Name' : 'First Item'}</label>
             <input
               type="text"
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g., Vacuum"
-              autoFocus
+              placeholder="e.g., Living Room, Bedroom, Kitchen"
+              autoFocus={!!presetCategory || isEditing}
             />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="category">Category (optional)</label>
-            <input
-              type="text"
-              id="category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              placeholder="e.g., Vacuuming, Cleaning, Laundry"
-            />
-            <span className="helper-text">Group related tasks together</span>
+            <span className="helper-text">
+              {presetCategory ? 'Add a new item to this category' : 'Add your first item to this category'}
+            </span>
           </div>
 
           <div className="form-group checkbox-group">
@@ -243,7 +263,11 @@ export function ChoreForm({
                 Cancel
               </button>
               <button type="submit" className="save-button">
-                {isEditing ? 'Save' : 'Add Chore'}
+                {isEditing
+                  ? 'Save'
+                  : presetCategory
+                    ? 'Add Item'
+                    : 'Create Category'}
               </button>
             </div>
           </div>

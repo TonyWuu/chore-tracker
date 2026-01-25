@@ -13,7 +13,8 @@ interface ChoreListProps {
   onSkip: (choreId: string) => void;
   onDeleteCompletion: (completionId: string) => void;
   onUpdateCompletionDate: (completionId: string, newDate: Date) => void;
-  onAddChore: () => void;
+  onAddCategory: () => void;
+  onAddToCategory: (category: string) => void;
 }
 
 export function ChoreList({
@@ -26,7 +27,8 @@ export function ChoreList({
   onSkip,
   onDeleteCompletion,
   onUpdateCompletionDate,
-  onAddChore
+  onAddCategory,
+  onAddToCategory
 }: ChoreListProps) {
   const activeChores = chores.filter(c => !(c.isOneTime && c.lastCompletion));
   const completedOneTimes = chores.filter(c => c.isOneTime && c.lastCompletion);
@@ -97,6 +99,7 @@ export function ChoreList({
               onSkip={onSkip}
               onDeleteCompletion={onDeleteCompletion}
               onUpdateCompletionDate={onUpdateCompletionDate}
+              onAddItem={() => onAddToCategory(category)}
             />
           ))}
           {completedGroups.map(({ category, chores: categoryChores }) => (
@@ -117,8 +120,8 @@ export function ChoreList({
           ))}
         </div>
       )}
-      <button className="add-chore-button" onClick={onAddChore}>
-        + Add Chore
+      <button className="add-chore-button" onClick={onAddCategory}>
+        + Add Category
       </button>
     </div>
   );

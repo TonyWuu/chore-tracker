@@ -14,6 +14,7 @@ interface ChoreColumnProps {
   onSkip: (choreId: string) => void;
   onDeleteCompletion: (completionId: string) => void;
   onUpdateCompletionDate: (completionId: string, newDate: Date) => void;
+  onAddItem?: () => void;
   isCompleted?: boolean;
 }
 
@@ -28,6 +29,7 @@ export function ChoreColumn({
   onSkip,
   onDeleteCompletion,
   onUpdateCompletionDate,
+  onAddItem,
   isCompleted = false
 }: ChoreColumnProps) {
   const [expandedChoreId, setExpandedChoreId] = useState<string | null>(null);
@@ -107,7 +109,14 @@ export function ChoreColumn({
     <div className={`chore-column ${isCompleted ? 'completed' : ''}`}>
       <div className="column-header">
         <h3 className="column-title">{title}</h3>
-        <span className="column-count">{chores.length}</span>
+        <div className="column-header-right">
+          <span className="column-count">{chores.length}</span>
+          {onAddItem && (
+            <button className="column-add-btn" onClick={onAddItem} title="Add item">
+              +
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="column-items">
