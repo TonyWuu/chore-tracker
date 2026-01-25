@@ -161,24 +161,19 @@ export function ChoreItem({
                 const isEditing = editingCompletionId === completion.id;
                 const completionDate = completion.completedAt.toDate();
 
-                const formatDateTimeLocal = (date: Date) => {
-                  const year = date.getFullYear();
-                  const month = String(date.getMonth() + 1).padStart(2, '0');
-                  const day = String(date.getDate()).padStart(2, '0');
-                  const hours = String(date.getHours()).padStart(2, '0');
-                  const minutes = String(date.getMinutes()).padStart(2, '0');
-                  return `${year}-${month}-${day}T${hours}:${minutes}`;
+                const formatDateLocal = (date: Date) => {
+                  return format(date, 'yyyy-MM-dd');
                 };
 
                 return (
                   <li key={completion.id}>
                     {isEditing ? (
                       <input
-                        type="datetime-local"
+                        type="date"
                         className="history-date-input"
-                        defaultValue={formatDateTimeLocal(completionDate)}
+                        defaultValue={formatDateLocal(completionDate)}
                         onBlur={(e) => {
-                          const newDate = new Date(e.target.value);
+                          const newDate = new Date(e.target.value + 'T12:00:00');
                           if (!isNaN(newDate.getTime())) {
                             onUpdateCompletionDate(completion.id, newDate);
                           }
@@ -186,7 +181,7 @@ export function ChoreItem({
                         }}
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') {
-                            const newDate = new Date((e.target as HTMLInputElement).value);
+                            const newDate = new Date((e.target as HTMLInputElement).value + 'T12:00:00');
                             if (!isNaN(newDate.getTime())) {
                               onUpdateCompletionDate(completion.id, newDate);
                             }
@@ -207,7 +202,7 @@ export function ChoreItem({
                         }}
                         title="Click to edit date"
                       >
-                        {format(completionDate, 'MMM d, yyyy h:mm a')}
+                        {format(completionDate, 'MMM d, yyyy')}
                       </span>
                     )}
                     <span className="history-who">

@@ -57,9 +57,10 @@ export function useCompletions() {
     choreId: string,
     userId: string,
     collaborative: boolean,
-    partnerId?: string
+    partnerId?: string,
+    completedAt?: Date
   ) => {
-    const now = Timestamp.now();
+    const timestamp = completedAt ? Timestamp.fromDate(completedAt) : Timestamp.now();
     const oneMinuteAgo = new Date(Date.now() - 60000);
 
     // Check for recent completion (race condition handling)
@@ -94,7 +95,7 @@ export function useCompletions() {
 
     await addDoc(collection(db, 'completions'), {
       choreId,
-      completedAt: now,
+      completedAt: timestamp,
       completedBy,
       collaborative
     });

@@ -161,14 +161,15 @@ function App() {
     frame();
   }, []);
 
-  const handleCompleteChore = async (collaborative: boolean) => {
+  const handleCompleteChore = async (collaborative: boolean, completedAt?: Date) => {
     if (!completingChoreId || !user) return;
 
     const result = await markDone(
       completingChoreId,
       user.uid,
       collaborative,
-      collaborative ? partnerId : undefined
+      collaborative ? partnerId : undefined,
+      completedAt
     );
 
     if (result === 'merged') {
