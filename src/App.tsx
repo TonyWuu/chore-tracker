@@ -1,5 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { collection, onSnapshot, query } from 'firebase/firestore';
+import confetti from 'canvas-confetti';
 import { db } from './lib/firebase';
 import { useAuth } from './hooks/useAuth';
 import { useChores } from './hooks/useChores';
@@ -130,6 +131,34 @@ function App() {
     setCompletingChoreId(choreId);
   };
 
+  const celebrate = useCallback(() => {
+    const duration = 800;
+    const end = Date.now() + duration;
+
+    const frame = () => {
+      confetti({
+        particleCount: 3,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0, y: 0.7 },
+        colors: ['#7c3aed', '#ec4899', '#f59e0b', '#22c55e']
+      });
+      confetti({
+        particleCount: 3,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1, y: 0.7 },
+        colors: ['#7c3aed', '#ec4899', '#f59e0b', '#22c55e']
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    };
+
+    frame();
+  }, []);
+
   const handleCompleteChore = async (collaborative: boolean) => {
     if (!completingChoreId || !user) return;
 
@@ -142,8 +171,10 @@ function App() {
 
     if (result === 'merged') {
       setToastMessage('Marked as done together!');
+      celebrate();
     } else if (result === 'created') {
       setToastMessage(collaborative ? 'Marked as done together!' : 'Marked as done!');
+      celebrate();
     }
 
     setCompletingChoreId(null);

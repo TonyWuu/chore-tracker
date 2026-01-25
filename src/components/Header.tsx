@@ -9,7 +9,10 @@ interface HeaderProps {
 export function Header({ user, onLogout }: HeaderProps) {
   return (
     <header className="header">
-      <h1 className="header-title">Chore Tracker</h1>
+      <h1 className="header-title">
+        <span className="title-icon">✨</span>
+        <span className="title-text">Choresy</span>
+      </h1>
       <div className="header-user">
         {user.photoURL && (
           <img
