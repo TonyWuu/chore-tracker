@@ -82,12 +82,10 @@ export function ChoreColumn({
   };
 
   const getNextDueDate = (chore: ChoreWithStatus) => {
-    if (chore.isOneTime) return null;
+    // Don't show due date for one-time tasks or tasks never done
+    if (chore.isOneTime || !chore.lastCompletion) return null;
 
-    const lastDoneDate = chore.lastCompletion
-      ? chore.lastCompletion.completedAt.toDate()
-      : chore.createdAt.toDate();
-
+    const lastDoneDate = chore.lastCompletion.completedAt.toDate();
     const dueDate = addDays(lastDoneDate, chore.maxDays);
     return format(dueDate, 'MMM d');
   };
@@ -220,12 +218,14 @@ export function ChoreColumn({
                   <span className="item-name">{chore.name}</span>
                   <span className="item-meta">
                     {getLastDoneText(chore)}
-                    {nextDueDate && <span className="item-due"> · Due {nextDueDate}</span>}
                   </span>
                 </div>
-                <span className={`item-status-text ${getStatusColor(chore.status)}`}>
-                  {chore.statusText}
-                </span>
+                <div className="item-status-info">
+                  <span className={`item-status-text ${getStatusColor(chore.status)}`}>
+                    {chore.statusText}
+                  </span>
+                  {nextDueDate && <span className="item-next-due">Next due {nextDueDate}</span>}
+                </div>
               </div>
 
               {isExpanded && (

@@ -256,7 +256,15 @@
   gap: 4px;
 }
 
-.item-due {
+.item-status-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.item-next-due {
+  font-size: 11px;
   color: #9ca3af;
 }
 
