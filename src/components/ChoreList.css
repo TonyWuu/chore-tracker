@@ -8,12 +8,11 @@
 
 .chore-columns {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: 20px;
+  align-items: flex-start;
   align-content: flex-start;
-  max-height: calc(100vh - 160px);
-  overflow-x: auto;
   padding-bottom: 16px;
 }
 
@@ -90,7 +89,5 @@
   .chore-columns {
     flex-direction: column;
     gap: 16px;
-    overflow-x: visible;
-    align-items: stretch;
   }
 }
