@@ -13,14 +13,32 @@ export function SkipModal({ choreName, onResetFully, onSnoozeUntil, onClose }: S
   const [selectedDate, setSelectedDate] = useState(
     format(addDays(new Date(), 7), 'yyyy-MM-dd')
   );
+  const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
 
   const handleSnooze = () => {
     onSnoozeUntil(new Date(selectedDate));
   };
 
+  const handleOverlayMouseDown = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      setMouseDownOnOverlay(true);
+    }
+  };
+
+  const handleOverlayMouseUp = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget && mouseDownOnOverlay) {
+      onClose();
+    }
+    setMouseDownOnOverlay(false);
+  };
+
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="skip-modal" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="modal-overlay"
+      onMouseDown={handleOverlayMouseDown}
+      onMouseUp={handleOverlayMouseUp}
+    >
+      <div className="skip-modal" onMouseDown={() => setMouseDownOnOverlay(false)}>
         <h3>Skip "{choreName}"?</h3>
         <p>This chore is severely overdue. What would you like to do?</p>
 

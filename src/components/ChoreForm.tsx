@@ -25,6 +25,7 @@ export function ChoreForm({
   const [maxDaysStr, setMaxDaysStr] = useState(String(chore?.maxDays || 14));
   const [isOneTime, setIsOneTime] = useState(chore?.isOneTime || false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
 
   useEffect(() => {
     if (chore) {
@@ -57,9 +58,26 @@ export function ChoreForm({
 
   const isEditing = !!chore;
 
+  const handleOverlayMouseDown = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      setMouseDownOnOverlay(true);
+    }
+  };
+
+  const handleOverlayMouseUp = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget && mouseDownOnOverlay) {
+      onClose();
+    }
+    setMouseDownOnOverlay(false);
+  };
+
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="modal-overlay"
+      onMouseDown={handleOverlayMouseDown}
+      onMouseUp={handleOverlayMouseUp}
+    >
+      <div className="modal-content" onMouseDown={(e) => setMouseDownOnOverlay(false)}>
         <div className="modal-header">
           <h2>{isEditing ? 'Edit Chore' : 'Add Chore'}</h2>
           <button className="close-button" onClick={onClose}>
