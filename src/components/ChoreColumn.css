@@ -247,6 +247,18 @@
   letter-spacing: -0.01em;
 }
 
+.item-status-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.item-last-done {
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
 .item-status-text {
   font-size: 12px;
   font-weight: 600;
