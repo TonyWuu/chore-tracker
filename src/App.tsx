@@ -189,6 +189,8 @@ function App() {
           chore={editingChore}
           completionHistory={editingChore ? getCompletionHistory(editingChore.id) : []}
           completionCount={editingChore ? getCompletionCount(editingChore.id) : 0}
+          users={users}
+          currentUserId={user?.uid}
           onSave={handleSaveChore}
           onDelete={editingChore ? handleDeleteChore : undefined}
           onDeleteCompletion={deleteCompletion}

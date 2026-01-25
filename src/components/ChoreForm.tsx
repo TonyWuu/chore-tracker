@@ -7,6 +7,8 @@ interface ChoreFormProps {
   chore?: ChoreWithStatus | null;
   completionHistory?: Completion[];
   completionCount?: number;
+  users?: Map<string, { displayName: string }>;
+  currentUserId?: string;
   onSave: (name: string, minDays: number, maxDays: number, isOneTime: boolean) => void;
   onDelete?: () => void;
   onDeleteCompletion?: (completionId: string) => void;
@@ -17,6 +19,8 @@ export function ChoreForm({
   chore,
   completionHistory = [],
   completionCount = 0,
+  users,
+  currentUserId,
   onSave,
   onDelete,
   onDeleteCompletion,
@@ -151,7 +155,13 @@ export function ChoreForm({
                       {format(completion.completedAt.toDate(), 'MMM d, yyyy')}
                     </span>
                     <span className="history-who">
-                      {completion.collaborative ? 'Together' : 'Solo'}
+                      {completion.collaborative
+                        ? 'Together'
+                        : completion.completedBy.map(id => {
+                            if (id === currentUserId) return 'You';
+                            const user = users?.get(id);
+                            return user?.displayName?.split(' ')[0] || 'Unknown';
+                          }).join(', ')}
                     </span>
                     {onDeleteCompletion && (
                       <button
