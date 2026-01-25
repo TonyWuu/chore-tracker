@@ -75,6 +75,33 @@
   font-weight: 600;
 }
 
+.column-done-all-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: 1px solid var(--status-comfortable-dot);
+  background: var(--status-comfortable-bg);
+  color: var(--status-comfortable-text);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 0.15s ease;
+}
+
+.column-done-all-btn:hover {
+  background: var(--status-comfortable-dot);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.column-done-all-btn:active {
+  transform: scale(0.98);
+}
+
 .column-add-btn {
   width: 32px;
   height: 32px;

@@ -44,6 +44,7 @@ function App() {
   const [editingChore, setEditingChore] = useState<ChoreWithStatus | null>(null);
   const [presetCategory, setPresetCategory] = useState<string | null>(null);
   const [completingChoreId, setCompletingChoreId] = useState<string | null>(null);
+  const [completingChoreIds, setCompletingChoreIds] = useState<string[]>([]);
   const [skippingChoreId, setSkippingChoreId] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [celebrationMessage, setCelebrationMessage] = useState<string | null>(null);
@@ -135,6 +136,10 @@ function App() {
     setCompletingChoreId(choreId);
   };
 
+  const handleMarkAllDone = (choreIds: string[]) => {
+    setCompletingChoreIds(choreIds);
+  };
+
   const celebrate = useCallback(() => {
     const duration = 800;
     const end = Date.now() + duration;
@@ -208,6 +213,34 @@ function App() {
     }
 
     setCompletingChoreId(null);
+  };
+
+  const handleCompleteAllChores = async (completedBy: CompletedByOption, completedAt?: Date) => {
+    if (completingChoreIds.length === 0 || !user) return;
+
+    const collaborative = completedBy === 'together';
+    const userId = completedBy === 'partner' && partner ? partner.id : user.uid;
+
+    for (const choreId of completingChoreIds) {
+      await markDone(
+        choreId,
+        userId,
+        collaborative,
+        collaborative ? partner?.id : undefined,
+        completedAt
+      );
+    }
+
+    const count = completingChoreIds.length;
+    const message = completedBy === 'together'
+      ? `${count} chores marked as done together!`
+      : completedBy === 'partner'
+        ? `${count} chores marked as done by ${partner?.name}!`
+        : `${count} chores marked as done!`;
+    setToastMessage(message);
+    celebrate();
+
+    setCompletingChoreIds([]);
   };
 
   const handleSkip = (choreId: string) => {
@@ -298,6 +331,7 @@ function App() {
           currentUserId={user.uid}
           getCompletionHistory={getCompletionHistory}
           onMarkDone={handleMarkDone}
+          onMarkAllDone={handleMarkAllDone}
           onEdit={handleEditChore}
           onSkip={handleSkip}
           onDeleteCompletion={deleteCompletion}
@@ -342,6 +376,15 @@ function App() {
           partnerName={partner?.name}
           onComplete={handleCompleteChore}
           onClose={() => setCompletingChoreId(null)}
+        />
+      )}
+
+      {completingChoreIds.length > 0 && (
+        <CompletionModal
+          choreName={`${completingChoreIds.length} chores`}
+          partnerName={partner?.name}
+          onComplete={handleCompleteAllChores}
+          onClose={() => setCompletingChoreIds([])}
         />
       )}
 
