@@ -37,6 +37,40 @@
   border-bottom: 1px solid #2d2d44;
 }
 
+.category-group {
+  margin-bottom: 1.5rem;
+}
+
+.category-group:first-child .category-title {
+  margin-top: 0;
+}
+
+.category-title {
+  color: #a0a0b0;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: #16162a;
+  border-radius: 8px;
+  border-left: 3px solid #3b82f6;
+}
+
+.category-title.completed {
+  border-left-color: #6b7280;
+  color: #6b7280;
+}
+
+.category-chores {
+  display: flex;
+  flex-direction: column;
+}
+
+.completed-group {
+  margin-top: 2rem;
+  opacity: 0.7;
+}
+
 .add-chore-button {
   position: fixed;
   bottom: 1.5rem;

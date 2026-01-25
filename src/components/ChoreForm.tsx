@@ -9,7 +9,7 @@ interface ChoreFormProps {
   completionCount?: number;
   users?: Map<string, { displayName: string }>;
   currentUserId?: string;
-  onSave: (name: string, description: string, minDays: number, maxDays: number, isOneTime: boolean) => void;
+  onSave: (name: string, category: string, minDays: number, maxDays: number, isOneTime: boolean) => void;
   onDelete?: () => void;
   onDeleteCompletion?: (completionId: string) => void;
   onUpdateCompletionDate?: (completionId: string, newDate: Date) => void;
@@ -29,7 +29,7 @@ export function ChoreForm({
   onClose
 }: ChoreFormProps) {
   const [name, setName] = useState(chore?.name || '');
-  const [description, setDescription] = useState(chore?.description || '');
+  const [category, setCategory] = useState(chore?.category || '');
   const [frequencyStr, setFrequencyStr] = useState(String(chore?.maxDays || 7));
   const [isOneTime, setIsOneTime] = useState(chore?.isOneTime || false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -39,7 +39,7 @@ export function ChoreForm({
   useEffect(() => {
     if (chore) {
       setName(chore.name);
-      setDescription(chore.description || '');
+      setCategory(chore.category || '');
       setFrequencyStr(String(chore.maxDays));
       setIsOneTime(chore.isOneTime);
     }
@@ -55,7 +55,7 @@ export function ChoreForm({
     const finalMinDays = isOneTime ? 0 : minDays;
     const finalMaxDays = isOneTime ? 0 : maxDays;
 
-    onSave(name.trim(), description.trim(), finalMinDays, finalMaxDays, isOneTime);
+    onSave(name.trim(), category.trim(), finalMinDays, finalMaxDays, isOneTime);
   };
 
   const handleDelete = () => {
@@ -109,14 +109,15 @@ export function ChoreForm({
           </div>
 
           <div className="form-group">
-            <label htmlFor="description">Description (optional)</label>
+            <label htmlFor="category">Category (optional)</label>
             <input
               type="text"
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="e.g., Living room, bedroom, hallway"
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              placeholder="e.g., Vacuuming, Cleaning, Laundry"
             />
+            <span className="helper-text">Group related tasks together</span>
           </div>
 
           <div className="form-group checkbox-group">

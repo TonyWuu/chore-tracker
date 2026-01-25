@@ -98,10 +98,7 @@ export function ChoreItem({
       <div className="chore-main" onClick={() => setExpanded(!expanded)}>
         <div className={`chore-status-indicator ${getStatusColor()}`} />
         <div className="chore-info">
-          <span className="chore-name">
-            {chore.name}
-            {chore.description && <span className="chore-description"> — {chore.description}</span>}
-          </span>
+          <span className="chore-name">{chore.name}</span>
           <span className="chore-last-done">
             {getLastDoneText()}
             {nextDueDate && <span className="chore-due-date"> · Due {nextDueDate}</span>}

@@ -79,12 +79,6 @@
   text-overflow: ellipsis;
 }
 
-.chore-description {
-  font-weight: 400;
-  color: #8888a0;
-  font-size: 0.9rem;
-}
-
 .chore-last-done {
   font-size: 0.8rem;
   color: #8888a0;

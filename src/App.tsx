@@ -85,15 +85,15 @@ function App() {
 
   const handleSaveChore = async (
     name: string,
-    description: string,
+    category: string,
     minDays: number,
     maxDays: number,
     isOneTime: boolean
   ) => {
     if (editingChore) {
-      await updateChore(editingChore.id, { name, description, minDays, maxDays });
+      await updateChore(editingChore.id, { name, category, minDays, maxDays });
     } else if (user) {
-      await addChore(name, description, minDays, maxDays, isOneTime, user.uid);
+      await addChore(name, category, minDays, maxDays, isOneTime, user.uid);
     }
     setShowChoreForm(false);
     setEditingChore(null);
