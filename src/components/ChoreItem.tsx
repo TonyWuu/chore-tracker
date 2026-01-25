@@ -106,7 +106,7 @@ export function ChoreItem({
         </div>
         <div className={`chore-status-badge ${getStatusColor()}`}>
           <span className="chore-status-text">{chore.statusText}</span>
-          {chore.lastCompletion && chore.daysSinceLastDone > 0 && (
+          {chore.lastCompletion && chore.daysSinceLastDone >= 1 && (
             <span className="chore-status-date">
               {format(chore.lastCompletion.completedAt.toDate(), 'MMM d')}
             </span>
