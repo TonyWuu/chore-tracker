@@ -38,14 +38,26 @@ export function ChoreColumn({
   isCompleted = false,
   collapseSignal = 0
 }: ChoreColumnProps) {
-  const [expandedChoreId, setExpandedChoreId] = useState<string | null>(null);
+  const [expandedChoreIds, setExpandedChoreIds] = useState<Set<string>>(new Set());
 
-  // Collapse when signal changes (background was clicked)
+  // Collapse all when signal changes (background was clicked)
   useEffect(() => {
     if (collapseSignal > 0) {
-      setExpandedChoreId(null);
+      setExpandedChoreIds(new Set());
     }
   }, [collapseSignal]);
+
+  const toggleExpanded = (choreId: string) => {
+    setExpandedChoreIds(prev => {
+      const next = new Set(prev);
+      if (next.has(choreId)) {
+        next.delete(choreId);
+      } else {
+        next.add(choreId);
+      }
+      return next;
+    });
+  };
   const [editingCompletionId, setEditingCompletionId] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -177,7 +189,7 @@ export function ChoreColumn({
 
       <div className="column-items">
         {chores.map((chore) => {
-          const isExpanded = expandedChoreId === chore.id;
+          const isExpanded = expandedChoreIds.has(chore.id);
           const completionHistory = getCompletionHistory(chore.id);
           const choreCompleted = chore.isOneTime && chore.lastCompletion;
 
@@ -188,7 +200,7 @@ export function ChoreColumn({
             >
               <div
                 className="item-main"
-                onClick={() => setExpandedChoreId(isExpanded ? null : chore.id)}
+                onClick={() => toggleExpanded(chore.id)}
               >
                 <div className={`item-status ${getStatusColor(chore.status)}`} />
                 <div className="item-content">
