@@ -57,30 +57,6 @@ export function ChoreColumn({
     }
   };
 
-  const getLastDoneText = (chore: ChoreWithStatus) => {
-    if (!chore.lastCompletion) {
-      return 'Never done';
-    }
-
-    const date = format(chore.lastCompletion.completedAt.toDate(), 'MMM d');
-    const completedByUsers = chore.lastCompletion.completedBy;
-
-    if (chore.lastCompletion.collaborative) {
-      return `Together, ${date}`;
-    }
-
-    if (completedByUsers.length === 1) {
-      const userId = completedByUsers[0];
-      if (userId === currentUserId) {
-        return `You, ${date}`;
-      }
-      const user = users.get(userId);
-      return `${user?.displayName?.split(' ')[0] || 'Partner'}, ${date}`;
-    }
-
-    return date;
-  };
-
   const getCompletedByText = (completion: Completion) => {
     if (completion.collaborative) {
       return 'Together';
@@ -206,20 +182,10 @@ export function ChoreColumn({
                 <div className={`item-status ${getStatusColor(chore.status)}`} />
                 <div className="item-content">
                   <span className="item-name">{chore.name}</span>
-                  <span className="item-meta">
-                    {getLastDoneText(chore)}
-                  </span>
                 </div>
-                <div className="item-status-info">
-                  <span className={`item-status-text ${getStatusColor(chore.status)}`}>
-                    {chore.statusText}
-                  </span>
-                  {chore.lastCompletion && (
-                    <span className="item-last-done">
-                      Last {format(chore.lastCompletion.completedAt.toDate(), 'MMM d')}
-                    </span>
-                  )}
-                </div>
+                <span className={`item-status-text ${getStatusColor(chore.status)}`}>
+                  {chore.statusText}
+                </span>
               </div>
 
               {isExpanded && (
