@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import type { ChoreWithStatus, User, Completion } from '../lib/types';
 import './ChoreItem.css';
 
@@ -76,7 +76,19 @@ export function ChoreItem({
     }).join(', ');
   };
 
+  const getNextDueDate = () => {
+    if (chore.isOneTime) return null;
+
+    const lastDoneDate = chore.lastCompletion
+      ? chore.lastCompletion.completedAt.toDate()
+      : chore.createdAt.toDate();
+
+    const dueDate = addDays(lastDoneDate, chore.maxDays);
+    return format(dueDate, 'MMM d');
+  };
+
   const isCompleted = chore.isOneTime && chore.lastCompletion;
+  const nextDueDate = getNextDueDate();
 
   return (
     <div className={`chore-item ${isCompleted ? 'chore-completed' : ''} ${expanded ? 'expanded' : ''}`}>
@@ -84,7 +96,10 @@ export function ChoreItem({
         <div className={`chore-status-indicator ${getStatusColor()}`} />
         <div className="chore-info">
           <span className="chore-name">{chore.name}</span>
-          <span className="chore-last-done">{getLastDoneText()}</span>
+          <span className="chore-last-done">
+            {getLastDoneText()}
+            {nextDueDate && <span className="chore-due-date"> · Due {nextDueDate}</span>}
+          </span>
         </div>
         <span className={`chore-status-text ${getStatusColor()}`}>
           {chore.statusText}

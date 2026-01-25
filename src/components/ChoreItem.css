@@ -84,6 +84,10 @@
   color: #8888a0;
 }
 
+.chore-due-date {
+  color: #6b7280;
+}
+
 .chore-status-text {
   font-size: 0.875rem;
   font-weight: 500;
