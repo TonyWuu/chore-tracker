@@ -7,7 +7,7 @@ export function calculateChoreStatus(
 ): ChoreWithStatus {
   const now = new Date();
 
-  // If no completion, treat createdAt as "just done"
+  // If no completion, use createdAt for calculation but mark as never done
   const lastDoneDate = lastCompletion
     ? lastCompletion.completedAt.toDate()
     : chore.createdAt.toDate();
@@ -22,6 +22,10 @@ export function calculateChoreStatus(
     // One-time task that's been completed
     status = 'comfortable';
     statusText = 'Completed';
+  } else if (!lastCompletion) {
+    // Never been done - show as overdue
+    status = 'overdue';
+    statusText = 'Never done';
   } else if (daysSinceLastDone < chore.minDays) {
     status = 'comfortable';
     const daysLeft = chore.minDays - daysSinceLastDone;
