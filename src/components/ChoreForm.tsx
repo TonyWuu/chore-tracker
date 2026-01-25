@@ -27,8 +27,7 @@ export function ChoreForm({
   onClose
 }: ChoreFormProps) {
   const [name, setName] = useState(chore?.name || '');
-  const [minDaysStr, setMinDaysStr] = useState(String(chore?.minDays || 7));
-  const [maxDaysStr, setMaxDaysStr] = useState(String(chore?.maxDays || 14));
+  const [frequencyStr, setFrequencyStr] = useState(String(chore?.maxDays || 7));
   const [isOneTime, setIsOneTime] = useState(chore?.isOneTime || false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
@@ -36,8 +35,7 @@ export function ChoreForm({
   useEffect(() => {
     if (chore) {
       setName(chore.name);
-      setMinDaysStr(String(chore.minDays));
-      setMaxDaysStr(String(chore.maxDays));
+      setFrequencyStr(String(chore.maxDays));
       setIsOneTime(chore.isOneTime);
     }
   }, [chore]);
@@ -46,10 +44,11 @@ export function ChoreForm({
     e.preventDefault();
     if (!name.trim()) return;
 
-    const minDays = parseInt(minDaysStr) || 1;
-    const maxDays = parseInt(maxDaysStr) || minDays;
+    const frequency = parseInt(frequencyStr) || 7;
+    const minDays = Math.max(1, Math.floor(frequency * 0.7));
+    const maxDays = frequency;
     const finalMinDays = isOneTime ? 0 : minDays;
-    const finalMaxDays = isOneTime ? 0 : Math.max(minDays, maxDays);
+    const finalMaxDays = isOneTime ? 0 : maxDays;
 
     onSave(name.trim(), finalMinDays, finalMaxDays, isOneTime);
   };
@@ -116,32 +115,17 @@ export function ChoreForm({
           </div>
 
           {!isOneTime && (
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="minDays">Minimum Days</label>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  id="minDays"
-                  value={minDaysStr}
-                  onChange={(e) => setMinDaysStr(e.target.value.replace(/\D/g, ''))}
-                />
-                <span className="helper-text">OK to wait this long</span>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="maxDays">Maximum Days</label>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  id="maxDays"
-                  value={maxDaysStr}
-                  onChange={(e) => setMaxDaysStr(e.target.value.replace(/\D/g, ''))}
-                />
-                <span className="helper-text">Overdue after this</span>
-              </div>
+            <div className="form-group">
+              <label htmlFor="frequency">Every how many days?</label>
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                id="frequency"
+                value={frequencyStr}
+                onChange={(e) => setFrequencyStr(e.target.value.replace(/\D/g, ''))}
+                placeholder="7"
+              />
             </div>
           )}
 
