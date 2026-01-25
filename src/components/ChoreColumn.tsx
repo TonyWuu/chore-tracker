@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { format, addDays } from 'date-fns';
+import { format } from 'date-fns';
 import type { ChoreWithStatus, User, Completion } from '../lib/types';
 import './ChoreColumn.css';
 
@@ -79,15 +79,6 @@ export function ChoreColumn({
     }
 
     return date;
-  };
-
-  const getNextDueDate = (chore: ChoreWithStatus) => {
-    // Don't show due date for one-time tasks or tasks never done
-    if (chore.isOneTime || !chore.lastCompletion) return null;
-
-    const lastDoneDate = chore.lastCompletion.completedAt.toDate();
-    const dueDate = addDays(lastDoneDate, chore.maxDays);
-    return format(dueDate, 'MMM d');
   };
 
   const getCompletedByText = (completion: Completion) => {
@@ -201,7 +192,6 @@ export function ChoreColumn({
         {chores.map((chore) => {
           const isExpanded = expandedChoreId === chore.id;
           const completionHistory = getCompletionHistory(chore.id);
-          const nextDueDate = getNextDueDate(chore);
           const choreCompleted = chore.isOneTime && chore.lastCompletion;
 
           return (
@@ -224,7 +214,11 @@ export function ChoreColumn({
                   <span className={`item-status-text ${getStatusColor(chore.status)}`}>
                     {chore.statusText}
                   </span>
-                  {nextDueDate && <span className="item-next-due">Next due {nextDueDate}</span>}
+                  {chore.lastCompletion && (
+                    <span className="item-last-done">
+                      Last {format(chore.lastCompletion.completedAt.toDate(), 'MMM d')}
+                    </span>
+                  )}
                 </div>
               </div>
 
