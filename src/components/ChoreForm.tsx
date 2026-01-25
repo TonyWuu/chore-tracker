@@ -31,7 +31,6 @@ export function ChoreForm({
   onClose
 }: ChoreFormProps) {
   const [name, setName] = useState(chore?.name || '');
-  const [category, setCategory] = useState(chore?.category || presetCategory || '');
   const [frequencyStr, setFrequencyStr] = useState(String(chore?.maxDays || 7));
   const [isOneTime, setIsOneTime] = useState(chore?.isOneTime || false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -41,13 +40,10 @@ export function ChoreForm({
   useEffect(() => {
     if (chore) {
       setName(chore.name);
-      setCategory(chore.category || '');
       setFrequencyStr(String(chore.maxDays));
       setIsOneTime(chore.isOneTime);
-    } else if (presetCategory) {
-      setCategory(presetCategory);
     }
-  }, [chore, presetCategory]);
+  }, [chore]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
