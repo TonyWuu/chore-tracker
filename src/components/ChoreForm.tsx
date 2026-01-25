@@ -21,16 +21,16 @@ export function ChoreForm({
   onClose
 }: ChoreFormProps) {
   const [name, setName] = useState(chore?.name || '');
-  const [minDays, setMinDays] = useState(chore?.minDays || 7);
-  const [maxDays, setMaxDays] = useState(chore?.maxDays || 14);
+  const [minDaysStr, setMinDaysStr] = useState(String(chore?.minDays || 7));
+  const [maxDaysStr, setMaxDaysStr] = useState(String(chore?.maxDays || 14));
   const [isOneTime, setIsOneTime] = useState(chore?.isOneTime || false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (chore) {
       setName(chore.name);
-      setMinDays(chore.minDays);
-      setMaxDays(chore.maxDays);
+      setMinDaysStr(String(chore.minDays));
+      setMaxDaysStr(String(chore.maxDays));
       setIsOneTime(chore.isOneTime);
     }
   }, [chore]);
@@ -39,6 +39,8 @@ export function ChoreForm({
     e.preventDefault();
     if (!name.trim()) return;
 
+    const minDays = parseInt(minDaysStr) || 1;
+    const maxDays = parseInt(maxDaysStr) || minDays;
     const finalMinDays = isOneTime ? 0 : minDays;
     const finalMaxDays = isOneTime ? 0 : Math.max(minDays, maxDays);
 
@@ -96,8 +98,8 @@ export function ChoreForm({
                 <input
                   type="number"
                   id="minDays"
-                  value={minDays}
-                  onChange={(e) => setMinDays(parseInt(e.target.value) || 1)}
+                  value={minDaysStr}
+                  onChange={(e) => setMinDaysStr(e.target.value)}
                   min="1"
                 />
                 <span className="helper-text">OK to wait this long</span>
@@ -108,9 +110,9 @@ export function ChoreForm({
                 <input
                   type="number"
                   id="maxDays"
-                  value={maxDays}
-                  onChange={(e) => setMaxDays(parseInt(e.target.value) || 1)}
-                  min={minDays}
+                  value={maxDaysStr}
+                  onChange={(e) => setMaxDaysStr(e.target.value)}
+                  min="1"
                 />
                 <span className="helper-text">Overdue after this</span>
               </div>
