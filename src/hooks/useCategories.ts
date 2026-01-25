@@ -5,6 +5,7 @@ import {
   onSnapshot,
   addDoc,
   deleteDoc,
+  updateDoc,
   doc
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
@@ -45,5 +46,14 @@ export function useCategories() {
     await deleteDoc(doc(db, 'categories', categoryId));
   };
 
-  return { categories, loading, addCategory, deleteCategory };
+  const updateCategory = async (categoryId: string, newName: string) => {
+    // Check if new name already exists
+    const exists = categories.some(c => c.id !== categoryId && c.name.toLowerCase() === newName.toLowerCase());
+    if (exists) return false;
+
+    await updateDoc(doc(db, 'categories', categoryId), { name: newName });
+    return true;
+  };
+
+  return { categories, loading, addCategory, deleteCategory, updateCategory };
 }

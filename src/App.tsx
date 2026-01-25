@@ -32,7 +32,7 @@ function App() {
     deleteCompletion,
     updateCompletionDate
   } = useCompletions();
-  const { categories, addCategory, deleteCategory } = useCategories();
+  const { categories, addCategory, deleteCategory, updateCategory } = useCategories();
 
   const [users, setUsers] = useState<Map<string, User>>(new Map());
   const [showChoreForm, setShowChoreForm] = useState(false);
@@ -186,6 +186,27 @@ function App() {
     setToastMessage('Chore deleted');
   };
 
+  const handleRenameCategory = async (oldName: string, newName: string) => {
+    // Find the category by name
+    const category = categories.find(c => c.name === oldName);
+    if (!category) return;
+
+    // Update the category name
+    const success = await updateCategory(category.id, newName);
+    if (!success) {
+      setToastMessage('A chore with that name already exists');
+      return;
+    }
+
+    // Update all chores in this category to the new category name
+    const choresInCategory = chores.filter(c => c.category === oldName);
+    for (const chore of choresInCategory) {
+      await updateChore(chore.id, { category: newName });
+    }
+
+    setToastMessage('Chore renamed');
+  };
+
   if (authLoading) {
     return (
       <div className="loading-screen">
@@ -223,6 +244,7 @@ function App() {
           onAddCategory={handleAddCategory}
           onAddToCategory={handleAddToCategory}
           onDeleteCategory={handleDeleteCategory}
+          onRenameCategory={handleRenameCategory}
         />
       )}
 

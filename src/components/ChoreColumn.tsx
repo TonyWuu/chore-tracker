@@ -16,6 +16,7 @@ interface ChoreColumnProps {
   onUpdateCompletionDate: (completionId: string, newDate: Date) => void;
   onAddItem?: () => void;
   onDeleteColumn?: () => void;
+  onRenameColumn?: (newName: string) => void;
   isCompleted?: boolean;
 }
 
@@ -32,11 +33,14 @@ export function ChoreColumn({
   onUpdateCompletionDate,
   onAddItem,
   onDeleteColumn,
+  onRenameColumn,
   isCompleted = false
 }: ChoreColumnProps) {
   const [expandedChoreId, setExpandedChoreId] = useState<string | null>(null);
   const [editingCompletionId, setEditingCompletionId] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(title);
 
   const getStatusColor = (status: ChoreWithStatus['status']) => {
     switch (status) {
@@ -111,7 +115,49 @@ export function ChoreColumn({
   return (
     <div className={`chore-column ${isCompleted ? 'completed' : ''}`}>
       <div className="column-header">
-        <h3 className="column-title">{title}</h3>
+        {isEditingTitle && onRenameColumn ? (
+          <input
+            type="text"
+            className="column-title-input"
+            value={editedTitle}
+            onChange={(e) => setEditedTitle(e.target.value)}
+            onBlur={() => {
+              if (editedTitle.trim() && editedTitle.trim() !== title) {
+                onRenameColumn(editedTitle.trim());
+              } else {
+                setEditedTitle(title);
+              }
+              setIsEditingTitle(false);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                if (editedTitle.trim() && editedTitle.trim() !== title) {
+                  onRenameColumn(editedTitle.trim());
+                } else {
+                  setEditedTitle(title);
+                }
+                setIsEditingTitle(false);
+              } else if (e.key === 'Escape') {
+                setEditedTitle(title);
+                setIsEditingTitle(false);
+              }
+            }}
+            autoFocus
+          />
+        ) : (
+          <h3
+            className={`column-title ${onRenameColumn ? 'editable' : ''}`}
+            onClick={() => {
+              if (onRenameColumn) {
+                setEditedTitle(title);
+                setIsEditingTitle(true);
+              }
+            }}
+            title={onRenameColumn ? 'Click to rename' : undefined}
+          >
+            {title}
+          </h3>
+        )}
         <div className="column-header-right">
           <span className="column-count">{chores.length}</span>
           {onAddItem && (

@@ -34,6 +34,33 @@
   letter-spacing: -0.01em;
 }
 
+.column-title.editable {
+  cursor: pointer;
+  padding: 4px 8px;
+  margin: -4px -8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.column-title.editable:hover {
+  background: #f3f0ff;
+}
+
+.column-title-input {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f1635;
+  letter-spacing: -0.01em;
+  border: 1px solid #7c3aed;
+  border-radius: 6px;
+  padding: 4px 8px;
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  width: auto;
+  min-width: 100px;
+}
+
 .column-header-right {
   display: flex;
   align-items: center;
