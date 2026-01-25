@@ -190,7 +190,7 @@
 
 .item-main {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
   padding: 14px 16px;
   cursor: pointer;
@@ -201,7 +201,6 @@
   height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
-  margin-top: 5px;
 }
 
 .item-status.status-comfortable {
@@ -260,14 +259,6 @@
   color: var(--text-faint);
 }
 
-.item-status-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  flex-shrink: 0;
-}
-
 .item-status-text {
   font-size: 12px;
   font-weight: 600;
@@ -275,31 +266,30 @@
   padding: 4px 10px;
   border-radius: 6px;
   letter-spacing: 0.01em;
+  flex-shrink: 0;
 }
 
 .item-status-date {
-  font-size: 11px;
   font-weight: 500;
-  color: var(--text-muted);
-  padding-right: 2px;
+  opacity: 0.8;
 }
 
-.item-status-badge.status-comfortable .item-status-text {
+.item-status-text.status-comfortable {
   color: var(--status-comfortable-text);
   background: var(--status-comfortable-bg);
 }
 
-.item-status-badge.status-due-soon .item-status-text {
+.item-status-text.status-due-soon {
   color: var(--status-due-soon-text);
   background: var(--status-due-soon-bg);
 }
 
-.item-status-badge.status-overdue .item-status-text {
+.item-status-text.status-overdue {
   color: var(--status-overdue-text);
   background: var(--status-overdue-bg);
 }
 
-.item-status-badge.status-severely-overdue .item-status-text {
+.item-status-text.status-severely-overdue {
   color: var(--status-severe-text);
   background: var(--status-severe-bg);
 }
