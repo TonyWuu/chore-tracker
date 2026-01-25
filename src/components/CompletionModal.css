@@ -1,0 +1,75 @@
+.completion-modal {
+  background: #1f1f3a;
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  animation: slideUp 0.3s ease-out;
+}
+
+.completion-modal h3 {
+  margin: 0 0 0.5rem;
+  color: #fff;
+  font-size: 1.125rem;
+}
+
+.completion-modal p {
+  margin: 0 0 1.5rem;
+  color: #8888a0;
+}
+
+.completion-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.completion-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  background: #16162a;
+  border: 2px solid #2d2d44;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.completion-option:hover {
+  border-color: #3b82f6;
+  background: #1a1a35;
+}
+
+.completion-option.collaborative:hover {
+  border-color: #22c55e;
+}
+
+.option-icon {
+  font-size: 1.75rem;
+}
+
+.option-text {
+  color: #fff;
+  font-weight: 500;
+}
+
+.completion-cancel {
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  border: 1px solid #4a4a6a;
+  border-radius: 8px;
+  color: #8888a0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.completion-cancel:hover {
+  background: #2d2d44;
+  color: #fff;
+}

@@ -1,0 +1,71 @@
+.chore-list-container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 73px);
+  padding: 1.5rem;
+  padding-bottom: 100px;
+}
+
+.chore-list {
+  flex: 1;
+  max-width: 700px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #8888a0;
+}
+
+.empty-state p {
+  margin: 0.5rem 0;
+}
+
+.empty-hint {
+  font-size: 0.875rem;
+}
+
+.section-title {
+  color: #6b7280;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 2rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #2d2d44;
+}
+
+.add-chore-button {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem 2rem;
+  background: #3b82f6;
+  border: none;
+  border-radius: 50px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.add-chore-button:hover {
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.5);
+}
+
+.add-chore-button:active {
+  transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 600px) {
+  .chore-list-container {
+    padding: 1rem;
+    padding-bottom: 100px;
+  }
+}

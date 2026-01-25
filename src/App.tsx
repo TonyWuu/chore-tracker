@@ -1,0 +1,224 @@
+import { useState, useEffect, useMemo } from 'react';
+import { collection, onSnapshot, query } from 'firebase/firestore';
+import { db } from './lib/firebase';
+import { useAuth } from './hooks/useAuth';
+import { useChores } from './hooks/useChores';
+import { useCompletions } from './hooks/useCompletions';
+import { calculateChoreStatus, sortByPriority } from './lib/priority';
+import type { ChoreWithStatus, User } from './lib/types';
+import { Header } from './components/Header';
+import { LoginScreen } from './components/LoginScreen';
+import { ChoreList } from './components/ChoreList';
+import { ChoreForm } from './components/ChoreForm';
+import { CompletionModal } from './components/CompletionModal';
+import { SkipModal } from './components/SkipModal';
+import { Toast } from './components/Toast';
+import './App.css';
+
+function App() {
+  const { user, loading: authLoading, signIn, logOut } = useAuth();
+  const { chores, loading: choresLoading, addChore, updateChore, deleteChore } = useChores();
+  const {
+    completions,
+    loading: completionsLoading,
+    getLastCompletion,
+    getCompletionHistory,
+    getCompletionCount,
+    markDone,
+    skipChore,
+    deleteCompletionsForChore
+  } = useCompletions();
+
+  const [users, setUsers] = useState<Map<string, User>>(new Map());
+  const [showChoreForm, setShowChoreForm] = useState(false);
+  const [editingChore, setEditingChore] = useState<ChoreWithStatus | null>(null);
+  const [completingChoreId, setCompletingChoreId] = useState<string | null>(null);
+  const [skippingChoreId, setSkippingChoreId] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Load all users
+  useEffect(() => {
+    const q = query(collection(db, 'users'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const userMap = new Map<string, User>();
+      snapshot.forEach((doc) => {
+        userMap.set(doc.id, doc.data() as User);
+      });
+      setUsers(userMap);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Calculate chore statuses and sort by priority
+  const choresWithStatus = useMemo(() => {
+    const withStatus = chores.map((chore) => {
+      const lastCompletion = getLastCompletion(chore.id);
+      return calculateChoreStatus(chore, lastCompletion);
+    });
+    return sortByPriority(withStatus);
+  }, [chores, completions, getLastCompletion]);
+
+  const completingChore = choresWithStatus.find(c => c.id === completingChoreId);
+  const skippingChore = choresWithStatus.find(c => c.id === skippingChoreId);
+
+  // Get partner ID (the other user)
+  const partnerId = useMemo(() => {
+    for (const [id] of users) {
+      if (id !== user?.uid) {
+        return id;
+      }
+    }
+    return undefined;
+  }, [users, user]);
+
+  const handleAddChore = () => {
+    setEditingChore(null);
+    setShowChoreForm(true);
+  };
+
+  const handleEditChore = (chore: ChoreWithStatus) => {
+    setEditingChore(chore);
+    setShowChoreForm(true);
+  };
+
+  const handleSaveChore = async (
+    name: string,
+    minDays: number,
+    maxDays: number,
+    isOneTime: boolean
+  ) => {
+    if (editingChore) {
+      await updateChore(editingChore.id, { name, minDays, maxDays });
+    } else if (user) {
+      await addChore(name, minDays, maxDays, isOneTime, user.uid);
+    }
+    setShowChoreForm(false);
+    setEditingChore(null);
+  };
+
+  const handleDeleteChore = async () => {
+    if (editingChore) {
+      await deleteCompletionsForChore(editingChore.id);
+      await deleteChore(editingChore.id);
+      setShowChoreForm(false);
+      setEditingChore(null);
+      setToastMessage('Chore deleted');
+    }
+  };
+
+  const handleMarkDone = (choreId: string) => {
+    setCompletingChoreId(choreId);
+  };
+
+  const handleCompleteChore = async (collaborative: boolean) => {
+    if (!completingChoreId || !user) return;
+
+    const result = await markDone(
+      completingChoreId,
+      user.uid,
+      collaborative,
+      collaborative ? partnerId : undefined
+    );
+
+    if (result === 'merged') {
+      setToastMessage('Marked as done together!');
+    } else if (result === 'created') {
+      setToastMessage(collaborative ? 'Marked as done together!' : 'Marked as done!');
+    }
+
+    setCompletingChoreId(null);
+  };
+
+  const handleSkip = (choreId: string) => {
+    setSkippingChoreId(choreId);
+  };
+
+  const handleResetFully = async () => {
+    if (!skippingChoreId || !user) return;
+    await skipChore(skippingChoreId, user.uid);
+    setSkippingChoreId(null);
+    setToastMessage('Chore reset');
+  };
+
+  const handleSnoozeUntil = async (date: Date) => {
+    // For snooze, we create a completion record with the snooze date
+    // This effectively resets the timer to that date
+    if (!skippingChoreId || !user) return;
+    await skipChore(skippingChoreId, user.uid);
+    setSkippingChoreId(null);
+    setToastMessage(`Snoozed until ${date.toLocaleDateString()}`);
+  };
+
+  if (authLoading) {
+    return (
+      <div className="loading-screen">
+        <div className="loading-spinner" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <LoginScreen onSignIn={signIn} />;
+  }
+
+  const isLoading = choresLoading || completionsLoading;
+
+  return (
+    <div className="app">
+      <Header user={user} onLogout={logOut} />
+
+      {isLoading ? (
+        <div className="loading-content">
+          <div className="loading-spinner" />
+        </div>
+      ) : (
+        <ChoreList
+          chores={choresWithStatus}
+          users={users}
+          currentUserId={user.uid}
+          onMarkDone={handleMarkDone}
+          onEdit={handleEditChore}
+          onSkip={handleSkip}
+          onAddChore={handleAddChore}
+        />
+      )}
+
+      {showChoreForm && (
+        <ChoreForm
+          chore={editingChore}
+          completionHistory={editingChore ? getCompletionHistory(editingChore.id) : []}
+          completionCount={editingChore ? getCompletionCount(editingChore.id) : 0}
+          onSave={handleSaveChore}
+          onDelete={editingChore ? handleDeleteChore : undefined}
+          onClose={() => {
+            setShowChoreForm(false);
+            setEditingChore(null);
+          }}
+        />
+      )}
+
+      {completingChore && (
+        <CompletionModal
+          choreName={completingChore.name}
+          onComplete={handleCompleteChore}
+          onClose={() => setCompletingChoreId(null)}
+        />
+      )}
+
+      {skippingChore && (
+        <SkipModal
+          choreName={skippingChore.name}
+          onResetFully={handleResetFully}
+          onSnoozeUntil={handleSnoozeUntil}
+          onClose={() => setSkippingChoreId(null)}
+        />
+      )}
+
+      {toastMessage && (
+        <Toast message={toastMessage} onClose={() => setToastMessage(null)} />
+      )}
+    </div>
+  );
+}
+
+export default App;
