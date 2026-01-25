@@ -15,6 +15,7 @@ import { ChoreList } from './components/ChoreList';
 import { ChoreForm } from './components/ChoreForm';
 import { CategoryForm } from './components/CategoryForm';
 import { CompletionModal } from './components/CompletionModal';
+import type { CompletedByOption } from './components/CompletionModal';
 import { SkipModal } from './components/SkipModal';
 import { Toast } from './components/Toast';
 import './App.css';
@@ -71,11 +72,11 @@ function App() {
   const completingChore = choresWithStatus.find(c => c.id === completingChoreId);
   const skippingChore = choresWithStatus.find(c => c.id === skippingChoreId);
 
-  // Get partner ID (the other user)
-  const partnerId = useMemo(() => {
-    for (const [id] of users) {
+  // Get partner info (the other user)
+  const partner = useMemo(() => {
+    for (const [id, userData] of users) {
       if (id !== user?.uid) {
-        return id;
+        return { id, name: userData.displayName?.split(' ')[0] || 'Partner' };
       }
     }
     return undefined;
@@ -161,14 +162,17 @@ function App() {
     frame();
   }, []);
 
-  const handleCompleteChore = async (collaborative: boolean, completedAt?: Date) => {
+  const handleCompleteChore = async (completedBy: CompletedByOption, completedAt?: Date) => {
     if (!completingChoreId || !user) return;
+
+    const collaborative = completedBy === 'together';
+    const userId = completedBy === 'partner' && partner ? partner.id : user.uid;
 
     const result = await markDone(
       completingChoreId,
-      user.uid,
+      userId,
       collaborative,
-      collaborative ? partnerId : undefined,
+      collaborative ? partner?.id : undefined,
       completedAt
     );
 
@@ -176,7 +180,12 @@ function App() {
       setToastMessage('Marked as done together!');
       celebrate();
     } else if (result === 'created') {
-      setToastMessage(collaborative ? 'Marked as done together!' : 'Marked as done!');
+      const message = completedBy === 'together'
+        ? 'Marked as done together!'
+        : completedBy === 'partner'
+          ? `Marked as done by ${partner?.name}!`
+          : 'Marked as done!';
+      setToastMessage(message);
       celebrate();
     }
 
@@ -312,6 +321,7 @@ function App() {
       {completingChore && (
         <CompletionModal
           choreName={completingChore.name}
+          partnerName={partner?.name}
           onComplete={handleCompleteChore}
           onClose={() => setCompletingChoreId(null)}
         />

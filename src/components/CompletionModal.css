@@ -89,6 +89,11 @@
   margin-bottom: 16px;
 }
 
+.completion-options.three-options {
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
 .completion-option {
   display: flex;
   flex-direction: column;
@@ -102,9 +107,27 @@
   transition: all 0.15s ease;
 }
 
+.three-options .completion-option {
+  padding: 16px 8px;
+  gap: 6px;
+}
+
+.three-options .option-icon {
+  font-size: 24px;
+}
+
+.three-options .option-text {
+  font-size: 12px;
+}
+
 .completion-option:hover {
   border-color: var(--accent-primary);
   background: var(--bg-hover);
+}
+
+.completion-option.partner:hover {
+  border-color: var(--status-due-soon-dot);
+  background: var(--status-due-soon-bg);
 }
 
 .completion-option.collaborative:hover {

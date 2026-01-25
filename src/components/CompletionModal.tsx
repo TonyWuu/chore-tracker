@@ -2,13 +2,16 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 import './CompletionModal.css';
 
+export type CompletedByOption = 'me' | 'partner' | 'together';
+
 interface CompletionModalProps {
   choreName: string;
-  onComplete: (collaborative: boolean, completedAt?: Date) => void;
+  partnerName?: string;
+  onComplete: (completedBy: CompletedByOption, completedAt?: Date) => void;
   onClose: () => void;
 }
 
-export function CompletionModal({ choreName, onComplete, onClose }: CompletionModalProps) {
+export function CompletionModal({ choreName, partnerName, onComplete, onClose }: CompletionModalProps) {
   const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
   const [dateMode, setDateMode] = useState<'now' | 'custom'>('now');
   const [customDate, setCustomDate] = useState(format(new Date(), 'yyyy-MM-dd'));
@@ -26,12 +29,12 @@ export function CompletionModal({ choreName, onComplete, onClose }: CompletionMo
     setMouseDownOnOverlay(false);
   };
 
-  const handleComplete = (collaborative: boolean) => {
+  const handleComplete = (completedBy: CompletedByOption) => {
     if (dateMode === 'now') {
-      onComplete(collaborative);
+      onComplete(completedBy);
     } else {
       const date = new Date(customDate + 'T12:00:00');
-      onComplete(collaborative, date);
+      onComplete(completedBy, date);
     }
   };
 
@@ -71,18 +74,27 @@ export function CompletionModal({ choreName, onComplete, onClose }: CompletionMo
           )}
         </div>
 
-        <p>Did you do this alone or together?</p>
-        <div className="completion-options">
+        <p>Who did this?</p>
+        <div className="completion-options three-options">
           <button
             className="completion-option"
-            onClick={() => handleComplete(false)}
+            onClick={() => handleComplete('me')}
           >
             <span className="option-icon">👤</span>
-            <span className="option-text">Just me</span>
+            <span className="option-text">Me</span>
           </button>
+          {partnerName && (
+            <button
+              className="completion-option partner"
+              onClick={() => handleComplete('partner')}
+            >
+              <span className="option-icon">👤</span>
+              <span className="option-text">{partnerName}</span>
+            </button>
+          )}
           <button
             className="completion-option collaborative"
-            onClick={() => handleComplete(true)}
+            onClick={() => handleComplete('together')}
           >
             <span className="option-icon">👥</span>
             <span className="option-text">Together</span>
