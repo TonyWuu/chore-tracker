@@ -1,10 +1,9 @@
 .chore-column {
   background: var(--bg-secondary);
   border-radius: 16px;
-  min-width: 320px;
-  max-width: 380px;
-  width: 320px;
-  flex-shrink: 0;
+  flex: 1 1 300px;
+  min-width: 280px;
+  max-width: 450px;
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-sm), var(--shadow-md);
@@ -505,10 +504,8 @@
 
 @media (max-width: 768px) {
   .chore-column {
+    flex: 1 1 100%;
     min-width: unset;
     max-width: none;
-    width: 100%;
-    max-height: none;
   }
-
 }

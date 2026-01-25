@@ -4,6 +4,7 @@
   min-height: calc(100vh - 69px);
   padding: 24px;
   padding-bottom: 100px;
+  overflow-x: hidden;
 }
 
 .chore-columns {
@@ -14,24 +15,6 @@
   align-items: flex-start;
   align-content: flex-start;
   padding-bottom: 16px;
-}
-
-.chore-columns::-webkit-scrollbar {
-  height: 8px;
-}
-
-.chore-columns::-webkit-scrollbar-track {
-  background: rgba(124, 58, 237, 0.05);
-  border-radius: 4px;
-}
-
-.chore-columns::-webkit-scrollbar-thumb {
-  background: rgba(124, 58, 237, 0.2);
-  border-radius: 4px;
-}
-
-.chore-columns::-webkit-scrollbar-thumb:hover {
-  background: rgba(124, 58, 237, 0.3);
 }
 
 .empty-state {
