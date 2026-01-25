@@ -18,41 +18,30 @@ export function calculateChoreStatus(
   let status: ChoreWithStatus['status'];
   let statusText: string;
 
+  // Determine status based on days since last done
   if (chore.isOneTime && lastCompletion) {
-    // One-time task that's been completed
     status = 'comfortable';
-    statusText = 'Completed';
   } else if (!lastCompletion) {
-    // Never been done - show as overdue
     status = 'overdue';
-    statusText = 'Due';
   } else if (daysSinceLastDone < chore.minDays) {
     status = 'comfortable';
-    const daysLeft = chore.minDays - daysSinceLastDone;
-    statusText = daysLeft === 1 ? 'Due in 1 day' : `Due in ${daysLeft} days`;
   } else if (daysSinceLastDone < chore.maxDays) {
     status = 'due-soon';
-    if (daysUntilOverdue <= 0) {
-      statusText = 'Due today';
-    } else if (daysUntilOverdue === 1) {
-      statusText = 'Due in 1 day';
-    } else {
-      statusText = `Due in ${daysUntilOverdue} days`;
-    }
   } else if (daysSinceLastDone >= chore.maxDays * 3) {
     status = 'severely-overdue';
-    const overdueDays = daysSinceLastDone - chore.maxDays;
-    statusText = `Overdue by ${overdueDays} days`;
   } else {
     status = 'overdue';
-    const overdueDays = daysSinceLastDone - chore.maxDays;
-    if (overdueDays === 0) {
-      statusText = 'Due today';
-    } else if (overdueDays === 1) {
-      statusText = 'Overdue by 1 day';
-    } else {
-      statusText = `Overdue by ${overdueDays} days`;
-    }
+  }
+
+  // Status text shows when it was last done
+  if (!lastCompletion) {
+    statusText = 'Never done';
+  } else if (daysSinceLastDone === 0) {
+    statusText = 'Today';
+  } else if (daysSinceLastDone === 1) {
+    statusText = '1 day ago';
+  } else {
+    statusText = `${daysSinceLastDone} days ago`;
   }
 
   return {

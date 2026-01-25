@@ -183,16 +183,9 @@ export function ChoreColumn({
                 <div className="item-content">
                   <span className="item-name">{chore.name}</span>
                 </div>
-                <div className="item-status-info">
-                  <span className={`item-status-text ${getStatusColor(chore.status)}`}>
-                    {chore.statusText}
-                  </span>
-                  {chore.lastCompletion && (
-                    <span className="item-last-done">
-                      Last {format(chore.lastCompletion.completedAt.toDate(), 'MMM d')}
-                    </span>
-                  )}
-                </div>
+                <span className={`item-status-text ${getStatusColor(chore.status)}`}>
+                  {chore.statusText}
+                </span>
               </div>
 
               {isExpanded && (
