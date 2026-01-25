@@ -1,7 +1,8 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(90, 74, 122, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,23 +17,26 @@
 }
 
 .modal-content {
-  background: #1f1f3a;
-  border-radius: 16px;
+  background: linear-gradient(145deg, #fefefe 0%, #f8f4ff 100%);
+  border-radius: 24px;
   width: 100%;
   max-width: 480px;
   max-height: 90vh;
   overflow-y: auto;
   animation: slideUp 0.3s ease-out;
+  box-shadow: 0 10px 40px rgba(139, 92, 246, 0.2),
+              0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(147, 112, 219, 0.1);
 }
 
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(20px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -41,27 +45,29 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid #2d2d44;
+  border-bottom: 1px solid rgba(147, 112, 219, 0.15);
 }
 
 .modal-header h2 {
   margin: 0;
   font-size: 1.25rem;
-  color: #fff;
+  font-weight: 700;
+  color: #5a4a7a;
 }
 
 .close-button {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #6b7280;
+  color: #9a8ab0;
   cursor: pointer;
   padding: 0.25rem;
   line-height: 1;
+  transition: color 0.2s;
 }
 
 .close-button:hover {
-  color: #fff;
+  color: #5a4a7a;
 }
 
 form {
@@ -75,33 +81,38 @@ form {
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #a0a0b0;
+  color: #7a6a9a;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .form-group input[type="text"],
 .form-group input[type="number"] {
   width: 100%;
   padding: 0.75rem 1rem;
-  background: #16162a;
-  border: 1px solid #2d2d44;
-  border-radius: 8px;
-  color: #fff;
+  background: #fff;
+  border: 2px solid rgba(147, 112, 219, 0.15);
+  border-radius: 12px;
+  color: #4a3a6a;
   font-size: 1rem;
-  transition: border-color 0.2s;
+  transition: all 0.2s ease;
+}
+
+.form-group input::placeholder {
+  color: #b0a0c0;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
 }
 
 .helper-text {
   display: block;
   margin-top: 0.375rem;
   font-size: 0.75rem;
-  color: #6b7280;
+  color: #9a8ab0;
 }
 
 .checkbox-group {
@@ -115,12 +126,13 @@ form {
   gap: 0.5rem;
   cursor: pointer;
   margin: 0;
+  color: #5a4a7a;
 }
 
 .checkbox-group input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #3b82f6;
+  accent-color: #8b5cf6;
   cursor: pointer;
 }
 
@@ -133,15 +145,16 @@ form {
 .history-section {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #2d2d44;
+  border-top: 1px solid rgba(147, 112, 219, 0.15);
 }
 
 .history-section h3 {
   margin: 0 0 1rem;
   font-size: 0.875rem;
-  color: #8888a0;
+  color: #7a6a9a;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 600;
 }
 
 .history-list {
@@ -156,8 +169,8 @@ form {
   gap: 0.75rem;
   padding: 0.5rem 0;
   font-size: 0.875rem;
-  color: #a0a0b0;
-  border-bottom: 1px solid #2d2d44;
+  color: #7a6a9a;
+  border-bottom: 1px solid rgba(147, 112, 219, 0.1);
 }
 
 .history-list li:last-child {
@@ -166,18 +179,19 @@ form {
 
 .history-who {
   flex: 1;
+  color: #9a8ab0;
 }
 
 .history-delete {
   background: none;
   border: none;
-  color: #6b7280;
+  color: #c0b0d0;
   font-size: 1.25rem;
   cursor: pointer;
   padding: 0 0.25rem;
   line-height: 1;
-  opacity: 0.5;
-  transition: opacity 0.2s, color 0.2s;
+  opacity: 0.6;
+  transition: all 0.2s;
 }
 
 .history-delete:hover {
@@ -186,25 +200,26 @@ form {
 }
 
 .history-date {
-  color: #fff;
+  color: #4a3a6a;
+  font-weight: 500;
 }
 
 .history-date.editable {
   cursor: pointer;
-  border-bottom: 1px dashed #6b7280;
-  transition: border-color 0.2s;
+  border-bottom: 1px dashed #a78bfa;
+  transition: all 0.2s;
 }
 
 .history-date.editable:hover {
-  border-color: #3b82f6;
-  color: #3b82f6;
+  border-color: #8b5cf6;
+  color: #8b5cf6;
 }
 
 .history-date-input {
-  background: #2d2d44;
-  border: 1px solid #3b82f6;
-  border-radius: 4px;
-  color: #fff;
+  background: #f8f4ff;
+  border: 1px solid #a78bfa;
+  border-radius: 6px;
+  color: #4a3a6a;
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
   font-family: inherit;
@@ -212,17 +227,13 @@ form {
 
 .history-date-input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-}
-
-.history-who {
-  color: #6b7280;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
 }
 
 .history-more {
   margin: 0.75rem 0 0;
   font-size: 0.8rem;
-  color: #6b7280;
+  color: #9a8ab0;
 }
 
 .form-actions {
@@ -231,7 +242,7 @@ form {
   align-items: center;
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #2d2d44;
+  border-top: 1px solid rgba(147, 112, 219, 0.15);
   gap: 1rem;
 }
 
@@ -242,50 +253,56 @@ form {
 
 .cancel-button {
   padding: 0.75rem 1.25rem;
-  background: transparent;
-  border: 1px solid #4a4a6a;
-  border-radius: 8px;
-  color: #a0a0b0;
+  background: #f8f4ff;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
+  color: #7c3aed;
   font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .cancel-button:hover {
-  background: #2d2d44;
-  color: #fff;
+  background: #ede9fe;
+  border-color: rgba(139, 92, 246, 0.4);
 }
 
 .save-button {
   padding: 0.75rem 1.5rem;
-  background: #3b82f6;
+  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   color: #fff;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
 }
 
 .save-button:hover {
-  background: #2563eb;
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+  transform: translateY(-1px);
 }
 
 .delete-button {
   padding: 0.75rem 1.25rem;
-  background: transparent;
-  border: 1px solid #dc2626;
-  border-radius: 8px;
+  background: #fff;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
   color: #dc2626;
   font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .delete-button:hover,
 .delete-button.confirm {
-  background: #dc2626;
+  background: linear-gradient(135deg, #fca5a5 0%, #ef4444 100%);
+  border-color: transparent;
   color: #fff;
 }
 

@@ -15,6 +15,7 @@ interface ChoreColumnProps {
   onDeleteCompletion: (completionId: string) => void;
   onUpdateCompletionDate: (completionId: string, newDate: Date) => void;
   onAddItem?: () => void;
+  onDeleteColumn?: () => void;
   isCompleted?: boolean;
 }
 
@@ -30,10 +31,12 @@ export function ChoreColumn({
   onDeleteCompletion,
   onUpdateCompletionDate,
   onAddItem,
+  onDeleteColumn,
   isCompleted = false
 }: ChoreColumnProps) {
   const [expandedChoreId, setExpandedChoreId] = useState<string | null>(null);
   const [editingCompletionId, setEditingCompletionId] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const getStatusColor = (status: ChoreWithStatus['status']) => {
     switch (status) {
@@ -115,6 +118,37 @@ export function ChoreColumn({
             <button className="column-add-btn" onClick={onAddItem} title="Add task">
               +
             </button>
+          )}
+          {onDeleteColumn && (
+            showDeleteConfirm ? (
+              <div className="column-delete-confirm">
+                <button
+                  className="column-delete-yes"
+                  onClick={() => {
+                    onDeleteColumn();
+                    setShowDeleteConfirm(false);
+                  }}
+                  title="Confirm delete"
+                >
+                  Yes
+                </button>
+                <button
+                  className="column-delete-no"
+                  onClick={() => setShowDeleteConfirm(false)}
+                  title="Cancel"
+                >
+                  No
+                </button>
+              </div>
+            ) : (
+              <button
+                className="column-delete-btn"
+                onClick={() => setShowDeleteConfirm(true)}
+                title="Delete chore"
+              >
+                &times;
+              </button>
+            )
           )}
         </div>
       </div>

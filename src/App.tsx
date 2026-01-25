@@ -32,7 +32,7 @@ function App() {
     deleteCompletion,
     updateCompletionDate
   } = useCompletions();
-  const { categories, addCategory } = useCategories();
+  const { categories, addCategory, deleteCategory } = useCategories();
 
   const [users, setUsers] = useState<Map<string, User>>(new Map());
   const [showChoreForm, setShowChoreForm] = useState(false);
@@ -169,6 +169,23 @@ function App() {
     setToastMessage(`Snoozed until ${date.toLocaleDateString()}`);
   };
 
+  const handleDeleteCategory = async (categoryName: string) => {
+    // Find the category by name and delete it
+    const category = categories.find(c => c.name === categoryName);
+    if (!category) return;
+
+    // Delete all chores and their completions in this category
+    const choresInCategory = chores.filter(c => c.category === categoryName);
+    for (const chore of choresInCategory) {
+      await deleteCompletionsForChore(chore.id);
+      await deleteChore(chore.id);
+    }
+
+    // Delete the category itself
+    await deleteCategory(category.id);
+    setToastMessage('Chore deleted');
+  };
+
   if (authLoading) {
     return (
       <div className="loading-screen">
@@ -205,6 +222,7 @@ function App() {
           onUpdateCompletionDate={updateCompletionDate}
           onAddCategory={handleAddCategory}
           onAddToCategory={handleAddToCategory}
+          onDeleteCategory={handleDeleteCategory}
         />
       )}
 

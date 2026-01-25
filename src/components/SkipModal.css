@@ -1,21 +1,25 @@
 .skip-modal {
-  background: #1f1f3a;
-  border-radius: 16px;
+  background: linear-gradient(145deg, #fefefe 0%, #f8f4ff 100%);
+  border-radius: 24px;
   padding: 1.5rem;
   width: 100%;
   max-width: 400px;
   animation: slideUp 0.3s ease-out;
+  box-shadow: 0 10px 40px rgba(139, 92, 246, 0.2),
+              0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(147, 112, 219, 0.1);
 }
 
 .skip-modal h3 {
   margin: 0 0 0.5rem;
-  color: #fff;
+  color: #5a4a7a;
   font-size: 1.125rem;
+  font-weight: 700;
 }
 
 .skip-modal p {
   margin: 0 0 1.5rem;
-  color: #8888a0;
+  color: #7a6a9a;
   font-size: 0.9rem;
 }
 
@@ -28,28 +32,31 @@
 
 .skip-option {
   padding: 1rem;
-  background: #16162a;
-  border: 2px solid #2d2d44;
-  border-radius: 12px;
+  background: #fff;
+  border: 2px solid rgba(147, 112, 219, 0.15);
+  border-radius: 16px;
   text-align: left;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .skip-option.reset:hover {
-  border-color: #3b82f6;
+  border-color: #a78bfa;
+  background: #f8f4ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
 }
 
 .skip-option-title {
   display: block;
-  color: #fff;
-  font-weight: 500;
+  color: #5a4a7a;
+  font-weight: 600;
   margin-bottom: 0.25rem;
 }
 
 .skip-option-desc {
   display: block;
-  color: #6b7280;
+  color: #9a8ab0;
   font-size: 0.8rem;
 }
 
@@ -62,45 +69,51 @@
 
 .skip-option.snooze input[type="date"] {
   padding: 0.625rem;
-  background: #1a1a2e;
-  border: 1px solid #3d3d5c;
-  border-radius: 6px;
-  color: #fff;
+  background: #f8f4ff;
+  border: 1px solid rgba(147, 112, 219, 0.2);
+  border-radius: 10px;
+  color: #4a3a6a;
   font-size: 0.9rem;
 }
 
-.skip-option.snooze input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
+.skip-option.snooze input[type="date"]:focus {
+  outline: none;
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
 .snooze-button {
   padding: 0.625rem 1rem;
-  background: #f59e0b;
+  background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
   border: none;
-  border-radius: 6px;
-  color: #000;
-  font-weight: 500;
+  border-radius: 10px;
+  color: #78350f;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
 }
 
 .snooze-button:hover {
-  background: #d97706;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
 }
 
 .skip-cancel {
   width: 100%;
   padding: 0.75rem;
-  background: transparent;
-  border: 1px solid #4a4a6a;
-  border-radius: 8px;
-  color: #8888a0;
+  background: #f8f4ff;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
+  color: #7c3aed;
   font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .skip-cancel:hover {
-  background: #2d2d44;
-  color: #fff;
+  background: #ede9fe;
+  border-color: rgba(139, 92, 246, 0.4);
 }
