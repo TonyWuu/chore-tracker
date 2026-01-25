@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import type { ChoreWithStatus, User, Completion } from '../lib/types';
 import type { Category } from '../hooks/useCategories';
 import { ChoreColumn } from './ChoreColumn';
@@ -92,8 +92,25 @@ export function ChoreList({
 
   const hasContent = groupedChores.length > 0 || completedOneTimes.length > 0;
 
+  // Track which column has an expanded item (null means collapse all)
+  const [activeColumn, setActiveColumn] = useState<string | null>(null);
+
+  const handleColumnClick = useCallback((columnKey: string) => {
+    setActiveColumn(columnKey);
+  }, []);
+
+  const handleBackgroundClick = useCallback((e: React.MouseEvent) => {
+    // Only collapse if clicking directly on the container or columns wrapper, not on a column
+    if (
+      e.target === e.currentTarget ||
+      (e.target as HTMLElement).classList.contains('chore-columns')
+    ) {
+      setActiveColumn(null);
+    }
+  }, []);
+
   return (
-    <div className="chore-list-container">
+    <div className="chore-list-container" onClick={handleBackgroundClick}>
       {!hasContent ? (
         <div className="empty-state">
           <p>No chores yet!</p>
@@ -104,6 +121,7 @@ export function ChoreList({
           {groupedChores.map(({ category, chores: categoryChores }) => (
             <ChoreColumn
               key={category}
+              columnKey={category}
               title={category}
               chores={categoryChores}
               users={users}
@@ -117,24 +135,32 @@ export function ChoreList({
               onAddItem={() => onAddToCategory(category)}
               onDeleteColumn={() => onDeleteCategory(category)}
               onRenameColumn={(newName) => onRenameCategory(category, newName)}
+              isActiveColumn={activeColumn === category}
+              onColumnActivate={() => handleColumnClick(category)}
             />
           ))}
-          {completedGroups.map(({ category, chores: categoryChores }) => (
-            <ChoreColumn
-              key={`completed-${category}`}
-              title={`${category} (Done)`}
-              chores={categoryChores}
-              users={users}
-              currentUserId={currentUserId}
-              getCompletionHistory={getCompletionHistory}
-              onMarkDone={onMarkDone}
-              onEdit={onEdit}
-              onSkip={onSkip}
-              onDeleteCompletion={onDeleteCompletion}
-              onUpdateCompletionDate={onUpdateCompletionDate}
-              isCompleted
-            />
-          ))}
+          {completedGroups.map(({ category, chores: categoryChores }) => {
+            const columnKey = `completed-${category}`;
+            return (
+              <ChoreColumn
+                key={columnKey}
+                columnKey={columnKey}
+                title={`${category} (Done)`}
+                chores={categoryChores}
+                users={users}
+                currentUserId={currentUserId}
+                getCompletionHistory={getCompletionHistory}
+                onMarkDone={onMarkDone}
+                onEdit={onEdit}
+                onSkip={onSkip}
+                onDeleteCompletion={onDeleteCompletion}
+                onUpdateCompletionDate={onUpdateCompletionDate}
+                isCompleted
+                isActiveColumn={activeColumn === columnKey}
+                onColumnActivate={() => handleColumnClick(columnKey)}
+              />
+            );
+          })}
         </div>
       )}
       <button className="add-chore-button" onClick={onAddCategory}>

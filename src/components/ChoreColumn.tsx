@@ -4,6 +4,7 @@ import type { ChoreWithStatus, User, Completion } from '../lib/types';
 import './ChoreColumn.css';
 
 interface ChoreColumnProps {
+  columnKey?: string;
   title: string;
   chores: ChoreWithStatus[];
   users: Map<string, User>;
@@ -18,6 +19,8 @@ interface ChoreColumnProps {
   onDeleteColumn?: () => void;
   onRenameColumn?: (newName: string) => void;
   isCompleted?: boolean;
+  isActiveColumn?: boolean;
+  onColumnActivate?: () => void;
 }
 
 export function ChoreColumn({
@@ -34,9 +37,14 @@ export function ChoreColumn({
   onAddItem,
   onDeleteColumn,
   onRenameColumn,
-  isCompleted = false
+  isCompleted = false,
+  isActiveColumn = true,
+  onColumnActivate
 }: ChoreColumnProps) {
   const [expandedChoreId, setExpandedChoreId] = useState<string | null>(null);
+
+  // Collapse when this column is no longer active
+  const effectiveExpandedId = isActiveColumn ? expandedChoreId : null;
   const [editingCompletionId, setEditingCompletionId] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -166,7 +174,7 @@ export function ChoreColumn({
 
       <div className="column-items">
         {chores.map((chore) => {
-          const isExpanded = expandedChoreId === chore.id;
+          const isExpanded = effectiveExpandedId === chore.id;
           const completionHistory = getCompletionHistory(chore.id);
           const choreCompleted = chore.isOneTime && chore.lastCompletion;
 
@@ -177,7 +185,12 @@ export function ChoreColumn({
             >
               <div
                 className="item-main"
-                onClick={() => setExpandedChoreId(isExpanded ? null : chore.id)}
+                onClick={() => {
+                  setExpandedChoreId(isExpanded ? null : chore.id);
+                  if (!isExpanded && onColumnActivate) {
+                    onColumnActivate();
+                  }
+                }}
               >
                 <div className={`item-status ${getStatusColor(chore.status)}`} />
                 <div className="item-content">
