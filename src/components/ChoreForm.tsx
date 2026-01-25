@@ -96,11 +96,12 @@ export function ChoreForm({
               <div className="form-group">
                 <label htmlFor="minDays">Minimum Days</label>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   id="minDays"
                   value={minDaysStr}
-                  onChange={(e) => setMinDaysStr(e.target.value)}
-                  min="1"
+                  onChange={(e) => setMinDaysStr(e.target.value.replace(/\D/g, ''))}
                 />
                 <span className="helper-text">OK to wait this long</span>
               </div>
@@ -108,11 +109,12 @@ export function ChoreForm({
               <div className="form-group">
                 <label htmlFor="maxDays">Maximum Days</label>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   id="maxDays"
                   value={maxDaysStr}
-                  onChange={(e) => setMaxDaysStr(e.target.value)}
-                  min="1"
+                  onChange={(e) => setMaxDaysStr(e.target.value.replace(/\D/g, ''))}
                 />
                 <span className="helper-text">Overdue after this</span>
               </div>
