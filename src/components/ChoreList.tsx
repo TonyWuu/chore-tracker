@@ -155,8 +155,8 @@ export function ChoreList({
           ))}
         </div>
       )}
-      <button className="add-chore-button" onClick={onAddCategory}>
-        + Add Chore
+      <button className="add-chore-button" onClick={onAddCategory} title="Add chore">
+        +
       </button>
     </div>
   );

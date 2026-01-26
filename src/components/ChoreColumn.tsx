@@ -158,12 +158,12 @@ export function ChoreColumn({
               onClick={() => onMarkAllDone(chores.map(c => c.id))}
               title="Mark all done"
             >
-              ✓ All Done
+              ✓ Done
             </button>
           )}
           {onAddItem && (
             <button className="column-add-btn" onClick={onAddItem} title="Add task">
-              + Add
+              +
             </button>
           )}
           {onDeleteColumn && (
@@ -175,25 +175,23 @@ export function ChoreColumn({
                     onDeleteColumn();
                     setShowDeleteConfirm(false);
                   }}
-                  title="Confirm delete"
                 >
-                  Yes
+                  Delete
                 </button>
                 <button
                   className="column-delete-no"
                   onClick={() => setShowDeleteConfirm(false)}
-                  title="Cancel"
                 >
-                  No
+                  Cancel
                 </button>
               </div>
             ) : (
               <button
                 className="column-delete-btn"
                 onClick={() => setShowDeleteConfirm(true)}
-                title="Delete column"
+                title="Delete"
               >
-                Delete
+                ×
               </button>
             )
           )}

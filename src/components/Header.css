@@ -2,79 +2,66 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
+  padding: 12px 20px;
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-light);
-  box-shadow: var(--shadow-sm);
 }
 
 .header-title {
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .title-icon {
-  font-size: 24px;
-  animation: sparkle 2s ease-in-out infinite;
-}
-
-@keyframes sparkle {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  25% { transform: scale(1.1) rotate(-5deg); }
-  75% { transform: scale(1.1) rotate(5deg); }
+  font-size: 20px;
 }
 
 .title-text {
-  font-size: 24px;
-  font-weight: 800;
-  background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.03em;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent-primary);
+  letter-spacing: -0.02em;
 }
 
 .header-user {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .theme-toggle {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  border: 1px solid var(--border-medium);
-  background: var(--bg-tertiary);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
   cursor: pointer;
   font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .theme-toggle:hover {
   background: var(--bg-hover);
-  border-color: var(--accent-primary);
-  transform: scale(1.05);
 }
 
 .header-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  border: 2px solid var(--accent-bg);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
 }
 
 .logout-button {
-  padding: 8px 16px;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-medium);
-  border-radius: 8px;
-  color: var(--text-muted);
+  padding: 6px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-faint);
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;
@@ -83,6 +70,5 @@
 
 .logout-button:hover {
   background: var(--bg-hover);
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
+  color: var(--text-muted);
 }
