@@ -337,6 +337,12 @@
   animation: slideDown 0.2s ease-out;
 }
 
+.item-next-due {
+  margin: 12px 0 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;

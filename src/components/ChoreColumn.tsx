@@ -229,6 +229,22 @@ export function ChoreColumn({
 
               {isExpanded && (
                 <div className="item-details">
+                  {chore.lastCompletion && !chore.isOneTime && (
+                    <p className="item-next-due">
+                      Next due:{' '}
+                      {(() => {
+                        const lastDone = chore.lastCompletion.completedAt.toDate();
+                        const nextDue = new Date(lastDone);
+                        nextDue.setDate(nextDue.getDate() + chore.maxDays);
+                        return format(nextDue, 'MMM d, yyyy');
+                      })()}
+                    </p>
+                  )}
+                  {!chore.lastCompletion && !chore.isOneTime && (
+                    <p className="item-next-due">
+                      Due every {chore.maxDays} days
+                    </p>
+                  )}
                   <div className="item-actions">
                     <button
                       className="action-btn edit"
