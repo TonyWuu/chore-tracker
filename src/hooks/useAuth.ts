@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import type { User as FirebaseUser } from 'firebase/auth';
 import {
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
   signOut,
   onAuthStateChanged
 } from 'firebase/auth';
@@ -22,11 +20,6 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for redirect result (for iOS PWA flow)
-    getRedirectResult(auth).catch((error) => {
-      console.error('Error getting redirect result:', error);
-    });
-
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         // Check if user document exists, create if not
@@ -54,12 +47,7 @@ export function useAuth() {
 
   const signIn = async () => {
     try {
-      // Use redirect for iOS PWA, popup for everything else
-      if (isIOSPWA()) {
-        await signInWithRedirect(auth, googleProvider);
-      } else {
-        await signInWithPopup(auth, googleProvider);
-      }
+      await signInWithPopup(auth, googleProvider);
     } catch (error) {
       console.error('Error signing in:', error);
     }
