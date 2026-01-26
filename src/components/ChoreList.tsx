@@ -76,9 +76,6 @@ function SortableColumn({
 
   return (
     <div ref={setNodeRef} style={style} className={`sortable-column ${isDragging ? 'dragging' : ''}`}>
-      <div className="column-drag-handle" {...attributes} {...listeners}>
-        ⋮⋮
-      </div>
       <ChoreColumn
         title={category}
         chores={chores}
@@ -95,6 +92,7 @@ function SortableColumn({
         onDeleteColumn={() => onDeleteCategory(category)}
         onRenameColumn={(newName) => onRenameCategory(category, newName)}
         collapseSignal={collapseSignal}
+        dragHandleProps={{ ...attributes, ...listeners }}
       />
     </div>
   );

@@ -20,6 +20,7 @@ interface ChoreColumnProps {
   onRenameColumn?: (newName: string) => void;
   isCompleted?: boolean;
   collapseSignal?: number;
+  dragHandleProps?: Record<string, unknown>;
 }
 
 export function ChoreColumn({
@@ -38,7 +39,8 @@ export function ChoreColumn({
   onDeleteColumn,
   onRenameColumn,
   isCompleted = false,
-  collapseSignal = 0
+  collapseSignal = 0,
+  dragHandleProps
 }: ChoreColumnProps) {
   const [expandedChoreIds, setExpandedChoreIds] = useState<Set<string>>(new Set());
 
@@ -105,6 +107,11 @@ export function ChoreColumn({
   return (
     <div className={`chore-column ${isCompleted ? 'completed' : ''}`}>
       <div className="column-header">
+        {dragHandleProps && (
+          <div className="column-drag-handle" {...dragHandleProps}>
+            ⋮⋮
+          </div>
+        )}
         <div className="column-title-row">
           {isEditingTitle && onRenameColumn ? (
             <input

@@ -15,9 +15,30 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
   padding: 14px 16px;
   border-bottom: 1px solid var(--border-light);
+}
+
+.column-drag-handle {
+  color: var(--text-faint);
+  font-size: 14px;
+  padding: 4px;
+  cursor: grab;
+  opacity: 0.5;
+  transition: all 0.15s;
+  user-select: none;
+  touch-action: none;
+  flex-shrink: 0;
+}
+
+.column-drag-handle:hover {
+  opacity: 1;
+  color: var(--text-muted);
+}
+
+.column-drag-handle:active {
+  cursor: grabbing;
 }
 
 .column-title-row {
