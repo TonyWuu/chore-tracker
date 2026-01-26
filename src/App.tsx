@@ -18,6 +18,7 @@ import { CompletionModal } from './components/CompletionModal';
 import type { CompletedByOption } from './components/CompletionModal';
 import { SkipModal } from './components/SkipModal';
 import { Toast } from './components/Toast';
+import { DueBanner } from './components/DueBanner';
 import './App.css';
 
 function App() {
@@ -318,6 +319,10 @@ function App() {
   return (
     <div className="app">
       <Header user={user} theme={theme} onToggleTheme={toggleTheme} onLogout={logOut} />
+
+      {!isLoading && (
+        <DueBanner chores={choresWithStatus} />
+      )}
 
       {isLoading ? (
         <div className="loading-content">
