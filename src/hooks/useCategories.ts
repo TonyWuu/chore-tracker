@@ -6,13 +6,15 @@ import {
   addDoc,
   deleteDoc,
   updateDoc,
-  doc
+  doc,
+  writeBatch
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
 export interface Category {
   id: string;
   name: string;
+  order?: number;
 }
 
 export function useCategories() {
@@ -24,8 +26,9 @@ export function useCategories() {
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const categoryData: Category[] = [];
-      snapshot.forEach((doc) => {
-        categoryData.push({ id: doc.id, name: doc.data().name });
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        categoryData.push({ id: docSnap.id, name: data.name, order: data.order });
       });
       setCategories(categoryData);
       setLoading(false);
@@ -55,5 +58,13 @@ export function useCategories() {
     return true;
   };
 
-  return { categories, loading, addCategory, deleteCategory, updateCategory };
+  const reorderCategories = async (categoryIds: string[]) => {
+    const batch = writeBatch(db);
+    categoryIds.forEach((categoryId, index) => {
+      batch.update(doc(db, 'categories', categoryId), { order: index });
+    });
+    await batch.commit();
+  };
+
+  return { categories, loading, addCategory, deleteCategory, updateCategory, reorderCategories };
 }

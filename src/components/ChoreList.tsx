@@ -1,8 +1,104 @@
 import { useMemo, useState, useCallback } from 'react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors
+} from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  horizontalListSortingStrategy
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import type { ChoreWithStatus, User, Completion } from '../lib/types';
 import type { Category } from '../hooks/useCategories';
 import { ChoreColumn } from './ChoreColumn';
 import './ChoreList.css';
+
+interface SortableColumnProps {
+  id: string;
+  category: string;
+  chores: ChoreWithStatus[];
+  users: Map<string, User>;
+  currentUserId: string;
+  getCompletionHistory: (choreId: string) => Completion[];
+  onMarkDone: (choreId: string) => void;
+  onMarkAllDone: (choreIds: string[]) => void;
+  onEdit: (chore: ChoreWithStatus) => void;
+  onSkip: (choreId: string) => void;
+  onDeleteCompletion: (completionId: string) => void;
+  onUpdateCompletionDate: (completionId: string, newDate: Date) => void;
+  onAddToCategory: (category: string) => void;
+  onDeleteCategory: (categoryName: string) => void;
+  onRenameCategory: (oldName: string, newName: string) => void;
+  collapseSignal: number;
+}
+
+function SortableColumn({
+  id,
+  category,
+  chores,
+  users,
+  currentUserId,
+  getCompletionHistory,
+  onMarkDone,
+  onMarkAllDone,
+  onEdit,
+  onSkip,
+  onDeleteCompletion,
+  onUpdateCompletionDate,
+  onAddToCategory,
+  onDeleteCategory,
+  onRenameCategory,
+  collapseSignal
+}: SortableColumnProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 1000 : 'auto' as const
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} className={`sortable-column ${isDragging ? 'dragging' : ''}`}>
+      <div className="column-drag-handle" {...attributes} {...listeners}>
+        ⋮⋮
+      </div>
+      <ChoreColumn
+        title={category}
+        chores={chores}
+        users={users}
+        currentUserId={currentUserId}
+        getCompletionHistory={getCompletionHistory}
+        onMarkDone={onMarkDone}
+        onMarkAllDone={onMarkAllDone}
+        onEdit={onEdit}
+        onSkip={onSkip}
+        onDeleteCompletion={onDeleteCompletion}
+        onUpdateCompletionDate={onUpdateCompletionDate}
+        onAddItem={() => onAddToCategory(category)}
+        onDeleteColumn={() => onDeleteCategory(category)}
+        onRenameColumn={(newName) => onRenameCategory(category, newName)}
+        collapseSignal={collapseSignal}
+      />
+    </div>
+  );
+}
 
 interface ChoreListProps {
   chores: ChoreWithStatus[];
@@ -20,7 +116,7 @@ interface ChoreListProps {
   onAddToCategory: (category: string) => void;
   onDeleteCategory: (categoryName: string) => void;
   onRenameCategory: (oldName: string, newName: string) => void;
-  onReorderChores: (choreIds: string[]) => void;
+  onReorderCategories: (categoryIds: string[]) => void;
 }
 
 export function ChoreList({
@@ -39,17 +135,29 @@ export function ChoreList({
   onAddToCategory,
   onDeleteCategory,
   onRenameCategory,
-  onReorderChores
+  onReorderCategories
 }: ChoreListProps) {
   const activeChores = chores.filter(c => !(c.isOneTime && c.lastCompletion));
   const completedOneTimes = chores.filter(c => c.isOneTime && c.lastCompletion);
 
-  // Group active chores by category, including empty categories
+  // Sort categories by order, falling back to alphabetical
+  const sortedCategories = useMemo(() => {
+    return [...categories].sort((a, b) => {
+      if (a.order !== undefined && b.order !== undefined) {
+        return a.order - b.order;
+      }
+      if (a.order !== undefined) return -1;
+      if (b.order !== undefined) return 1;
+      return a.name.localeCompare(b.name);
+    });
+  }, [categories]);
+
+  // Group active chores by category
   const groupedChores = useMemo(() => {
     const groups = new Map<string, ChoreWithStatus[]>();
 
-    // Start with all categories from the categories collection
-    for (const cat of categories) {
+    // Start with all categories from the sorted categories
+    for (const cat of sortedCategories) {
       groups.set(cat.name, []);
     }
 
@@ -62,33 +170,17 @@ export function ChoreList({
       groups.get(category)!.push(chore);
     }
 
-    // Sort chores within each category by order, falling back to priority
+    // Sort chores within each category by priority
     for (const [, categoryChores] of groups) {
-      categoryChores.sort((a, b) => {
-        // If both have order, sort by order
-        if (a.order !== undefined && b.order !== undefined) {
-          return a.order - b.order;
-        }
-        // If only one has order, it goes first
-        if (a.order !== undefined) return -1;
-        if (b.order !== undefined) return 1;
-        // Fall back to priority (days until overdue)
-        return a.daysUntilOverdue - b.daysUntilOverdue;
-      });
+      categoryChores.sort((a, b) => a.daysUntilOverdue - b.daysUntilOverdue);
     }
 
-    // Sort categories alphabetically, "Uncategorized" goes last
-    const sortedCategories = Array.from(groups.keys()).sort((a, b) => {
-      if (a === 'Uncategorized') return 1;
-      if (b === 'Uncategorized') return -1;
-      return a.localeCompare(b);
-    });
-
-    return sortedCategories.map(category => ({
-      category,
-      chores: groups.get(category)!
+    return sortedCategories.map(cat => ({
+      id: cat.id,
+      category: cat.name,
+      chores: groups.get(cat.name) || []
     }));
-  }, [activeChores, categories]);
+  }, [activeChores, sortedCategories]);
 
   // Group completed one-time tasks
   const completedGroups = useMemo(() => {
@@ -124,6 +216,28 @@ export function ChoreList({
     }
   }, []);
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = groupedChores.findIndex(g => g.id === active.id);
+      const newIndex = groupedChores.findIndex(g => g.id === over.id);
+      const newOrder = arrayMove(groupedChores, oldIndex, newIndex);
+      onReorderCategories(newOrder.map(g => g.id));
+    }
+  };
+
   return (
     <div className="chore-list-container" onClick={handleBackgroundClick}>
       {!hasContent ? (
@@ -132,46 +246,58 @@ export function ChoreList({
           <p className="empty-hint">Add your first chore to get started.</p>
         </div>
       ) : (
-        <div className="chore-columns">
-          {groupedChores.map(({ category, chores: categoryChores }) => (
-            <ChoreColumn
-              key={category}
-              title={category}
-              chores={categoryChores}
-              users={users}
-              currentUserId={currentUserId}
-              getCompletionHistory={getCompletionHistory}
-              onMarkDone={onMarkDone}
-              onMarkAllDone={onMarkAllDone}
-              onEdit={onEdit}
-              onSkip={onSkip}
-              onDeleteCompletion={onDeleteCompletion}
-              onUpdateCompletionDate={onUpdateCompletionDate}
-              onAddItem={() => onAddToCategory(category)}
-              onDeleteColumn={() => onDeleteCategory(category)}
-              onRenameColumn={(newName) => onRenameCategory(category, newName)}
-              onReorder={onReorderChores}
-              collapseSignal={collapseSignal}
-            />
-          ))}
-          {completedGroups.map(({ category, chores: categoryChores }) => (
-            <ChoreColumn
-              key={`completed-${category}`}
-              title={`${category} (Done)`}
-              chores={categoryChores}
-              users={users}
-              currentUserId={currentUserId}
-              getCompletionHistory={getCompletionHistory}
-              onMarkDone={onMarkDone}
-              onEdit={onEdit}
-              onSkip={onSkip}
-              onDeleteCompletion={onDeleteCompletion}
-              onUpdateCompletionDate={onUpdateCompletionDate}
-              isCompleted
-              collapseSignal={collapseSignal}
-            />
-          ))}
-        </div>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={groupedChores.map(g => g.id)}
+            strategy={horizontalListSortingStrategy}
+          >
+            <div className="chore-columns">
+              {groupedChores.map(({ id, category, chores: categoryChores }) => (
+                <SortableColumn
+                  key={id}
+                  id={id}
+                  category={category}
+                  chores={categoryChores}
+                  users={users}
+                  currentUserId={currentUserId}
+                  getCompletionHistory={getCompletionHistory}
+                  onMarkDone={onMarkDone}
+                  onMarkAllDone={onMarkAllDone}
+                  onEdit={onEdit}
+                  onSkip={onSkip}
+                  onDeleteCompletion={onDeleteCompletion}
+                  onUpdateCompletionDate={onUpdateCompletionDate}
+                  onAddToCategory={onAddToCategory}
+                  onDeleteCategory={onDeleteCategory}
+                  onRenameCategory={onRenameCategory}
+                  collapseSignal={collapseSignal}
+                />
+              ))}
+              {completedGroups.map(({ category, chores: categoryChores }) => (
+                <div key={`completed-${category}`} className="sortable-column">
+                  <ChoreColumn
+                    title={`${category} (Done)`}
+                    chores={categoryChores}
+                    users={users}
+                    currentUserId={currentUserId}
+                    getCompletionHistory={getCompletionHistory}
+                    onMarkDone={onMarkDone}
+                    onEdit={onEdit}
+                    onSkip={onSkip}
+                    onDeleteCompletion={onDeleteCompletion}
+                    onUpdateCompletionDate={onUpdateCompletionDate}
+                    isCompleted
+                    collapseSignal={collapseSignal}
+                  />
+                </div>
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       )}
       <button className="add-chore-button" onClick={onAddCategory} title="Add chore">
         +

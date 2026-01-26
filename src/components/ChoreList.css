@@ -17,6 +17,40 @@
   padding-bottom: 16px;
 }
 
+.sortable-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 300px;
+  min-width: 280px;
+  max-width: 450px;
+}
+
+.sortable-column.dragging {
+  opacity: 0.5;
+}
+
+.column-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  color: var(--text-faint);
+  font-size: 14px;
+  cursor: grab;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+  user-select: none;
+  touch-action: none;
+}
+
+.column-drag-handle:hover {
+  opacity: 1;
+}
+
+.column-drag-handle:active {
+  cursor: grabbing;
+}
+
 .empty-state {
   text-align: center;
   padding: 80px 32px;

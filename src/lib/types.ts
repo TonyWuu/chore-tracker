@@ -9,7 +9,6 @@ export interface Chore {
   isOneTime: boolean;
   createdAt: Timestamp;
   createdBy: string;
-  order?: number;
 }
 
 export interface Completion {

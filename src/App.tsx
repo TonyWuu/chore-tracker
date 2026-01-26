@@ -24,7 +24,7 @@ import './App.css';
 function App() {
   const { user, loading: authLoading, signIn, logOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const { chores, loading: choresLoading, addChore, updateChore, deleteChore, reorderChores } = useChores();
+  const { chores, loading: choresLoading, addChore, updateChore, deleteChore } = useChores();
   const {
     completions,
     loading: completionsLoading,
@@ -37,7 +37,7 @@ function App() {
     deleteCompletion,
     updateCompletionDate
   } = useCompletions();
-  const { categories, addCategory, deleteCategory, updateCategory } = useCategories();
+  const { categories, addCategory, deleteCategory, updateCategory, reorderCategories } = useCategories();
 
   const [users, setUsers] = useState<Map<string, User>>(new Map());
   const [showChoreForm, setShowChoreForm] = useState(false);
@@ -350,7 +350,7 @@ function App() {
           onAddToCategory={handleAddToCategory}
           onDeleteCategory={handleDeleteCategory}
           onRenameCategory={handleRenameCategory}
-          onReorderChores={reorderChores}
+          onReorderCategories={reorderCategories}
         />
       )}
 
