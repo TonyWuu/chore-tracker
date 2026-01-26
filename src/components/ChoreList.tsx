@@ -16,6 +16,7 @@ import {
   horizontalListSortingStrategy
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
 import type { ChoreWithStatus, User, Completion } from '../lib/types';
 import type { Category } from '../hooks/useCategories';
 import { ChoreColumn } from './ChoreColumn';
@@ -68,7 +69,7 @@ function SortableColumn({
   } = useSortable({ id });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Translate.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
     zIndex: isDragging ? 1000 : 'auto' as const
@@ -248,6 +249,7 @@ export function ChoreList({
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
+          modifiers={[restrictToHorizontalAxis]}
         >
           <SortableContext
             items={groupedChores.map(g => g.id)}
