@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-import { isIOSPWA } from '../hooks/useAuth';
 import './LoginScreen.css';
 
 interface LoginScreenProps {
@@ -7,35 +5,6 @@ interface LoginScreenProps {
 }
 
 export function LoginScreen({ onSignIn }: LoginScreenProps) {
-  const [showSafariOption, setShowSafariOption] = useState(false);
-  const [copied, setCopied] = useState(false);
-
-  const appUrl = typeof window !== 'undefined'
-    ? window.location.origin + window.location.pathname
-    : '';
-
-  useEffect(() => {
-    setShowSafariOption(isIOSPWA());
-  }, []);
-
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(appUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Fallback for older browsers
-      const textArea = document.createElement('textarea');
-      textArea.value = appUrl;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
   return (
     <div className="login-screen">
       <div className="login-card">
@@ -64,32 +33,6 @@ export function LoginScreen({ onSignIn }: LoginScreenProps) {
           </svg>
           Sign in with Google
         </button>
-
-        {showSafariOption && (
-          <div className="safari-fallback">
-            <p className="safari-hint">
-              Keyboard not working? Open this app in Safari:
-            </p>
-            <div className="safari-options">
-              <a
-                href={appUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="safari-link"
-                onClick={(e) => e.preventDefault()}
-              >
-                {appUrl.replace('https://', '')}
-              </a>
-              <button onClick={copyToClipboard} className="copy-button">
-                {copied ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
-            <p className="safari-instructions">
-              Long-press the link above → "Open in Safari"<br />
-              or copy and paste in Safari
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );

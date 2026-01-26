@@ -8,13 +8,6 @@ import {
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../lib/firebase';
 
-// Detect if running as iOS PWA (standalone mode)
-export function isIOSPWA(): boolean {
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const isStandalone = (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
-  return isIOS && isStandalone;
-}
-
 export function useAuth() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
