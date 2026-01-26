@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
+import type { User } from '../lib/types';
 import './CompletionModal.css';
 
-export type CompletedByOption = 'me' | 'partner' | 'together';
+export type CompletedByOption = { type: 'user'; userId: string } | { type: 'together' };
 
 interface CompletionModalProps {
   choreName: string;
-  partnerName?: string;
+  users: Map<string, User>;
+  currentUserId: string;
   onComplete: (completedBy: CompletedByOption, completedAt?: Date) => void;
   onClose: () => void;
 }
 
-export function CompletionModal({ choreName, partnerName, onComplete, onClose }: CompletionModalProps) {
+export function CompletionModal({ choreName, users, currentUserId, onComplete, onClose }: CompletionModalProps) {
   const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
   const [dateMode, setDateMode] = useState<'now' | 'custom'>('now');
   const [customDate, setCustomDate] = useState(format(new Date(), 'yyyy-MM-dd'));
@@ -37,6 +39,13 @@ export function CompletionModal({ choreName, partnerName, onComplete, onClose }:
       onComplete(completedBy, date);
     }
   };
+
+  // Get sorted list of users (current user first, then others alphabetically)
+  const sortedUsers = Array.from(users.entries()).sort(([idA, userA], [idB, userB]) => {
+    if (idA === currentUserId) return -1;
+    if (idB === currentUserId) return 1;
+    return (userA.displayName || '').localeCompare(userB.displayName || '');
+  });
 
   return (
     <div
@@ -75,30 +84,28 @@ export function CompletionModal({ choreName, partnerName, onComplete, onClose }:
         </div>
 
         <p>Who did this?</p>
-        <div className="completion-options three-options">
-          <button
-            className="completion-option"
-            onClick={() => handleComplete('me')}
-          >
-            <span className="option-icon">👤</span>
-            <span className="option-text">Me</span>
-          </button>
-          {partnerName && (
+        <div className="completion-options">
+          {sortedUsers.map(([userId, user]) => (
             <button
-              className="completion-option partner"
-              onClick={() => handleComplete('partner')}
+              key={userId}
+              className={`completion-option ${userId === currentUserId ? '' : 'other-user'}`}
+              onClick={() => handleComplete({ type: 'user', userId })}
             >
               <span className="option-icon">👤</span>
-              <span className="option-text">{partnerName}</span>
+              <span className="option-text">
+                {userId === currentUserId ? 'Me' : user.displayName?.split(' ')[0] || 'User'}
+              </span>
+            </button>
+          ))}
+          {users.size > 1 && (
+            <button
+              className="completion-option collaborative"
+              onClick={() => handleComplete({ type: 'together' })}
+            >
+              <span className="option-icon">👥</span>
+              <span className="option-text">Together</span>
             </button>
           )}
-          <button
-            className="completion-option collaborative"
-            onClick={() => handleComplete('together')}
-          >
-            <span className="option-icon">👥</span>
-            <span className="option-text">Together</span>
-          </button>
         </div>
         <button className="completion-cancel" onClick={onClose}>
           Cancel

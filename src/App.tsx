@@ -75,16 +75,6 @@ function App() {
   const completingChore = choresWithStatus.find(c => c.id === completingChoreId);
   const skippingChore = choresWithStatus.find(c => c.id === skippingChoreId);
 
-  // Get partner info (the other user)
-  const partner = useMemo(() => {
-    for (const [id, userData] of users) {
-      if (id !== user?.uid) {
-        return { id, name: userData.displayName?.split(' ')[0] || 'Partner' };
-      }
-    }
-    return undefined;
-  }, [users, user]);
-
   const handleAddCategory = () => {
     setShowCategoryForm(true);
   };
@@ -189,14 +179,19 @@ function App() {
   const handleCompleteChore = async (completedBy: CompletedByOption, completedAt?: Date) => {
     if (!completingChoreId || !user) return;
 
-    const collaborative = completedBy === 'together';
-    const userId = completedBy === 'partner' && partner ? partner.id : user.uid;
+    const collaborative = completedBy.type === 'together';
+    const userId = completedBy.type === 'user' ? completedBy.userId : user.uid;
+
+    // For collaborative, include all other users
+    const otherUserIds = collaborative
+      ? Array.from(users.keys()).filter(id => id !== user.uid)
+      : undefined;
 
     const result = await markDone(
       completingChoreId,
       userId,
       collaborative,
-      collaborative ? partner?.id : undefined,
+      otherUserIds?.[0],
       completedAt
     );
 
@@ -204,11 +199,14 @@ function App() {
       setToastMessage('Marked as done together!');
       celebrate();
     } else if (result === 'created') {
-      const message = completedBy === 'together'
-        ? 'Marked as done together!'
-        : completedBy === 'partner'
-          ? `Marked as done by ${partner?.name}!`
-          : 'Marked as done!';
+      let message = 'Marked as done!';
+      if (completedBy.type === 'together') {
+        message = 'Marked as done together!';
+      } else if (completedBy.userId !== user.uid) {
+        const completedByUser = users.get(completedBy.userId);
+        const name = completedByUser?.displayName?.split(' ')[0] || 'User';
+        message = `Marked as done by ${name}!`;
+      }
       setToastMessage(message);
       celebrate();
     }
@@ -219,25 +217,32 @@ function App() {
   const handleCompleteAllChores = async (completedBy: CompletedByOption, completedAt?: Date) => {
     if (completingChoreIds.length === 0 || !user) return;
 
-    const collaborative = completedBy === 'together';
-    const userId = completedBy === 'partner' && partner ? partner.id : user.uid;
+    const collaborative = completedBy.type === 'together';
+    const userId = completedBy.type === 'user' ? completedBy.userId : user.uid;
+
+    const otherUserIds = collaborative
+      ? Array.from(users.keys()).filter(id => id !== user.uid)
+      : undefined;
 
     for (const choreId of completingChoreIds) {
       await markDone(
         choreId,
         userId,
         collaborative,
-        collaborative ? partner?.id : undefined,
+        otherUserIds?.[0],
         completedAt
       );
     }
 
     const count = completingChoreIds.length;
-    const message = completedBy === 'together'
-      ? `${count} chores marked as done together!`
-      : completedBy === 'partner'
-        ? `${count} chores marked as done by ${partner?.name}!`
-        : `${count} chores marked as done!`;
+    let message = `${count} chores marked as done!`;
+    if (completedBy.type === 'together') {
+      message = `${count} chores marked as done together!`;
+    } else if (completedBy.userId !== user.uid) {
+      const completedByUser = users.get(completedBy.userId);
+      const name = completedByUser?.displayName?.split(' ')[0] || 'User';
+      message = `${count} chores marked as done by ${name}!`;
+    }
     setToastMessage(message);
     celebrate();
 
@@ -378,7 +383,8 @@ function App() {
       {completingChore && (
         <CompletionModal
           choreName={completingChore.name}
-          partnerName={partner?.name}
+          users={users}
+          currentUserId={user.uid}
           onComplete={handleCompleteChore}
           onClose={() => setCompletingChoreId(null)}
         />
@@ -387,7 +393,8 @@ function App() {
       {completingChoreIds.length > 0 && (
         <CompletionModal
           choreName={`${completingChoreIds.length} chores`}
-          partnerName={partner?.name}
+          users={users}
+          currentUserId={user.uid}
           onComplete={handleCompleteAllChores}
           onClose={() => setCompletingChoreIds([])}
         />
