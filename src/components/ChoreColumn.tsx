@@ -1,7 +1,240 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors
+} from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import type { ChoreWithStatus, User, Completion } from '../lib/types';
 import './ChoreColumn.css';
+
+interface SortableChoreItemProps {
+  chore: ChoreWithStatus;
+  isExpanded: boolean;
+  onToggleExpanded: () => void;
+  getStatusColor: (status: ChoreWithStatus['status']) => string;
+  completionHistory: Completion[];
+  choreCompleted: boolean;
+  users: Map<string, User>;
+  currentUserId: string;
+  editingCompletionId: string | null;
+  setEditingCompletionId: (id: string | null) => void;
+  formatDateTimeLocal: (date: Date) => string;
+  getCompletedByText: (completion: Completion) => string;
+  onEdit: (chore: ChoreWithStatus) => void;
+  onSkip: (choreId: string) => void;
+  onMarkDone: (choreId: string) => void;
+  onDeleteCompletion: (completionId: string) => void;
+  onUpdateCompletionDate: (completionId: string, newDate: Date) => void;
+}
+
+function SortableChoreItem({
+  chore,
+  isExpanded,
+  onToggleExpanded,
+  getStatusColor,
+  completionHistory,
+  choreCompleted,
+  editingCompletionId,
+  setEditingCompletionId,
+  formatDateTimeLocal,
+  getCompletedByText,
+  onEdit,
+  onSkip,
+  onMarkDone,
+  onDeleteCompletion,
+  onUpdateCompletionDate
+}: SortableChoreItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: chore.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 1000 : 'auto' as const
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`column-item ${isExpanded ? 'expanded' : ''} ${choreCompleted ? 'item-completed' : ''} ${isDragging ? 'dragging' : ''}`}
+    >
+      <div className="item-main">
+        <div
+          className="drag-handle"
+          {...attributes}
+          {...listeners}
+        >
+          ⋮⋮
+        </div>
+        <div
+          className="item-clickable"
+          onClick={onToggleExpanded}
+        >
+          <div className={`item-status ${getStatusColor(chore.status)}`} />
+          <div className="item-content">
+            <span className="item-name">{chore.name}</span>
+          </div>
+          <span className={`item-status-text ${getStatusColor(chore.status)}`}>
+            {chore.statusText}
+            {chore.lastCompletion && chore.daysSinceLastDone >= 1 && (
+              <span className="item-status-date">
+                {' · '}{format(chore.lastCompletion.completedAt.toDate(), 'MMM d')}
+              </span>
+            )}
+          </span>
+        </div>
+      </div>
+
+      {isExpanded && (
+        <div className="item-details">
+          {chore.lastCompletion && !chore.isOneTime && (
+            <p className="item-next-due">
+              Next due:{' '}
+              {(() => {
+                const lastDone = chore.lastCompletion.completedAt.toDate();
+                const nextDue = new Date(lastDone);
+                nextDue.setDate(nextDue.getDate() + chore.maxDays);
+                return format(nextDue, 'MMM d, yyyy');
+              })()}
+            </p>
+          )}
+          {!chore.lastCompletion && !chore.isOneTime && (
+            <p className="item-next-due">
+              Due every {chore.maxDays} days
+            </p>
+          )}
+          <div className="item-actions">
+            <button
+              className="action-btn edit"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(chore);
+              }}
+            >
+              Edit
+            </button>
+            {chore.status === 'severely-overdue' && (
+              <button
+                className="action-btn skip"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSkip(chore.id);
+                }}
+              >
+                Skip
+              </button>
+            )}
+            {!choreCompleted && (
+              <button
+                className="action-btn done"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onMarkDone(chore.id);
+                }}
+              >
+                Done
+              </button>
+            )}
+          </div>
+
+          <div className="item-history">
+            <div className="history-header">
+              <span>History</span>
+              <span className="history-count">{completionHistory.length} entries</span>
+            </div>
+            {completionHistory.length === 0 ? (
+              <p className="history-empty">No history yet</p>
+            ) : (
+              <ul className="history-list">
+                {completionHistory.map((completion) => {
+                  const isEditing = editingCompletionId === completion.id;
+                  const completionDate = completion.completedAt.toDate();
+
+                  return (
+                    <li key={completion.id}>
+                      {isEditing ? (
+                        <input
+                          type="datetime-local"
+                          className="history-date-input"
+                          defaultValue={formatDateTimeLocal(completionDate)}
+                          onBlur={(e) => {
+                            const newDate = new Date(e.target.value);
+                            if (!isNaN(newDate.getTime())) {
+                              onUpdateCompletionDate(completion.id, newDate);
+                            }
+                            setEditingCompletionId(null);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const newDate = new Date((e.target as HTMLInputElement).value);
+                              if (!isNaN(newDate.getTime())) {
+                                onUpdateCompletionDate(completion.id, newDate);
+                              }
+                              setEditingCompletionId(null);
+                            } else if (e.key === 'Escape') {
+                              setEditingCompletionId(null);
+                            }
+                          }}
+                          autoFocus
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      ) : (
+                        <span
+                          className="history-date editable"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditingCompletionId(completion.id);
+                          }}
+                          title="Click to edit date"
+                        >
+                          {format(completionDate, 'MMM d, yyyy h:mm a')}
+                        </span>
+                      )}
+                      <span className="history-who">
+                        {getCompletedByText(completion)}
+                      </span>
+                      <button
+                        className="history-delete"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteCompletion(completion.id);
+                        }}
+                        title="Delete this entry"
+                      >
+                        ×
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface ChoreColumnProps {
   title: string;
@@ -18,6 +251,7 @@ interface ChoreColumnProps {
   onAddItem?: () => void;
   onDeleteColumn?: () => void;
   onRenameColumn?: (newName: string) => void;
+  onReorder?: (choreIds: string[]) => void;
   isCompleted?: boolean;
   collapseSignal?: number;
 }
@@ -37,6 +271,7 @@ export function ChoreColumn({
   onAddItem,
   onDeleteColumn,
   onRenameColumn,
+  onReorder,
   isCompleted = false,
   collapseSignal = 0
 }: ChoreColumnProps) {
@@ -100,6 +335,28 @@ export function ChoreColumn({
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = chores.findIndex(c => c.id === active.id);
+      const newIndex = chores.findIndex(c => c.id === over.id);
+      const newOrder = arrayMove(chores, oldIndex, newIndex);
+      onReorder?.(newOrder.map(c => c.id));
+    }
   };
 
   return (
@@ -198,165 +455,41 @@ export function ChoreColumn({
         </div>
       </div>
 
-      <div className="column-items">
-        {chores.map((chore) => {
-          const isExpanded = expandedChoreIds.has(chore.id);
-          const completionHistory = getCompletionHistory(chore.id);
-          const choreCompleted = chore.isOneTime && chore.lastCompletion;
-
-          return (
-            <div
-              key={chore.id}
-              className={`column-item ${isExpanded ? 'expanded' : ''} ${choreCompleted ? 'item-completed' : ''}`}
-            >
-              <div
-                className="item-main"
-                onClick={() => toggleExpanded(chore.id)}
-              >
-                <div className={`item-status ${getStatusColor(chore.status)}`} />
-                <div className="item-content">
-                  <span className="item-name">{chore.name}</span>
-                </div>
-                <span className={`item-status-text ${getStatusColor(chore.status)}`}>
-                  {chore.statusText}
-                  {chore.lastCompletion && chore.daysSinceLastDone >= 1 && (
-                    <span className="item-status-date">
-                      {' · '}{format(chore.lastCompletion.completedAt.toDate(), 'MMM d')}
-                    </span>
-                  )}
-                </span>
-              </div>
-
-              {isExpanded && (
-                <div className="item-details">
-                  {chore.lastCompletion && !chore.isOneTime && (
-                    <p className="item-next-due">
-                      Next due:{' '}
-                      {(() => {
-                        const lastDone = chore.lastCompletion.completedAt.toDate();
-                        const nextDue = new Date(lastDone);
-                        nextDue.setDate(nextDue.getDate() + chore.maxDays);
-                        return format(nextDue, 'MMM d, yyyy');
-                      })()}
-                    </p>
-                  )}
-                  {!chore.lastCompletion && !chore.isOneTime && (
-                    <p className="item-next-due">
-                      Due every {chore.maxDays} days
-                    </p>
-                  )}
-                  <div className="item-actions">
-                    <button
-                      className="action-btn edit"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onEdit(chore);
-                      }}
-                    >
-                      Edit
-                    </button>
-                    {chore.status === 'severely-overdue' && (
-                      <button
-                        className="action-btn skip"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onSkip(chore.id);
-                        }}
-                      >
-                        Skip
-                      </button>
-                    )}
-                    {!choreCompleted && (
-                      <button
-                        className="action-btn done"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onMarkDone(chore.id);
-                        }}
-                      >
-                        Done
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="item-history">
-                    <div className="history-header">
-                      <span>History</span>
-                      <span className="history-count">{completionHistory.length} entries</span>
-                    </div>
-                    {completionHistory.length === 0 ? (
-                      <p className="history-empty">No history yet</p>
-                    ) : (
-                      <ul className="history-list">
-                        {completionHistory.map((completion) => {
-                          const isEditing = editingCompletionId === completion.id;
-                          const completionDate = completion.completedAt.toDate();
-
-                          return (
-                            <li key={completion.id}>
-                              {isEditing ? (
-                                <input
-                                  type="datetime-local"
-                                  className="history-date-input"
-                                  defaultValue={formatDateTimeLocal(completionDate)}
-                                  onBlur={(e) => {
-                                    const newDate = new Date(e.target.value);
-                                    if (!isNaN(newDate.getTime())) {
-                                      onUpdateCompletionDate(completion.id, newDate);
-                                    }
-                                    setEditingCompletionId(null);
-                                  }}
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                      const newDate = new Date((e.target as HTMLInputElement).value);
-                                      if (!isNaN(newDate.getTime())) {
-                                        onUpdateCompletionDate(completion.id, newDate);
-                                      }
-                                      setEditingCompletionId(null);
-                                    } else if (e.key === 'Escape') {
-                                      setEditingCompletionId(null);
-                                    }
-                                  }}
-                                  autoFocus
-                                  onClick={(e) => e.stopPropagation()}
-                                />
-                              ) : (
-                                <span
-                                  className="history-date editable"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setEditingCompletionId(completion.id);
-                                  }}
-                                  title="Click to edit date"
-                                >
-                                  {format(completionDate, 'MMM d, yyyy h:mm a')}
-                                </span>
-                              )}
-                              <span className="history-who">
-                                {getCompletedByText(completion)}
-                              </span>
-                              <button
-                                className="history-delete"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onDeleteCompletion(completion.id);
-                                }}
-                                title="Delete this entry"
-                              >
-                                ×
-                              </button>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={chores.map(c => c.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="column-items">
+            {chores.map((chore) => (
+              <SortableChoreItem
+                key={chore.id}
+                chore={chore}
+                isExpanded={expandedChoreIds.has(chore.id)}
+                onToggleExpanded={() => toggleExpanded(chore.id)}
+                getStatusColor={getStatusColor}
+                completionHistory={getCompletionHistory(chore.id)}
+                choreCompleted={!!(chore.isOneTime && chore.lastCompletion)}
+                users={users}
+                currentUserId={currentUserId}
+                editingCompletionId={editingCompletionId}
+                setEditingCompletionId={setEditingCompletionId}
+                formatDateTimeLocal={formatDateTimeLocal}
+                getCompletedByText={getCompletedByText}
+                onEdit={onEdit}
+                onSkip={onSkip}
+                onMarkDone={onMarkDone}
+                onDeleteCompletion={onDeleteCompletion}
+                onUpdateCompletionDate={onUpdateCompletionDate}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 }

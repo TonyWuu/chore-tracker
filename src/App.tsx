@@ -24,7 +24,7 @@ import './App.css';
 function App() {
   const { user, loading: authLoading, signIn, logOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const { chores, loading: choresLoading, addChore, updateChore, deleteChore } = useChores();
+  const { chores, loading: choresLoading, addChore, updateChore, deleteChore, reorderChores } = useChores();
   const {
     completions,
     loading: completionsLoading,
@@ -350,6 +350,7 @@ function App() {
           onAddToCategory={handleAddToCategory}
           onDeleteCategory={handleDeleteCategory}
           onRenameCategory={handleRenameCategory}
+          onReorderChores={reorderChores}
         />
       )}
 

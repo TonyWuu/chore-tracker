@@ -206,7 +206,40 @@
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
+}
+
+.drag-handle {
+  color: var(--text-faint);
+  font-size: 12px;
+  cursor: grab;
+  padding: 4px 2px;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+  user-select: none;
+  touch-action: none;
+}
+
+.drag-handle:hover {
+  opacity: 1;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.item-clickable {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
   cursor: pointer;
+}
+
+.column-item.dragging {
+  background: var(--bg-secondary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
 }
 
 .item-status {

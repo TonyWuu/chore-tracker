@@ -67,5 +67,13 @@ export function useChores() {
     await batch.commit();
   };
 
-  return { chores, loading, addChore, updateChore, deleteChore };
+  const reorderChores = async (choreIds: string[]) => {
+    const batch = writeBatch(db);
+    choreIds.forEach((choreId, index) => {
+      batch.update(doc(db, 'chores', choreId), { order: index });
+    });
+    await batch.commit();
+  };
+
+  return { chores, loading, addChore, updateChore, deleteChore, reorderChores };
 }

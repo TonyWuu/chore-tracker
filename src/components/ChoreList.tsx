@@ -20,6 +20,7 @@ interface ChoreListProps {
   onAddToCategory: (category: string) => void;
   onDeleteCategory: (categoryName: string) => void;
   onRenameCategory: (oldName: string, newName: string) => void;
+  onReorderChores: (choreIds: string[]) => void;
 }
 
 export function ChoreList({
@@ -37,7 +38,8 @@ export function ChoreList({
   onAddCategory,
   onAddToCategory,
   onDeleteCategory,
-  onRenameCategory
+  onRenameCategory,
+  onReorderChores
 }: ChoreListProps) {
   const activeChores = chores.filter(c => !(c.isOneTime && c.lastCompletion));
   const completedOneTimes = chores.filter(c => c.isOneTime && c.lastCompletion);
@@ -58,6 +60,21 @@ export function ChoreList({
         groups.set(category, []);
       }
       groups.get(category)!.push(chore);
+    }
+
+    // Sort chores within each category by order, falling back to priority
+    for (const [, categoryChores] of groups) {
+      categoryChores.sort((a, b) => {
+        // If both have order, sort by order
+        if (a.order !== undefined && b.order !== undefined) {
+          return a.order - b.order;
+        }
+        // If only one has order, it goes first
+        if (a.order !== undefined) return -1;
+        if (b.order !== undefined) return 1;
+        // Fall back to priority (days until overdue)
+        return a.daysUntilOverdue - b.daysUntilOverdue;
+      });
     }
 
     // Sort categories alphabetically, "Uncategorized" goes last
@@ -133,6 +150,7 @@ export function ChoreList({
               onAddItem={() => onAddToCategory(category)}
               onDeleteColumn={() => onDeleteCategory(category)}
               onRenameColumn={(newName) => onRenameCategory(category, newName)}
+              onReorder={onReorderChores}
               collapseSignal={collapseSignal}
             />
           ))}
