@@ -41,7 +41,9 @@ export function DueBanner({ chores }: DueBannerProps) {
             }
           </strong>
           <span className="due-banner-items">
-            {dueChores.slice(0, 3).map(c => c.name).join(', ')}
+            {dueChores.slice(0, 3).map(c =>
+              c.category ? `${c.category}: ${c.name}` : c.name
+            ).join(', ')}
             {dueChores.length > 3 && ` +${dueChores.length - 3} more`}
           </span>
         </div>
