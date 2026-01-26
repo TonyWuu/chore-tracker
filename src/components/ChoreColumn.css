@@ -16,20 +16,31 @@
 
 .column-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 16px 12px;
   border-bottom: 1px solid var(--border-light);
   background: var(--bg-secondary);
   border-radius: 16px 16px 0 0;
 }
 
+.column-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .column-title {
   margin: 0;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
   letter-spacing: -0.01em;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .column-title.editable {
@@ -45,7 +56,7 @@
 }
 
 .column-title-input {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
   letter-spacing: -0.01em;
@@ -55,11 +66,11 @@
   background: var(--bg-input);
   outline: none;
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
-  width: auto;
-  min-width: 100px;
+  flex: 1;
+  min-width: 0;
 }
 
-.column-header-right {
+.column-actions {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -72,6 +83,7 @@
   padding: 4px 10px;
   border-radius: 20px;
   font-weight: 600;
+  flex-shrink: 0;
 }
 
 .column-done-all-btn {
@@ -103,25 +115,25 @@
 }
 
 .column-add-btn {
-  width: 32px;
   height: 32px;
+  padding: 0 12px;
   border-radius: 10px;
   border: none;
   background: var(--accent-primary);
   color: #fff;
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
+  gap: 4px;
+  white-space: nowrap;
   transition: all 0.15s ease;
 }
 
 .column-add-btn:hover {
   background: var(--accent-secondary);
-  transform: scale(1.05);
 }
 
 .column-add-btn:active {
@@ -129,18 +141,19 @@
 }
 
 .column-delete-btn {
-  width: 32px;
   height: 32px;
+  padding: 0 12px;
   border-radius: 10px;
   border: 1px solid var(--border-medium);
   background: var(--bg-tertiary);
   color: var(--text-faint);
-  font-size: 18px;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
+  white-space: nowrap;
   transition: all 0.15s ease;
 }
 

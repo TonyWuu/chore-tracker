@@ -105,51 +105,53 @@ export function ChoreColumn({
   return (
     <div className={`chore-column ${isCompleted ? 'completed' : ''}`}>
       <div className="column-header">
-        {isEditingTitle && onRenameColumn ? (
-          <input
-            type="text"
-            className="column-title-input"
-            value={editedTitle}
-            onChange={(e) => setEditedTitle(e.target.value)}
-            onBlur={() => {
-              if (editedTitle.trim() && editedTitle.trim() !== title) {
-                onRenameColumn(editedTitle.trim());
-              } else {
-                setEditedTitle(title);
-              }
-              setIsEditingTitle(false);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
+        <div className="column-title-row">
+          {isEditingTitle && onRenameColumn ? (
+            <input
+              type="text"
+              className="column-title-input"
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              onBlur={() => {
                 if (editedTitle.trim() && editedTitle.trim() !== title) {
                   onRenameColumn(editedTitle.trim());
                 } else {
                   setEditedTitle(title);
                 }
                 setIsEditingTitle(false);
-              } else if (e.key === 'Escape') {
-                setEditedTitle(title);
-                setIsEditingTitle(false);
-              }
-            }}
-            autoFocus
-          />
-        ) : (
-          <h3
-            className={`column-title ${onRenameColumn ? 'editable' : ''}`}
-            onClick={() => {
-              if (onRenameColumn) {
-                setEditedTitle(title);
-                setIsEditingTitle(true);
-              }
-            }}
-            title={onRenameColumn ? 'Click to rename' : undefined}
-          >
-            {title}
-          </h3>
-        )}
-        <div className="column-header-right">
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  if (editedTitle.trim() && editedTitle.trim() !== title) {
+                    onRenameColumn(editedTitle.trim());
+                  } else {
+                    setEditedTitle(title);
+                  }
+                  setIsEditingTitle(false);
+                } else if (e.key === 'Escape') {
+                  setEditedTitle(title);
+                  setIsEditingTitle(false);
+                }
+              }}
+              autoFocus
+            />
+          ) : (
+            <h3
+              className={`column-title ${onRenameColumn ? 'editable' : ''}`}
+              onClick={() => {
+                if (onRenameColumn) {
+                  setEditedTitle(title);
+                  setIsEditingTitle(true);
+                }
+              }}
+              title={onRenameColumn ? 'Click to rename' : undefined}
+            >
+              {title}
+            </h3>
+          )}
           <span className="column-count">{chores.length}</span>
+        </div>
+        <div className="column-actions">
           {onMarkAllDone && chores.length > 0 && (
             <button
               className="column-done-all-btn"
@@ -161,7 +163,7 @@ export function ChoreColumn({
           )}
           {onAddItem && (
             <button className="column-add-btn" onClick={onAddItem} title="Add task">
-              +
+              + Add
             </button>
           )}
           {onDeleteColumn && (
@@ -189,9 +191,9 @@ export function ChoreColumn({
               <button
                 className="column-delete-btn"
                 onClick={() => setShowDeleteConfirm(true)}
-                title="Delete chore"
+                title="Delete column"
               >
-                &times;
+                Delete
               </button>
             )
           )}
