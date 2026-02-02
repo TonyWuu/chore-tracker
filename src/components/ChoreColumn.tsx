@@ -1,7 +1,65 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { format } from 'date-fns';
 import type { ChoreWithStatus, User, Completion } from '../lib/types';
 import './ChoreColumn.css';
+
+// Map category names to cute emojis
+function getCategoryEmoji(category: string): string {
+  const lower = category.toLowerCase();
+
+  // Kitchen & cooking
+  if (lower.includes('kitchen') || lower.includes('cook') || lower.includes('dish')) return '🍳';
+  if (lower.includes('food') || lower.includes('grocer') || lower.includes('meal')) return '🛒';
+
+  // Cleaning
+  if (lower.includes('clean') || lower.includes('tidy')) return '✨';
+  if (lower.includes('laundry') || lower.includes('wash') || lower.includes('cloth')) return '👕';
+  if (lower.includes('vacuum') || lower.includes('floor') || lower.includes('mop')) return '🧹';
+  if (lower.includes('trash') || lower.includes('garbage') || lower.includes('bin')) return '🗑️';
+  if (lower.includes('bathroom') || lower.includes('toilet') || lower.includes('shower')) return '🚿';
+
+  // Outdoors & garden
+  if (lower.includes('garden') || lower.includes('plant') || lower.includes('water')) return '🌱';
+  if (lower.includes('lawn') || lower.includes('yard') || lower.includes('grass')) return '🌿';
+  if (lower.includes('outdoor') || lower.includes('outside')) return '🏡';
+
+  // Pets
+  if (lower.includes('pet') || lower.includes('dog') || lower.includes('cat') || lower.includes('animal')) return '🐾';
+  if (lower.includes('fish') || lower.includes('aquarium')) return '🐠';
+
+  // Home maintenance
+  if (lower.includes('repair') || lower.includes('fix') || lower.includes('maintain')) return '🔧';
+  if (lower.includes('car') || lower.includes('vehicle') || lower.includes('auto')) return '🚗';
+
+  // Organization & admin
+  if (lower.includes('bill') || lower.includes('pay') || lower.includes('finance')) return '💳';
+  if (lower.includes('mail') || lower.includes('letter') || lower.includes('package')) return '📬';
+  if (lower.includes('organiz') || lower.includes('sort') || lower.includes('declutter')) return '📦';
+
+  // Health & self-care
+  if (lower.includes('health') || lower.includes('medic') || lower.includes('doctor')) return '💊';
+  if (lower.includes('exercise') || lower.includes('workout') || lower.includes('gym')) return '💪';
+
+  // Bedroom
+  if (lower.includes('bed') || lower.includes('sheet') || lower.includes('bedroom')) return '🛏️';
+
+  // Shopping & errands
+  if (lower.includes('shop') || lower.includes('buy') || lower.includes('errand')) return '🛍️';
+
+  // Weekly/monthly/seasonal
+  if (lower.includes('week')) return '📅';
+  if (lower.includes('month')) return '🗓️';
+  if (lower.includes('season') || lower.includes('annual') || lower.includes('year')) return '🔄';
+
+  // Misc common ones
+  if (lower.includes('office') || lower.includes('work') || lower.includes('desk')) return '💼';
+  if (lower.includes('living') || lower.includes('lounge') || lower.includes('room')) return '🛋️';
+
+  // Default cute emojis based on first letter for variety
+  const defaults = ['🏠', '⭐', '💫', '🌟', '✅', '📌', '🎯', '💡'];
+  const index = lower.charCodeAt(0) % defaults.length;
+  return defaults[index];
+}
 
 interface ChoreColumnProps {
   title: string;
@@ -64,6 +122,8 @@ export function ChoreColumn({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
+
+  const emoji = useMemo(() => getCategoryEmoji(title), [title]);
 
   const getStatusColor = (status: ChoreWithStatus['status']) => {
     switch (status) {
@@ -151,10 +211,10 @@ export function ChoreColumn({
               }}
               title={onRenameColumn ? 'Click to rename' : undefined}
             >
+              <span className="column-emoji">{emoji}</span>
               {title}
             </h3>
           )}
-          <span className="column-count">{chores.length}</span>
         </div>
         <div className="column-actions">
           {onAddItem && (
