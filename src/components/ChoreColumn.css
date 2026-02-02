@@ -43,9 +43,9 @@
 .column-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 18px 20px;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 16px 18px;
   border-bottom: 2px dashed var(--border-light);
   position: relative;
   z-index: 1;
@@ -79,9 +79,9 @@
 .column-title-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-width: 0;
-  flex: 1;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 120px;
 }
 
 .column-title {
@@ -91,10 +91,7 @@
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.01em;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  word-break: break-word;
 }
 
 .column-title.editable {
@@ -128,9 +125,10 @@
 .column-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
-  opacity: 0.5;
+  gap: 6px;
+  opacity: 0.6;
   transition: opacity 0.2s var(--smooth);
+  flex-shrink: 0;
 }
 
 .chore-column:hover .column-actions {
@@ -139,72 +137,46 @@
 
 .column-count {
   color: var(--text-faint);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   flex-shrink: 0;
-  background: var(--bg-tertiary);
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
 }
 
-.column-done-all-btn,
 .column-add-btn,
 .column-delete-btn {
-  height: 34px;
-  padding: 0 14px;
+  height: 30px;
+  width: 30px;
+  padding: 0;
   border-radius: var(--radius-full);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  white-space: nowrap;
   transition: all 0.25s var(--elastic);
   border: none;
 }
 
-.column-done-all-btn {
-  background: var(--status-comfortable-bg);
-  color: var(--status-comfortable-text);
-}
-
-.column-done-all-btn:hover {
-  background: var(--status-comfortable-dot);
-  color: #fff;
-  transform: scale(1.08);
-  box-shadow: 0 4px 12px rgba(52, 211, 153, 0.4);
-}
-
-.column-done-all-btn:active {
-  transform: scale(0.95);
-}
-
 .column-add-btn {
-  width: 34px;
-  padding: 0;
   background: var(--accent-bg);
   color: var(--accent-text);
-  font-size: 20px;
 }
 
 .column-add-btn:hover {
   background: var(--accent-gradient);
   color: #fff;
-  transform: scale(1.15) rotate(180deg);
+  transform: scale(1.15) rotate(90deg);
   box-shadow: var(--shadow-glow);
 }
 
 .column-add-btn:active {
-  transform: scale(0.9) rotate(90deg);
+  transform: scale(0.9);
 }
 
 .column-delete-btn {
-  width: 34px;
-  padding: 0;
   background: transparent;
   color: var(--text-faint);
-  font-size: 18px;
 }
 
 .column-delete-btn:hover {

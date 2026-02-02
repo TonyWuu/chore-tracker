@@ -127,10 +127,6 @@ function App() {
     setCompletingChoreId(choreId);
   };
 
-  const handleMarkAllDone = (choreIds: string[]) => {
-    setCompletingChoreIds(choreIds);
-  };
-
   const celebrate = useCallback(() => {
     const duration = 800;
     const end = Date.now() + duration;
@@ -341,7 +337,6 @@ function App() {
           currentUserId={user.uid}
           getCompletionHistory={getCompletionHistory}
           onMarkDone={handleMarkDone}
-          onMarkAllDone={handleMarkAllDone}
           onEdit={handleEditChore}
           onSkip={handleSkip}
           onDeleteCompletion={deleteCompletion}

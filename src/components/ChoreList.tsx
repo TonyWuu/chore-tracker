@@ -30,7 +30,6 @@ interface SortableColumnProps {
   currentUserId: string;
   getCompletionHistory: (choreId: string) => Completion[];
   onMarkDone: (choreId: string) => void;
-  onMarkAllDone: (choreIds: string[]) => void;
   onEdit: (chore: ChoreWithStatus) => void;
   onSkip: (choreId: string) => void;
   onDeleteCompletion: (completionId: string) => void;
@@ -49,7 +48,6 @@ function SortableColumn({
   currentUserId,
   getCompletionHistory,
   onMarkDone,
-  onMarkAllDone,
   onEdit,
   onSkip,
   onDeleteCompletion,
@@ -84,7 +82,6 @@ function SortableColumn({
         currentUserId={currentUserId}
         getCompletionHistory={getCompletionHistory}
         onMarkDone={onMarkDone}
-        onMarkAllDone={onMarkAllDone}
         onEdit={onEdit}
         onSkip={onSkip}
         onDeleteCompletion={onDeleteCompletion}
@@ -106,7 +103,6 @@ interface ChoreListProps {
   currentUserId: string;
   getCompletionHistory: (choreId: string) => Completion[];
   onMarkDone: (choreId: string) => void;
-  onMarkAllDone: (choreIds: string[]) => void;
   onEdit: (chore: ChoreWithStatus) => void;
   onSkip: (choreId: string) => void;
   onDeleteCompletion: (completionId: string) => void;
@@ -125,7 +121,6 @@ export function ChoreList({
   currentUserId,
   getCompletionHistory,
   onMarkDone,
-  onMarkAllDone,
   onEdit,
   onSkip,
   onDeleteCompletion,
@@ -266,7 +261,6 @@ export function ChoreList({
                   currentUserId={currentUserId}
                   getCompletionHistory={getCompletionHistory}
                   onMarkDone={onMarkDone}
-                  onMarkAllDone={onMarkAllDone}
                   onEdit={onEdit}
                   onSkip={onSkip}
                   onDeleteCompletion={onDeleteCompletion}

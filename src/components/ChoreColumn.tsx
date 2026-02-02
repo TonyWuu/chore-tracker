@@ -10,7 +10,6 @@ interface ChoreColumnProps {
   currentUserId: string;
   getCompletionHistory: (choreId: string) => Completion[];
   onMarkDone: (choreId: string) => void;
-  onMarkAllDone?: (choreIds: string[]) => void;
   onEdit: (chore: ChoreWithStatus) => void;
   onSkip: (choreId: string) => void;
   onDeleteCompletion: (completionId: string) => void;
@@ -30,7 +29,6 @@ export function ChoreColumn({
   currentUserId,
   getCompletionHistory,
   onMarkDone,
-  onMarkAllDone,
   onEdit,
   onSkip,
   onDeleteCompletion,
@@ -159,15 +157,6 @@ export function ChoreColumn({
           <span className="column-count">{chores.length}</span>
         </div>
         <div className="column-actions">
-          {onMarkAllDone && chores.length > 0 && (
-            <button
-              className="column-done-all-btn"
-              onClick={() => onMarkAllDone(chores.map(c => c.id))}
-              title="Mark all done"
-            >
-              ✓ Done
-            </button>
-          )}
           {onAddItem && (
             <button className="column-add-btn" onClick={onAddItem} title="Add task">
               +
