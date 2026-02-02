@@ -1,127 +1,173 @@
 .completion-modal {
   background: var(--bg-secondary);
-  border-radius: 24px;
-  padding: 28px;
+  border-radius: var(--radius-xl);
+  padding: 32px;
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
   text-align: center;
-  animation: popUp 0.3s var(--bounce);
-  box-shadow: 0 20px 50px rgba(168, 85, 247, 0.2);
+  animation: modalBounce 0.4s var(--elastic);
+  box-shadow: var(--shadow-lg);
   border: 2px solid var(--border-light);
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes popUp {
-  from {
+/* Decorative corner blobs */
+.completion-modal::before,
+.completion-modal::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.completion-modal::before {
+  top: -40px;
+  right: -40px;
+  width: 100px;
+  height: 100px;
+  background: var(--accent-gradient);
+  opacity: 0.1;
+}
+
+.completion-modal::after {
+  bottom: -30px;
+  left: -30px;
+  width: 80px;
+  height: 80px;
+  background: var(--teal-primary);
+  opacity: 0.08;
+}
+
+@keyframes modalBounce {
+  0% {
     opacity: 0;
-    transform: scale(0.9) translateY(20px);
+    transform: scale(0.8) translateY(30px);
   }
-  to {
+  60% {
+    transform: scale(1.03) translateY(-5px);
+  }
+  100% {
     opacity: 1;
     transform: scale(1) translateY(0);
   }
 }
 
 .completion-modal h3 {
-  margin: 0 0 6px;
+  margin: 0 0 8px;
+  font-family: var(--font-display);
   color: var(--text-primary);
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   letter-spacing: -0.01em;
+  position: relative;
+  z-index: 1;
 }
 
 .completion-modal p {
-  margin: 0 0 20px;
+  margin: 0 0 24px;
   color: var(--text-muted);
   font-size: 14px;
+  position: relative;
+  z-index: 1;
 }
 
 .completion-when {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border-light);
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 2px dashed var(--border-light);
+  position: relative;
+  z-index: 1;
 }
 
 .when-label {
   color: var(--text-muted);
   font-size: 14px;
+  font-weight: 600;
 }
 
 .when-options {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .when-option {
-  padding: 8px 16px;
+  padding: 10px 18px;
   background: var(--bg-tertiary);
-  border: 1px solid var(--border-medium);
-  border-radius: 8px;
+  border: 2px solid var(--border-medium);
+  border-radius: var(--radius-full);
   color: var(--text-secondary);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.25s var(--elastic);
 }
 
 .when-option:hover {
   background: var(--bg-hover);
-  border-color: var(--border-medium);
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
 }
 
 .when-option.active {
-  background: var(--accent-primary);
-  border-color: var(--accent-primary);
+  background: var(--accent-gradient);
+  border-color: transparent;
   color: white;
+  box-shadow: var(--shadow-glow);
 }
 
 .when-date-input {
-  padding: 10px 14px;
+  padding: 12px 16px;
   background: var(--bg-tertiary);
-  border: 1px solid var(--border-medium);
-  border-radius: 8px;
+  border: 2px solid var(--border-medium);
+  border-radius: var(--radius-md);
   color: var(--text-primary);
   font-size: 14px;
   font-family: inherit;
   cursor: pointer;
+  transition: all 0.2s var(--smooth);
 }
 
 .when-date-input:focus {
   outline: none;
   border-color: var(--accent-primary);
+  box-shadow: var(--shadow-glow);
 }
 
 .completion-options {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 10px;
+  margin-bottom: 20px;
   justify-content: center;
+  position: relative;
+  z-index: 1;
 }
 
 .completion-option {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 16px 18px;
-  min-width: 85px;
+  gap: 10px;
+  padding: 20px;
+  min-width: 90px;
   flex: 1;
-  max-width: 110px;
+  max-width: 115px;
   background: var(--bg-tertiary);
-  border: 2px solid var(--border-medium);
-  border-radius: 16px;
+  border: 3px solid var(--border-medium);
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: all 0.2s var(--bounce);
+  transition: all 0.3s var(--elastic);
 }
 
 .completion-option:hover {
   border-color: var(--accent-primary);
-  background: var(--bg-hover);
-  transform: translateY(-4px) scale(1.02);
+  background: var(--accent-bg);
+  transform: translateY(-6px) scale(1.02);
   box-shadow: var(--shadow-md);
 }
 
@@ -135,22 +181,23 @@
 }
 
 .completion-option.collaborative:hover {
-  border-color: var(--status-comfortable-dot);
-  background: var(--status-comfortable-bg);
+  border-color: var(--teal-primary);
+  background: var(--teal-bg);
 }
 
 .option-icon {
-  font-size: 28px;
-  transition: transform 0.2s var(--bounce);
+  font-size: 32px;
+  transition: transform 0.3s var(--elastic);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .completion-option:hover .option-icon {
-  transform: scale(1.2);
+  transform: scale(1.25) rotate(-5deg);
 }
 
 .option-text {
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 12px;
   white-space: nowrap;
   overflow: hidden;
@@ -160,15 +207,17 @@
 
 .completion-cancel {
   width: 100%;
-  padding: 14px;
+  padding: 16px;
   background: var(--bg-tertiary);
   border: 2px solid var(--border-medium);
-  border-radius: 14px;
+  border-radius: var(--radius-full);
   color: var(--text-muted);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s var(--bounce);
+  transition: all 0.25s var(--elastic);
+  position: relative;
+  z-index: 1;
 }
 
 .completion-cancel:hover {

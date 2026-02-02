@@ -1,20 +1,53 @@
 .chore-list-container {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 69px);
-  padding: 24px;
-  padding-bottom: 100px;
+  min-height: calc(100vh - 73px);
+  padding: 28px;
+  padding-bottom: 120px;
   overflow-x: hidden;
+  position: relative;
+}
+
+/* Decorative background blobs */
+.chore-list-container::before,
+.chore-list-container::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.chore-list-container::before {
+  top: 20%;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  background: var(--accent-gradient);
+  opacity: 0.04;
+  filter: blur(60px);
+}
+
+.chore-list-container::after {
+  bottom: 10%;
+  left: -80px;
+  width: 250px;
+  height: 250px;
+  background: var(--teal-primary);
+  opacity: 0.04;
+  filter: blur(50px);
 }
 
 .chore-columns {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 24px;
   align-items: flex-start;
   align-content: flex-start;
-  padding-bottom: 16px;
+  padding-bottom: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .sortable-column {
@@ -23,77 +56,124 @@
   flex: 1 1 300px;
   min-width: 280px;
   max-width: 450px;
-  transition: transform 0.2s var(--bounce);
+  transition: transform 0.3s var(--elastic);
 }
 
 .sortable-column.dragging {
-  opacity: 0.6;
-  transform: rotate(2deg) scale(1.02);
+  opacity: 0.7;
+  transform: rotate(3deg) scale(1.02);
 }
 
 .empty-state {
   text-align: center;
-  padding: 100px 32px;
+  padding: 120px 40px;
   width: 100%;
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeFloat 0.6s var(--elastic);
+  position: relative;
+  z-index: 1;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fadeFloat {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .empty-state p {
-  margin: 10px 0;
-  font-size: 17px;
+  margin: 12px 0;
+  font-family: var(--font-display);
+  font-size: 20px;
   color: var(--text-muted);
   font-weight: 600;
 }
 
 .empty-hint {
+  font-family: var(--font-body);
   font-size: 15px;
   color: var(--text-faint);
 }
 
 .add-chore-button {
   position: fixed;
-  bottom: 28px;
-  right: 28px;
-  width: 64px;
-  height: 64px;
+  bottom: 32px;
+  right: 32px;
+  width: 68px;
+  height: 68px;
   padding: 0;
   background: var(--accent-gradient);
   border: none;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   color: #fff;
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 300;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4);
-  transition: all 0.25s var(--bounce);
+  box-shadow: var(--shadow-lg), 0 0 0 0 var(--accent-glow);
+  transition: all 0.3s var(--elastic);
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: floatButton 3s ease-in-out infinite;
+}
+
+@keyframes floatButton {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.add-chore-button::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: var(--radius-full);
+  background: var(--accent-gradient);
+  opacity: 0;
+  z-index: -1;
+  transition: all 0.3s var(--smooth);
+  filter: blur(8px);
 }
 
 .add-chore-button:hover {
-  transform: scale(1.15) rotate(90deg);
-  box-shadow: 0 12px 32px rgba(168, 85, 247, 0.5);
+  transform: scale(1.15) rotate(180deg);
+  box-shadow: var(--shadow-lg), 0 0 40px var(--accent-glow);
+  animation: none;
+}
+
+.add-chore-button:hover::before {
+  opacity: 0.6;
+  inset: -8px;
 }
 
 .add-chore-button:active {
-  transform: scale(0.95);
+  transform: scale(0.95) rotate(90deg);
+  animation: none;
 }
 
 @media (max-width: 768px) {
   .chore-list-container {
-    padding: 16px;
-    padding-bottom: 100px;
+    padding: 20px;
+    padding-bottom: 120px;
   }
 
   .chore-columns {
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
+  }
+
+  .add-chore-button {
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    font-size: 32px;
   }
 }

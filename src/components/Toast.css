@@ -1,26 +1,72 @@
 .toast {
   position: fixed;
-  bottom: 100px;
+  bottom: 110px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 14px 28px;
-  background: var(--accent-gradient);
-  color: #fff;
-  border-radius: 16px;
-  font-weight: 600;
+  padding: 16px 32px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-radius: var(--radius-full);
+  font-weight: 700;
   font-size: 14px;
-  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.3);
-  animation: popUpToast 0.35s var(--bounce);
+  box-shadow: var(--shadow-lg);
+  animation: toastPop 0.4s var(--elastic);
   z-index: 200;
+  border: 2px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-@keyframes popUpToast {
-  from {
+/* Accent bar */
+.toast::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  height: 3px;
+  background: var(--accent-gradient);
+  border-radius: var(--radius-full);
+}
+
+@keyframes toastPop {
+  0% {
     opacity: 0;
-    transform: translateX(-50%) translateY(20px) scale(0.9);
+    transform: translateX(-50%) translateY(30px) scale(0.9);
   }
-  to {
+  60% {
+    transform: translateX(-50%) translateY(-5px) scale(1.02);
+  }
+  100% {
     opacity: 1;
     transform: translateX(-50%) translateY(0) scale(1);
   }
+}
+
+/* Success variant */
+.toast.success {
+  border-color: var(--status-comfortable-dot);
+}
+
+.toast.success::before {
+  background: var(--status-comfortable-dot);
+}
+
+/* Warning variant */
+.toast.warning {
+  border-color: var(--status-due-soon-dot);
+}
+
+.toast.warning::before {
+  background: var(--status-due-soon-dot);
+}
+
+/* Error variant */
+.toast.error {
+  border-color: var(--status-overdue-dot);
+}
+
+.toast.error::before {
+  background: var(--status-overdue-dot);
 }

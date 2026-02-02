@@ -4,70 +4,158 @@
   align-items: center;
   justify-content: center;
   background: var(--bg-primary);
-  padding: 24px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative background elements */
+.login-screen::before,
+.login-screen::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.login-screen::before {
+  top: 10%;
+  right: -150px;
+  width: 400px;
+  height: 400px;
+  background: var(--accent-gradient);
+  opacity: 0.08;
+  filter: blur(80px);
+  animation: float 8s ease-in-out infinite;
+}
+
+.login-screen::after {
+  bottom: 5%;
+  left: -100px;
+  width: 300px;
+  height: 300px;
+  background: var(--teal-primary);
+  opacity: 0.06;
+  filter: blur(60px);
+  animation: float 10s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-30px) scale(1.05);
+  }
 }
 
 .login-card {
   text-align: center;
-  max-width: 340px;
+  max-width: 380px;
   width: 100%;
-  animation: floatIn 0.6s var(--bounce);
+  animation: cardFloat 0.8s var(--elastic);
+  position: relative;
+  z-index: 1;
 }
 
-@keyframes floatIn {
+@keyframes cardFloat {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .login-title {
-  margin: 0 0 10px 0;
-  font-size: 38px;
+  margin: 0 0 14px 0;
+  font-family: var(--font-display);
+  font-size: 48px;
   font-weight: 800;
   background: var(--accent-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   letter-spacing: -0.02em;
+  animation: titlePulse 3s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
 }
 
 .login-subtitle {
-  margin: 0 0 44px 0;
+  margin: 0 0 48px 0;
   color: var(--text-muted);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.6;
+  font-weight: 500;
 }
 
 .google-sign-in-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 14px;
   width: 100%;
-  padding: 16px 28px;
+  padding: 18px 32px;
   background: var(--bg-secondary);
-  border: 2px solid var(--border-medium);
-  border-radius: 16px;
+  border: 3px solid var(--border-medium);
+  border-radius: var(--radius-full);
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
   cursor: pointer;
-  transition: all 0.2s var(--bounce);
+  transition: all 0.3s var(--elastic);
   box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.google-sign-in-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0;
+  transition: opacity 0.3s var(--smooth);
 }
 
 .google-sign-in-button:hover {
-  background: var(--bg-secondary);
   border-color: var(--accent-primary);
   box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.google-sign-in-button:hover::before {
+  opacity: 0.05;
 }
 
 .google-sign-in-button:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
+}
+
+/* Icon styling */
+.google-sign-in-button svg,
+.google-sign-in-button img {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s var(--elastic);
+}
+
+.google-sign-in-button:hover svg,
+.google-sign-in-button:hover img {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.google-sign-in-button span {
+  position: relative;
+  z-index: 1;
 }

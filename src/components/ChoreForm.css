@@ -1,14 +1,14 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(31, 22, 53, 0.5);
-  backdrop-filter: blur(8px);
+  background: rgba(45, 42, 50, 0.6);
+  backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 20px;
   z-index: 100;
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.2s var(--smooth);
 }
 
 @keyframes fadeIn {
@@ -18,17 +18,30 @@
 
 .modal-content {
   background: var(--bg-secondary);
-  border-radius: 24px;
+  border-radius: var(--radius-xl);
   width: 100%;
-  max-width: 460px;
+  max-width: 480px;
   max-height: 90vh;
   overflow-y: auto;
-  animation: popUp 0.3s var(--bounce);
-  box-shadow: 0 24px 50px rgba(168, 85, 247, 0.2);
+  animation: modalPop 0.35s var(--elastic);
+  box-shadow: var(--shadow-lg);
   border: 2px solid var(--border-light);
+  position: relative;
 }
 
-@keyframes popUp {
+/* Decorative accent */
+.modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--accent-gradient);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+@keyframes modalPop {
   from {
     opacity: 0;
     transform: scale(0.9) translateY(20px);
@@ -43,34 +56,40 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 24px;
-  border-bottom: 1px solid var(--border-light);
+  padding: 24px 28px 20px;
+  border-bottom: 2px dashed var(--border-light);
 }
 
 .modal-header h2 {
   margin: 0;
-  font-size: 17px;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.01em;
 }
 
 .close-button {
-  background: none;
+  background: var(--bg-tertiary);
   border: none;
-  font-size: 24px;
+  font-size: 22px;
   color: var(--text-faint);
   cursor: pointer;
-  padding: 6px;
+  padding: 8px;
   line-height: 1;
-  transition: all 0.2s var(--bounce);
-  border-radius: 8px;
+  transition: all 0.25s var(--elastic);
+  border-radius: var(--radius-md);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .close-button:hover {
-  color: var(--text-muted);
+  color: var(--text-primary);
   background: var(--bg-hover);
-  transform: rotate(90deg);
+  transform: rotate(90deg) scale(1.1);
 }
 
 .close-button:active {
@@ -78,32 +97,34 @@
 }
 
 form {
-  padding: 24px;
+  padding: 28px;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   color: var(--text-muted);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .form-group input[type="text"],
 .form-group input[type="number"] {
   width: 100%;
-  padding: 14px 18px;
+  padding: 16px 20px;
   background: var(--bg-tertiary);
   border: 2px solid var(--border-medium);
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   color: var(--text-primary);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
-  transition: all 0.2s var(--bounce);
+  transition: all 0.25s var(--elastic);
 }
 
 .form-group input::placeholder {
@@ -114,13 +135,13 @@ form {
   outline: none;
   background: var(--bg-input);
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.15);
+  box-shadow: var(--shadow-glow);
   transform: scale(1.01);
 }
 
 .helper-text {
   display: block;
-  margin-top: 6px;
+  margin-top: 8px;
   font-size: 12px;
   color: var(--text-faint);
 }
@@ -133,40 +154,43 @@ form {
 .checkbox-group label {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   cursor: pointer;
   margin: 0;
-  color: var(--text-muted);
-  font-size: 14px;
-  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .checkbox-group input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   accent-color: var(--accent-primary);
   cursor: pointer;
+  border-radius: var(--radius-sm);
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 20px;
 }
 
 .history-section {
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border-light);
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 2px dashed var(--border-light);
 }
 
 .history-section h3 {
-  margin: 0 0 16px;
+  margin: 0 0 18px;
   font-size: 11px;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .history-list {
@@ -178,8 +202,8 @@ form {
 .history-list li {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 0;
+  gap: 14px;
+  padding: 12px 0;
   font-size: 14px;
   color: var(--text-muted);
   border-bottom: 1px solid var(--border-light);
@@ -198,28 +222,29 @@ form {
   background: none;
   border: none;
   color: var(--text-faint);
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
-  padding: 2px 4px;
+  padding: 4px 6px;
   line-height: 1;
-  transition: all 0.15s;
-  border-radius: 4px;
+  transition: all 0.2s var(--elastic);
+  border-radius: var(--radius-sm);
 }
 
 .history-delete:hover {
   color: var(--delete-text);
   background: var(--delete-bg);
+  transform: scale(1.1);
 }
 
 .history-date {
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .history-date.editable {
   cursor: pointer;
-  border-bottom: 1px dashed var(--accent-primary);
-  transition: all 0.15s;
+  border-bottom: 2px dashed var(--accent-primary);
+  transition: all 0.2s var(--smooth);
 }
 
 .history-date.editable:hover {
@@ -229,21 +254,21 @@ form {
 
 .history-date-input {
   background: var(--bg-input);
-  border: 1px solid var(--accent-primary);
-  border-radius: 6px;
+  border: 2px solid var(--accent-primary);
+  border-radius: var(--radius-md);
   color: var(--text-primary);
-  padding: 6px 10px;
+  padding: 8px 12px;
   font-size: 14px;
   font-family: inherit;
 }
 
 .history-date-input:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+  box-shadow: var(--shadow-glow);
 }
 
 .history-more {
-  margin: 12px 0 0;
+  margin: 14px 0 0;
   font-size: 13px;
   color: var(--text-faint);
 }
@@ -252,33 +277,34 @@ form {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border-light);
-  gap: 12px;
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 2px dashed var(--border-light);
+  gap: 14px;
 }
 
 .form-actions-right {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
 .cancel-button {
-  padding: 12px 22px;
+  padding: 14px 24px;
   background: var(--bg-tertiary);
   border: 2px solid var(--border-medium);
-  border-radius: 12px;
+  border-radius: var(--radius-full);
   color: var(--text-muted);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s var(--bounce);
+  transition: all 0.25s var(--elastic);
 }
 
 .cancel-button:hover {
   background: var(--bg-hover);
+  border-color: var(--text-faint);
   color: var(--text-primary);
-  transform: scale(1.03);
+  transform: translateY(-2px);
 }
 
 .cancel-button:active {
@@ -286,21 +312,21 @@ form {
 }
 
 .save-button {
-  padding: 12px 26px;
+  padding: 14px 28px;
   background: var(--accent-gradient);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-full);
   color: #fff;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s var(--bounce);
-  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+  transition: all 0.25s var(--elastic);
+  box-shadow: var(--shadow-glow);
 }
 
 .save-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 24px var(--accent-glow);
 }
 
 .save-button:active {
@@ -308,15 +334,15 @@ form {
 }
 
 .delete-button {
-  padding: 12px 22px;
+  padding: 14px 24px;
   background: var(--bg-secondary);
   border: 2px solid var(--delete-border);
-  border-radius: 12px;
+  border-radius: var(--radius-full);
   color: var(--delete-text);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s var(--bounce);
+  transition: all 0.25s var(--elastic);
 }
 
 .delete-button:hover,
@@ -324,7 +350,7 @@ form {
   background: var(--delete-text);
   border-color: var(--delete-text);
   color: #fff;
-  transform: scale(1.03);
+  transform: translateY(-2px);
 }
 
 .delete-button:active {

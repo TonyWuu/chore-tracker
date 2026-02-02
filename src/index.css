@@ -1,62 +1,86 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 * {
   box-sizing: border-box;
 }
 
 :root {
-  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  /* Typography */
+  --font-display: 'Baloo 2', cursive;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  font-family: var(--font-body);
   line-height: 1.6;
   font-weight: 500;
 
-  /* Light theme (default) */
-  --bg-primary: #faf5ff;
-  --bg-secondary: #fff;
-  --bg-tertiary: #fdf8ff;
-  --bg-hover: #f3e8ff;
-  --bg-input: #fff;
+  /* Light theme - Soft Candy palette */
+  --bg-primary: #fef7f4;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #fff9f7;
+  --bg-hover: #fff0eb;
+  --bg-input: #ffffff;
+  --bg-pattern: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
 
-  --text-primary: #1f1635;
-  --text-secondary: #3d3654;
-  --text-muted: #6b7280;
-  --text-faint: #9ca3af;
+  --text-primary: #2d2a32;
+  --text-secondary: #4a4655;
+  --text-muted: #706b7a;
+  --text-faint: #9e99a7;
 
-  --border-light: rgba(168, 85, 247, 0.12);
-  --border-medium: #e9d5ff;
-  --border-focus: #a855f7;
+  --border-light: rgba(255, 138, 101, 0.15);
+  --border-medium: #ffe4db;
+  --border-focus: #ff8a65;
 
-  --accent-primary: #a855f7;
-  --accent-secondary: #9333ea;
-  --accent-bg: #fae8ff;
-  --accent-text: #9333ea;
-  --accent-gradient: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  /* Coral/Peach primary with Teal accent */
+  --accent-primary: #ff7b54;
+  --accent-secondary: #ff6140;
+  --accent-tertiary: #20b2aa;
+  --accent-bg: #fff0eb;
+  --accent-text: #e85d3a;
+  --accent-gradient: linear-gradient(135deg, #ff7b54 0%, #ffb347 50%, #ff6b6b 100%);
+  --accent-glow: rgba(255, 123, 84, 0.4);
 
-  --shadow-sm: 0 2px 8px rgba(168, 85, 247, 0.08);
-  --shadow-md: 0 4px 16px rgba(168, 85, 247, 0.12);
-  --shadow-lg: 0 8px 24px rgba(168, 85, 247, 0.15);
+  /* Teal for secondary actions */
+  --teal-primary: #20b2aa;
+  --teal-bg: #e6f7f6;
+  --teal-text: #0d8f87;
 
+  --shadow-sm: 0 2px 8px rgba(255, 123, 84, 0.1);
+  --shadow-md: 0 8px 24px rgba(255, 123, 84, 0.15);
+  --shadow-lg: 0 16px 40px rgba(255, 123, 84, 0.2);
+  --shadow-glow: 0 4px 20px var(--accent-glow);
+
+  /* Animation curves */
   --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --smooth: cubic-bezier(0.4, 0, 0.2, 1);
 
-  --status-comfortable-bg: #dcfce7;
-  --status-comfortable-text: #15803d;
-  --status-comfortable-dot: #22c55e;
+  /* Status colors - softer, more playful */
+  --status-comfortable-bg: #e8f8ed;
+  --status-comfortable-text: #2a9d5c;
+  --status-comfortable-dot: #34d399;
 
-  --status-due-soon-bg: #fef3c7;
-  --status-due-soon-text: #b45309;
-  --status-due-soon-dot: #f59e0b;
+  --status-due-soon-bg: #fef6e6;
+  --status-due-soon-text: #d97706;
+  --status-due-soon-dot: #fbbf24;
 
-  --status-overdue-bg: #fee2e2;
-  --status-overdue-text: #dc2626;
-  --status-overdue-dot: #ef4444;
+  --status-overdue-bg: #fef0f0;
+  --status-overdue-text: #e53e3e;
+  --status-overdue-dot: #f87171;
 
   --status-severe-bg: #fee2e2;
-  --status-severe-text: #991b1b;
-  --status-severe-dot: #dc2626;
+  --status-severe-text: #c53030;
+  --status-severe-dot: #ef4444;
 
-  --delete-bg: #fef2f2;
-  --delete-border: #fecaca;
-  --delete-text: #dc2626;
+  --delete-bg: #fff5f5;
+  --delete-border: #fed7d7;
+  --delete-text: #e53e3e;
+
+  /* Radii - super rounded */
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
 
   color-scheme: light;
   color: var(--text-secondary);
@@ -69,50 +93,57 @@
 }
 
 [data-theme="dark"] {
-  --bg-primary: #0c0714;
-  --bg-secondary: #150f20;
-  --bg-tertiary: #1e1530;
-  --bg-hover: #2a1d40;
-  --bg-input: #150f20;
+  --bg-primary: #1a1620;
+  --bg-secondary: #241e2c;
+  --bg-tertiary: #2d2636;
+  --bg-hover: #362e42;
+  --bg-input: #241e2c;
 
-  --text-primary: #f5f0ff;
-  --text-secondary: #e0d8f0;
-  --text-muted: #b8a8d4;
-  --text-faint: #8a7aaa;
+  --text-primary: #f8f6fa;
+  --text-secondary: #e4e0ea;
+  --text-muted: #b8b2c2;
+  --text-faint: #8a8494;
 
-  --border-light: rgba(168, 85, 247, 0.25);
-  --border-medium: #3d2a5c;
-  --border-focus: #c084fc;
+  --border-light: rgba(255, 138, 101, 0.2);
+  --border-medium: #3d3548;
+  --border-focus: #ff9a7a;
 
-  --accent-primary: #c084fc;
-  --accent-secondary: #a855f7;
-  --accent-bg: rgba(168, 85, 247, 0.25);
-  --accent-text: #d8b4fe;
-  --accent-gradient: linear-gradient(135deg, #c084fc 0%, #f472b6 100%);
+  --accent-primary: #ff9a7a;
+  --accent-secondary: #ff7b54;
+  --accent-tertiary: #5cd6ce;
+  --accent-bg: rgba(255, 123, 84, 0.15);
+  --accent-text: #ffb89e;
+  --accent-gradient: linear-gradient(135deg, #ff9a7a 0%, #ffc97a 50%, #ff8a8a 100%);
+  --accent-glow: rgba(255, 154, 122, 0.3);
 
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --teal-primary: #5cd6ce;
+  --teal-bg: rgba(92, 214, 206, 0.15);
+  --teal-text: #7eeae3;
 
-  --status-comfortable-bg: rgba(34, 197, 94, 0.2);
-  --status-comfortable-text: #4ade80;
-  --status-comfortable-dot: #22c55e;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 4px 20px var(--accent-glow);
 
-  --status-due-soon-bg: rgba(245, 158, 11, 0.2);
-  --status-due-soon-text: #fbbf24;
-  --status-due-soon-dot: #f59e0b;
+  --status-comfortable-bg: rgba(52, 211, 153, 0.15);
+  --status-comfortable-text: #6ee7b7;
+  --status-comfortable-dot: #34d399;
 
-  --status-overdue-bg: rgba(239, 68, 68, 0.2);
-  --status-overdue-text: #f87171;
-  --status-overdue-dot: #ef4444;
+  --status-due-soon-bg: rgba(251, 191, 36, 0.15);
+  --status-due-soon-text: #fcd34d;
+  --status-due-soon-dot: #fbbf24;
 
-  --status-severe-bg: rgba(220, 38, 38, 0.25);
-  --status-severe-text: #fca5a5;
-  --status-severe-dot: #dc2626;
+  --status-overdue-bg: rgba(248, 113, 113, 0.15);
+  --status-overdue-text: #fca5a5;
+  --status-overdue-dot: #f87171;
 
-  --delete-bg: rgba(239, 68, 68, 0.15);
-  --delete-border: rgba(239, 68, 68, 0.3);
-  --delete-text: #f87171;
+  --status-severe-bg: rgba(239, 68, 68, 0.2);
+  --status-severe-text: #fecaca;
+  --status-severe-dot: #ef4444;
+
+  --delete-bg: rgba(239, 68, 68, 0.12);
+  --delete-border: rgba(239, 68, 68, 0.25);
+  --delete-text: #fca5a5;
 
   color-scheme: dark;
   color: var(--text-secondary);
@@ -123,46 +154,75 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  position: relative;
+}
+
+/* Subtle texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: var(--bg-pattern);
+  opacity: 0.02;
+  pointer-events: none;
+  z-index: 9999;
 }
 
 #root {
   min-height: 100vh;
 }
 
+/* Display headings use Baloo 2 */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
 a {
-  font-weight: 500;
-  color: #7c3aed;
-  text-decoration: inherit;
+  font-weight: 600;
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: color 0.2s var(--smooth);
 }
 
 a:hover {
-  color: #8b5cf6;
+  color: var(--accent-secondary);
 }
 
 button {
-  font-family: inherit;
+  font-family: var(--font-body);
 }
 
 input {
-  font-family: inherit;
+  font-family: var(--font-body);
 }
 
-/* Custom scrollbar for the whole app */
+/* Playful scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(147, 112, 219, 0.08);
-  border-radius: 4px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(147, 112, 219, 0.25);
-  border-radius: 4px;
+  background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-tertiary);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(147, 112, 219, 0.4);
+  background: var(--accent-secondary);
+}
+
+/* Selection styling */
+::selection {
+  background: var(--accent-primary);
+  color: white;
 }

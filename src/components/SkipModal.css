@@ -1,35 +1,53 @@
 .skip-modal {
   background: var(--bg-secondary);
-  border-radius: 24px;
-  padding: 28px;
+  border-radius: var(--radius-xl);
+  padding: 32px;
   width: 100%;
-  max-width: 400px;
-  animation: popUp 0.3s var(--bounce);
-  box-shadow: 0 24px 50px rgba(168, 85, 247, 0.2);
+  max-width: 420px;
+  animation: modalBounce 0.4s var(--elastic);
+  box-shadow: var(--shadow-lg);
   border: 2px solid var(--border-light);
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes popUp {
-  from {
+/* Decorative accent */
+.skip-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--status-due-soon-dot);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+@keyframes modalBounce {
+  0% {
     opacity: 0;
-    transform: scale(0.9) translateY(20px);
+    transform: scale(0.8) translateY(30px);
   }
-  to {
+  60% {
+    transform: scale(1.03) translateY(-5px);
+  }
+  100% {
     opacity: 1;
     transform: scale(1) translateY(0);
   }
 }
 
 .skip-modal h3 {
-  margin: 0 0 6px;
+  margin: 0 0 8px;
+  font-family: var(--font-display);
   color: var(--text-primary);
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   letter-spacing: -0.01em;
 }
 
 .skip-modal p {
-  margin: 0 0 20px;
+  margin: 0 0 24px;
   color: var(--text-muted);
   font-size: 14px;
 }
@@ -37,79 +55,103 @@
 .skip-options {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 14px;
+  margin-bottom: 20px;
 }
 
 .skip-option {
-  padding: 18px;
+  padding: 20px;
   background: var(--bg-tertiary);
   border: 2px solid var(--border-medium);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   text-align: left;
   cursor: pointer;
-  transition: all 0.2s var(--bounce);
+  transition: all 0.25s var(--elastic);
+  position: relative;
+  overflow: hidden;
+}
+
+.skip-option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-primary);
+  opacity: 0;
+  transition: opacity 0.2s var(--smooth);
 }
 
 .skip-option.reset:hover {
   border-color: var(--accent-primary);
-  background: var(--bg-hover);
-  transform: translateX(4px);
+  background: var(--accent-bg);
+  transform: translateX(6px);
+}
+
+.skip-option.reset:hover::before {
+  opacity: 1;
 }
 
 .skip-option-title {
   display: block;
   color: var(--text-primary);
-  font-weight: 600;
-  font-size: 14px;
-  margin-bottom: 4px;
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 6px;
 }
 
 .skip-option-desc {
   display: block;
   color: var(--text-faint);
   font-size: 13px;
+  line-height: 1.5;
 }
 
 .skip-option.snooze {
   cursor: default;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+}
+
+.skip-option.snooze::before {
+  background: var(--status-due-soon-dot);
 }
 
 .skip-option.snooze input[type="date"] {
-  padding: 10px 12px;
+  padding: 12px 16px;
   background: var(--bg-input);
-  border: 1px solid var(--border-medium);
-  border-radius: 8px;
+  border: 2px solid var(--border-medium);
+  border-radius: var(--radius-md);
   color: var(--text-primary);
   font-size: 14px;
   font-family: inherit;
+  transition: all 0.2s var(--smooth);
 }
 
 .skip-option.snooze input[type="date"]:focus {
   outline: none;
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  border-color: var(--status-due-soon-dot);
+  box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2);
 }
 
 .snooze-button {
-  padding: 12px 18px;
-  background: var(--status-due-soon-dot);
+  padding: 14px 20px;
+  background: linear-gradient(135deg, var(--status-due-soon-dot) 0%, #f59e0b 100%);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-full);
   color: #fff;
   font-weight: 700;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s var(--bounce);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  transition: all 0.25s var(--elastic);
+  box-shadow: 0 4px 14px rgba(251, 191, 36, 0.35);
 }
 
 .snooze-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.45);
 }
 
 .snooze-button:active {
@@ -118,15 +160,15 @@
 
 .skip-cancel {
   width: 100%;
-  padding: 14px;
+  padding: 16px;
   background: var(--bg-tertiary);
   border: 2px solid var(--border-medium);
-  border-radius: 14px;
+  border-radius: var(--radius-full);
   color: var(--text-muted);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s var(--bounce);
+  transition: all 0.25s var(--elastic);
 }
 
 .skip-cancel:hover {

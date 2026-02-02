@@ -2,24 +2,36 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  padding: 14px 18px;
-  margin: 16px 24px 0;
-  border-radius: 16px;
-  animation: wiggleIn 0.4s var(--bounce);
+  gap: 16px;
+  padding: 16px 20px;
+  margin: 20px 28px 0;
+  border-radius: var(--radius-lg);
+  animation: bannerSlide 0.5s var(--elastic);
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes wiggleIn {
-  0% {
+/* Decorative element */
+.due-banner::before {
+  content: '';
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+@keyframes bannerSlide {
+  from {
     opacity: 0;
-    transform: translateY(-10px) rotate(-1deg);
+    transform: translateY(-15px) scale(0.98);
   }
-  60% {
-    transform: translateY(0) rotate(0.5deg);
-  }
-  100% {
+  to {
     opacity: 1;
-    transform: translateY(0) rotate(0deg);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -28,40 +40,55 @@
   border: 2px solid var(--status-due-soon-dot);
 }
 
+.due-banner.due-soon::before {
+  background: var(--status-due-soon-dot);
+}
+
 .due-banner.overdue {
   background: var(--status-overdue-bg);
   border: 2px solid var(--status-overdue-dot);
 }
 
+.due-banner.overdue::before {
+  background: var(--status-overdue-dot);
+}
+
 .due-banner-content {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
   min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .due-banner-icon {
-  font-size: 20px;
+  font-size: 24px;
   flex-shrink: 0;
-  animation: wiggle 1s ease-in-out infinite;
+  animation: iconBounce 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
-@keyframes wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-8deg); }
-  75% { transform: rotate(8deg); }
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(5deg);
+  }
 }
 
 .due-banner-text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   min-width: 0;
 }
 
 .due-banner-text strong {
-  font-size: 14px;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
   color: var(--text-primary);
 }
 
@@ -74,52 +101,44 @@
 }
 
 .due-banner-items {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 500;
 }
 
 .due-banner-dismiss {
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border: none;
   background: transparent;
   color: var(--text-faint);
-  font-size: 20px;
+  font-size: 22px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  transition: all 0.2s var(--bounce);
+  border-radius: var(--radius-md);
+  transition: all 0.25s var(--elastic);
+  position: relative;
+  z-index: 1;
 }
 
 .due-banner-dismiss:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.08);
   color: var(--text-muted);
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(90deg);
 }
 
 .due-banner-dismiss:active {
   transform: scale(0.9);
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (max-width: 768px) {
   .due-banner {
-    margin: 12px 16px 0;
+    margin: 16px 20px 0;
   }
 }
