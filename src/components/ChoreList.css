@@ -23,46 +23,54 @@
   flex: 1 1 300px;
   min-width: 280px;
   max-width: 450px;
+  transition: transform 0.2s var(--bounce);
 }
 
 .sortable-column.dragging {
-  opacity: 0.5;
+  opacity: 0.6;
+  transform: rotate(2deg) scale(1.02);
 }
 
 .empty-state {
   text-align: center;
-  padding: 80px 32px;
+  padding: 100px 32px;
   width: 100%;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .empty-state p {
-  margin: 8px 0;
-  font-size: 16px;
+  margin: 10px 0;
+  font-size: 17px;
   color: var(--text-muted);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .empty-hint {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-faint);
 }
 
 .add-chore-button {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 56px;
-  height: 56px;
+  bottom: 28px;
+  right: 28px;
+  width: 64px;
+  height: 64px;
   padding: 0;
-  background: var(--accent-primary);
+  background: var(--accent-gradient);
   border: none;
   border-radius: 50%;
   color: #fff;
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 300;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
-  transition: all 0.2s ease;
+  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4);
+  transition: all 0.25s var(--bounce);
   z-index: 10;
   display: flex;
   align-items: center;
@@ -70,13 +78,12 @@
 }
 
 .add-chore-button:hover {
-  background: var(--accent-secondary);
-  transform: scale(1.1);
-  box-shadow: 0 6px 24px rgba(124, 58, 237, 0.5);
+  transform: scale(1.15) rotate(90deg);
+  box-shadow: 0 12px 32px rgba(168, 85, 247, 0.5);
 }
 
 .add-chore-button:active {
-  transform: scale(1);
+  transform: scale(0.95);
 }
 
 @media (max-width: 768px) {
