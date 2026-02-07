@@ -233,13 +233,14 @@
 .column-item {
   background: transparent;
   border-radius: var(--radius-lg);
-  transition: all 0.25s var(--elastic);
+  transition: all 0.2s var(--smooth);
   position: relative;
 }
 
 .column-item:hover {
   background: var(--bg-hover);
   transform: translateX(6px);
+  transition: all 0.08s ease-out;
 }
 
 .column-item.expanded {
@@ -265,11 +266,12 @@
   height: 10px;
   border-radius: var(--radius-full);
   flex-shrink: 0;
-  transition: all 0.3s var(--elastic);
+  transition: all 0.2s var(--smooth);
 }
 
 .column-item:hover .item-status {
   transform: scale(1.3);
+  transition: all 0.08s ease-out;
 }
 
 .item-status.status-comfortable {
