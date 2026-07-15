@@ -145,3 +145,16 @@
   background: var(--bg-hover);
   color: var(--text-primary);
 }
+
+/* Bottom sheet on phones */
+@media (max-width: 480px) {
+  .skip-modal {
+    max-width: none;
+    max-height: 92vh;
+    max-height: 92dvh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-bottom: none;
+    padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
+    animation: sheetUp 0.3s var(--smooth);
+  }
+}

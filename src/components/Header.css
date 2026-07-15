@@ -5,6 +5,8 @@
   gap: var(--space-3);
   min-height: var(--header-height);
   padding: var(--space-3) var(--gutter);
+  /* Clears the iOS status bar when installed to the home screen */
+  padding-top: calc(var(--space-3) + env(safe-area-inset-top));
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-light);
 }

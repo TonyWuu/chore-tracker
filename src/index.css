@@ -184,6 +184,18 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Native-feeling touch: no double-tap zoom on controls, no long-press
+   text-selection callout on tappable rows */
+button,
+.item-main,
+.column-title.editable,
+.history-date.editable {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 #root {
@@ -248,6 +260,12 @@ input {
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Bottom-sheet entrance on phones */
+@keyframes sheetUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
 }
 
 /* Slim playful scrollbar */
