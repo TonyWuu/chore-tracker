@@ -103,11 +103,12 @@ export function useCompletions() {
     return 'created';
   };
 
-  const skipChore = async (choreId: string, userId: string) => {
-    // Create a "skip" completion that resets the timer
+  const skipChore = async (choreId: string, userId: string, resetDate?: Date) => {
+    // Create a "skip" completion that resets the timer. An explicit resetDate
+    // back-/forward-dates the reset so the chore comes due on a chosen day.
     await addDoc(collection(db, 'completions'), {
       choreId,
-      completedAt: Timestamp.now(),
+      completedAt: resetDate ? Timestamp.fromDate(resetDate) : Timestamp.now(),
       completedBy: [userId],
       collaborative: false
     });

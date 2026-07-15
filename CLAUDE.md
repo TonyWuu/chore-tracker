@@ -83,6 +83,19 @@ Required in `.env` (see `.env.example`):
 - `VITE_FIREBASE_MESSAGING_SENDER_ID`
 - `VITE_FIREBASE_APP_ID`
 
+## Design Preview Harness
+
+With `npm run dev` running, open `/design-preview.html?state=main&theme=dark` to render the app
+with fixture data (no Firebase/auth needed) — useful for visual work and screenshots.
+States: `main | empty | login | completion | skip | form-add | form-edit | category | toast`,
+plus `&theme=light|dark`. Entry: `src/design-preview.tsx` (dev-only, not in the production build).
+
+## UI Vocabulary
+
+In the UI, a **Chore** is a column/category (e.g. "Vacuuming") and a **Task** is an item inside it
+(e.g. "Living Room"). This is intentionally the reverse of the Firestore collection names
+(`categories` / `chores`) — keep the UI copy as-is.
+
 ## Notes
 
 - Only 2 users (household members) - no public signup

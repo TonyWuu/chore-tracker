@@ -13,7 +13,7 @@ export function Toast({ message, onClose }: ToastProps) {
   }, [onClose]);
 
   return (
-    <div className="toast">
+    <div className="toast" role="status" aria-live="polite">
       {message}
     </div>
   );

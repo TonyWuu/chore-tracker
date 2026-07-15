@@ -13,10 +13,9 @@ import {
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
-  horizontalListSortingStrategy
+  rectSortingStrategy
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
 import type { ChoreWithStatus, User, Completion } from '../lib/types';
 import type { Category } from '../hooks/useCategories';
 import { ChoreColumn } from './ChoreColumn';
@@ -236,19 +235,22 @@ export function ChoreList({
     <div className="chore-list-container" onClick={handleBackgroundClick}>
       {!hasContent ? (
         <div className="empty-state">
-          <p>No chores yet!</p>
-          <p className="empty-hint">Add your first chore to get started.</p>
+          <span className="empty-emoji" aria-hidden="true">✨</span>
+          <p>A fresh start!</p>
+          <p className="empty-hint">Add a chore like Vacuuming or Laundry, then fill it with tasks.</p>
+          <button className="empty-add-button" onClick={onAddCategory}>
+            ＋ Add your first chore
+          </button>
         </div>
       ) : (
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
-          modifiers={[restrictToHorizontalAxis]}
         >
           <SortableContext
             items={groupedChores.map(g => g.id)}
-            strategy={horizontalListSortingStrategy}
+            strategy={rectSortingStrategy}
           >
             <div className="chore-columns">
               {groupedChores.map(({ id, category, chores: categoryChores }) => (
@@ -293,7 +295,7 @@ export function ChoreList({
           </SortableContext>
         </DndContext>
       )}
-      <button className="add-chore-button" onClick={onAddCategory} title="Add chore">
+      <button className="add-chore-button" onClick={onAddCategory} aria-label="Add chore" title="Add chore">
         +
       </button>
     </div>

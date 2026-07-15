@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useEscape } from '../hooks/useEscape';
 import './ChoreForm.css';
 
 interface CategoryFormProps {
@@ -9,6 +10,8 @@ interface CategoryFormProps {
 export function CategoryForm({ onSave, onClose }: CategoryFormProps) {
   const [name, setName] = useState('');
   const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
+
+  useEscape(onClose);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,10 +38,16 @@ export function CategoryForm({ onSave, onClose }: CategoryFormProps) {
       onMouseDown={handleOverlayMouseDown}
       onMouseUp={handleOverlayMouseUp}
     >
-      <div className="modal-content" onMouseDown={() => setMouseDownOnOverlay(false)}>
+      <div
+        className="modal-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="category-form-title"
+        onMouseDown={() => setMouseDownOnOverlay(false)}
+      >
         <div className="modal-header">
-          <h2>Add Chore</h2>
-          <button className="close-button" onClick={onClose}>
+          <h2 id="category-form-title">Add Chore</h2>
+          <button className="close-button" onClick={onClose} aria-label="Close">
             &times;
           </button>
         </div>

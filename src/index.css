@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
-
 * {
   box-sizing: border-box;
 }
@@ -10,8 +8,21 @@
   --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
   font-family: var(--font-body);
-  line-height: 1.6;
-  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* Layout */
+  --gutter: 28px;
+  --header-height: 72px;
+
+  /* Spacing scale (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
 
   /* Light theme - Soft Candy palette */
   --bg-primary: #fef7f4;
@@ -19,67 +30,73 @@
   --bg-tertiary: #fff9f7;
   --bg-hover: #fff0eb;
   --bg-input: #ffffff;
-  --bg-pattern: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+  --overlay: rgba(45, 42, 50, 0.5);
+  --overlay-hover: rgba(0, 0, 0, 0.08);
 
   --text-primary: #2d2a32;
   --text-secondary: #4a4655;
-  --text-muted: #706b7a;
-  --text-faint: #9e99a7;
+  --text-muted: #6b6575;
+  --text-faint: #767081;
 
-  --border-light: rgba(255, 138, 101, 0.15);
-  --border-medium: #ffe4db;
+  --border-light: rgba(255, 138, 101, 0.18);
+  --border-medium: #f0cfc2;
   --border-focus: #ff8a65;
+  --card-highlight: transparent;
 
-  /* Coral/Peach primary with Teal accent */
+  /* Coral/Peach primary; dark plum ink carries text on candy fills */
   --accent-primary: #ff7b54;
   --accent-secondary: #ff6140;
-  --accent-tertiary: #20b2aa;
   --accent-bg: #fff0eb;
-  --accent-text: #e85d3a;
+  --accent-text: #d64524;
+  --accent-ink: #2d2a32;
   --accent-gradient: linear-gradient(135deg, #ff7b54 0%, #ffb347 50%, #ff6b6b 100%);
-  --accent-glow: rgba(255, 123, 84, 0.4);
+  --wordmark-gradient: linear-gradient(135deg, #f4511e 0%, #ef6c00 50%, #e53935 100%);
+  --accent-glow: rgba(255, 123, 84, 0.35);
 
-  /* Teal for secondary actions */
+  /* Teal - the "together" color */
   --teal-primary: #20b2aa;
   --teal-bg: #e6f7f6;
-  --teal-text: #0d8f87;
+  --teal-text: #0b6e68;
 
   --shadow-sm: 0 2px 8px rgba(255, 123, 84, 0.1);
   --shadow-md: 0 8px 24px rgba(255, 123, 84, 0.15);
   --shadow-lg: 0 16px 40px rgba(255, 123, 84, 0.2);
   --shadow-glow: 0 4px 20px var(--accent-glow);
 
-  /* Animation curves */
+  /* Motion */
   --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   --elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
   --smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 120ms;
+  --dur-base: 250ms;
+  --dur-slow: 400ms;
 
-  /* Status colors - softer, more playful */
+  /* Status colors - pastel chips, AA-passing text */
   --status-comfortable-bg: #e8f8ed;
-  --status-comfortable-text: #2a9d5c;
+  --status-comfortable-text: #1b7a43;
   --status-comfortable-dot: #34d399;
 
   --status-due-soon-bg: #fef6e6;
-  --status-due-soon-text: #d97706;
+  --status-due-soon-text: #9a5b00;
   --status-due-soon-dot: #fbbf24;
 
   --status-overdue-bg: #fef0f0;
-  --status-overdue-text: #e53e3e;
+  --status-overdue-text: #c92f2f;
   --status-overdue-dot: #f87171;
 
   --status-severe-bg: #fee2e2;
-  --status-severe-text: #c53030;
+  --status-severe-text: #b02626;
   --status-severe-dot: #ef4444;
 
   --delete-bg: #fff5f5;
   --delete-border: #fed7d7;
-  --delete-text: #e53e3e;
+  --delete-text: #c92f2f;
 
-  /* Radii - super rounded */
-  --radius-sm: 12px;
-  --radius-md: 18px;
-  --radius-lg: 24px;
-  --radius-xl: 32px;
+  /* Radii - rounded, but not balloon */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
   --radius-full: 9999px;
 
   color-scheme: light;
@@ -94,31 +111,36 @@
 
 [data-theme="dark"] {
   --bg-primary: #1a1620;
-  --bg-secondary: #241e2c;
-  --bg-tertiary: #2d2636;
-  --bg-hover: #362e42;
-  --bg-input: #241e2c;
+  --bg-secondary: #2a2334;
+  --bg-tertiary: #342c40;
+  --bg-hover: #3d3450;
+  --bg-input: #221c2b;
+  --overlay: rgba(10, 8, 14, 0.65);
+  --overlay-hover: rgba(255, 255, 255, 0.08);
 
   --text-primary: #f8f6fa;
   --text-secondary: #e4e0ea;
   --text-muted: #b8b2c2;
-  --text-faint: #8a8494;
+  --text-faint: #948da0;
 
-  --border-light: rgba(255, 138, 101, 0.2);
-  --border-medium: #3d3548;
+  /* Neutral hairlines carry edges in dark; coral is reserved for hover/focus */
+  --border-light: rgba(255, 255, 255, 0.07);
+  --border-medium: rgba(255, 255, 255, 0.14);
   --border-focus: #ff9a7a;
+  --card-highlight: rgba(255, 255, 255, 0.06);
 
   --accent-primary: #ff9a7a;
   --accent-secondary: #ff7b54;
-  --accent-tertiary: #5cd6ce;
   --accent-bg: rgba(255, 123, 84, 0.15);
   --accent-text: #ffb89e;
+  --accent-ink: #2d2a32;
   --accent-gradient: linear-gradient(135deg, #ff9a7a 0%, #ffc97a 50%, #ff8a8a 100%);
-  --accent-glow: rgba(255, 154, 122, 0.3);
+  --wordmark-gradient: linear-gradient(135deg, #ff9a7a 0%, #ffc97a 50%, #ff8a8a 100%);
+  --accent-glow: rgba(255, 154, 122, 0.25);
 
   --teal-primary: #5cd6ce;
   --teal-bg: rgba(92, 214, 206, 0.15);
-  --teal-text: #7eeae3;
+  --teal-text: #8eeee7;
 
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
@@ -150,29 +172,23 @@
   background-color: var(--bg-primary);
 }
 
+@media (max-width: 768px) {
+  :root {
+    --gutter: 16px;
+  }
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  min-height: 100dvh;
   position: relative;
-}
-
-/* Subtle texture overlay */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: var(--bg-pattern);
-  opacity: 0.02;
-  pointer-events: none;
-  z-index: 9999;
 }
 
 #root {
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* Display headings use Baloo 2 */
@@ -185,7 +201,7 @@ a {
   font-weight: 600;
   color: var(--accent-primary);
   text-decoration: none;
-  transition: color 0.2s var(--smooth);
+  transition: color var(--dur-base) var(--smooth);
 }
 
 a:hover {
@@ -200,29 +216,72 @@ input {
   font-family: var(--font-body);
 }
 
-/* Playful scrollbar */
+/* Keyboard focus ring */
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* "Together" — the teal couple accent */
+.together-chip {
+  display: inline-block;
+  color: var(--teal-text);
+  background: var(--teal-bg);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+/* Shared modal entrance */
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Slim playful scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-tertiary);
-  border-radius: var(--radius-full);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+  background: var(--border-medium);
   border-radius: var(--radius-full);
-  border: 2px solid var(--bg-tertiary);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-secondary);
+  background: var(--accent-primary);
 }
 
-/* Selection styling */
+/* Selection keeps native ink, coral wash */
 ::selection {
-  background: var(--accent-primary);
-  color: white;
+  background: rgba(255, 123, 84, 0.3);
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

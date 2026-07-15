@@ -1,11 +1,13 @@
 .app {
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg-primary);
 }
 
 .loading-screen,
 .loading-content {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,7 +15,8 @@
 }
 
 .loading-content {
-  min-height: calc(100vh - 73px);
+  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100dvh - var(--header-height));
 }
 
 .loading-spinner {
@@ -23,19 +26,16 @@
   border-top-color: var(--accent-primary);
   border-right-color: var(--teal-primary);
   border-radius: var(--radius-full);
-  animation: spinBounce 0.8s ease-in-out infinite;
+  animation: spin 0.8s linear infinite, spinnerPulse 1.6s ease-in-out infinite;
 }
 
-@keyframes spinBounce {
-  0% {
-    transform: rotate(0deg) scale(1);
-  }
-  50% {
-    transform: rotate(180deg) scale(1.1);
-  }
-  100% {
-    transform: rotate(360deg) scale(1);
-  }
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinnerPulse {
+  0%, 100% { scale: 1; }
+  50% { scale: 1.08; }
 }
 
 .celebration-overlay {
@@ -56,12 +56,11 @@
   font-family: var(--font-display);
   font-size: clamp(52px, 14vw, 90px);
   font-weight: 800;
-  background: var(--accent-gradient);
+  background: var(--wordmark-gradient);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 8px 40px var(--accent-glow);
   animation: celebrationPop 0.5s var(--elastic),
              gradientFlow 1.5s ease infinite;
   filter: drop-shadow(0 4px 20px var(--accent-glow));

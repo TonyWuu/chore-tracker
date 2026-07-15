@@ -71,24 +71,41 @@
 
 .login-title {
   margin: 0 0 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.login-icon {
+  font-size: 40px;
+  filter: drop-shadow(0 4px 12px var(--accent-glow));
+}
+
+.login-wordmark {
   font-family: var(--font-display);
   font-size: 48px;
-  font-weight: 800;
-  background: var(--accent-gradient);
+  font-weight: 700;
+  background: var(--wordmark-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   letter-spacing: -0.02em;
-  animation: titlePulse 3s ease-in-out infinite;
+  position: relative;
+  line-height: 1.25;
 }
 
-@keyframes titlePulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.02);
-  }
+/* Teal underline - same "together" accent as the header */
+.login-wordmark::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  right: 2px;
+  height: 5px;
+  background: var(--teal-primary);
+  border-radius: var(--radius-full);
+  opacity: 0.45;
 }
 
 .login-subtitle {
@@ -105,57 +122,26 @@
   justify-content: center;
   gap: 14px;
   width: 100%;
-  padding: 18px 32px;
+  padding: 17px 32px;
   background: var(--bg-secondary);
-  border: 3px solid var(--border-medium);
+  border: 1.5px solid var(--border-medium);
   border-radius: var(--radius-full);
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text-primary);
   cursor: pointer;
-  transition: all 0.3s var(--elastic);
+  transition: transform var(--dur-base) var(--elastic),
+              border-color var(--dur-base) var(--smooth),
+              box-shadow var(--dur-base) var(--smooth);
   box-shadow: var(--shadow-sm);
-  position: relative;
-  overflow: hidden;
-}
-
-.google-sign-in-button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--accent-gradient);
-  opacity: 0;
-  transition: opacity 0.3s var(--smooth);
 }
 
 .google-sign-in-button:hover {
   border-color: var(--accent-primary);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-4px) scale(1.02);
-}
-
-.google-sign-in-button:hover::before {
-  opacity: 0.05;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .google-sign-in-button:active {
   transform: scale(0.98);
-}
-
-/* Icon styling */
-.google-sign-in-button svg,
-.google-sign-in-button img {
-  position: relative;
-  z-index: 1;
-  transition: transform 0.3s var(--elastic);
-}
-
-.google-sign-in-button:hover svg,
-.google-sign-in-button:hover img {
-  transform: scale(1.1) rotate(-5deg);
-}
-
-.google-sign-in-button span {
-  position: relative;
-  z-index: 1;
 }

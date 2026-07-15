@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { format, addDays } from 'date-fns';
+import { useEscape } from '../hooks/useEscape';
 import './SkipModal.css';
 
 interface SkipModalProps {
@@ -15,8 +16,10 @@ export function SkipModal({ choreName, onResetFully, onSnoozeUntil, onClose }: S
   );
   const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
 
+  useEscape(onClose);
+
   const handleSnooze = () => {
-    onSnoozeUntil(new Date(selectedDate));
+    onSnoozeUntil(new Date(selectedDate + 'T12:00:00'));
   };
 
   const handleOverlayMouseDown = (e: React.MouseEvent) => {
@@ -38,8 +41,14 @@ export function SkipModal({ choreName, onResetFully, onSnoozeUntil, onClose }: S
       onMouseDown={handleOverlayMouseDown}
       onMouseUp={handleOverlayMouseUp}
     >
-      <div className="skip-modal" onMouseDown={() => setMouseDownOnOverlay(false)}>
-        <h3>Skip "{choreName}"?</h3>
+      <div
+        className="skip-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="skip-modal-title"
+        onMouseDown={() => setMouseDownOnOverlay(false)}
+      >
+        <h3 id="skip-modal-title">Reset or snooze “{choreName}”?</h3>
         <p>This chore is severely overdue. What would you like to do?</p>
 
         <div className="skip-options">
@@ -57,6 +66,7 @@ export function SkipModal({ choreName, onResetFully, onSnoozeUntil, onClose }: S
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
               min={format(new Date(), 'yyyy-MM-dd')}
+              aria-label="Snooze until date"
             />
             <button className="snooze-button" onClick={handleSnooze}>
               Snooze

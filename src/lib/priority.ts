@@ -36,6 +36,9 @@ export function calculateChoreStatus(
   // Status text shows when it was last done
   if (!lastCompletion) {
     statusText = 'Never done';
+  } else if (daysSinceLastDone < 0) {
+    // A snoozed chore's reset can sit in the future
+    statusText = 'Snoozed';
   } else if (daysSinceLastDone === 0) {
     statusText = 'Today';
   } else if (daysSinceLastDone === 1) {

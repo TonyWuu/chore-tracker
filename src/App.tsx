@@ -130,6 +130,7 @@ function App() {
   const celebrate = useCallback(() => {
     const duration = 800;
     const end = Date.now() + duration;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Show random congratulatory message
     const messages = [
@@ -147,6 +148,8 @@ function App() {
     const randomMessage = messages[Math.floor(Math.random() * messages.length)];
     setCelebrationMessage(randomMessage);
     setTimeout(() => setCelebrationMessage(null), 1500);
+
+    if (reducedMotion) return;
 
     const frame = () => {
       confetti({
@@ -200,7 +203,7 @@ function App() {
         message = 'Marked as done together!';
       } else if (completedBy.userId !== user.uid) {
         const completedByUser = users.get(completedBy.userId);
-        const name = completedByUser?.displayName?.split(' ')[0] || 'User';
+        const name = completedByUser?.displayName?.split(' ')[0] || 'your partner';
         message = `Marked as done by ${name}!`;
       }
       setToastMessage(message);
@@ -236,7 +239,7 @@ function App() {
       message = `${count} chores marked as done together!`;
     } else if (completedBy.userId !== user.uid) {
       const completedByUser = users.get(completedBy.userId);
-      const name = completedByUser?.displayName?.split(' ')[0] || 'User';
+      const name = completedByUser?.displayName?.split(' ')[0] || 'your partner';
       message = `${count} chores marked as done by ${name}!`;
     }
     setToastMessage(message);
@@ -257,10 +260,11 @@ function App() {
   };
 
   const handleSnoozeUntil = async (date: Date) => {
-    // For snooze, we create a completion record with the snooze date
-    // This effectively resets the timer to that date
-    if (!skippingChoreId || !user) return;
-    await skipChore(skippingChoreId, user.uid);
+    // Back-date the reset so the chore comes due again on the chosen day:
+    // due date = completedAt + maxDays, so completedAt = chosen day - maxDays.
+    if (!skippingChoreId || !user || !skippingChore) return;
+    const resetDate = new Date(date.getTime() - skippingChore.maxDays * 86_400_000);
+    await skipChore(skippingChoreId, user.uid, resetDate);
     setSkippingChoreId(null);
     setToastMessage(`Snoozed until ${date.toLocaleDateString()}`);
   };

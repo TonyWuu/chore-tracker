@@ -149,7 +149,7 @@ export function ChoreColumn({
     return completion.completedBy.map(id => {
       if (id === currentUserId) return 'You';
       const user = users.get(id);
-      return user?.displayName?.split(' ')[0] || 'Unknown';
+      return user?.displayName?.split(' ')[0] || 'Partner';
     }).join(', ');
   };
 
@@ -218,7 +218,12 @@ export function ChoreColumn({
         </div>
         <div className="column-actions">
           {onAddItem && (
-            <button className="column-add-btn" onClick={onAddItem} title="Add task">
+            <button
+              className="column-add-btn"
+              onClick={onAddItem}
+              aria-label={`Add task to ${title}`}
+              title="Add task"
+            >
               +
             </button>
           )}
@@ -232,19 +237,22 @@ export function ChoreColumn({
                     setShowDeleteConfirm(false);
                   }}
                 >
-                  Delete
+                  {chores.length > 0
+                    ? `Delete ${chores.length} ${chores.length === 1 ? 'task' : 'tasks'} + history`
+                    : 'Delete'}
                 </button>
                 <button
                   className="column-delete-no"
                   onClick={() => setShowDeleteConfirm(false)}
                 >
-                  Cancel
+                  Keep
                 </button>
               </div>
             ) : (
               <button
                 className="column-delete-btn"
                 onClick={() => setShowDeleteConfirm(true)}
+                aria-label={`Delete ${title}`}
                 title="Delete"
               >
                 ×
@@ -275,11 +283,6 @@ export function ChoreColumn({
                 </div>
                 <span className={`item-status-text ${getStatusColor(chore.status)}`}>
                   {chore.statusText}
-                  {chore.lastCompletion && chore.daysSinceLastDone >= 1 && (
-                    <span className="item-status-date">
-                      {' · '}{format(chore.lastCompletion.completedAt.toDate(), 'MMM d')}
-                    </span>
-                  )}
                 </span>
               </div>
 
@@ -287,18 +290,21 @@ export function ChoreColumn({
                 <div className="item-details">
                   {chore.lastCompletion && !chore.isOneTime && (
                     <p className="item-next-due">
-                      Next due:{' '}
-                      {(() => {
-                        const lastDone = chore.lastCompletion.completedAt.toDate();
-                        const nextDue = new Date(lastDone);
-                        nextDue.setDate(nextDue.getDate() + chore.maxDays);
-                        return format(nextDue, 'MMM d, yyyy');
-                      })()}
+                      Next due{' '}
+                      <strong className={chore.daysUntilOverdue < 0 ? getStatusColor(chore.status) : ''}>
+                        {(() => {
+                          const lastDone = chore.lastCompletion.completedAt.toDate();
+                          const nextDue = new Date(lastDone);
+                          nextDue.setDate(nextDue.getDate() + chore.maxDays);
+                          return format(nextDue, 'MMM d, yyyy');
+                        })()}
+                      </strong>
+                      {' · '}every {chore.maxDays} {chore.maxDays === 1 ? 'day' : 'days'}
                     </p>
                   )}
                   {!chore.lastCompletion && !chore.isOneTime && (
                     <p className="item-next-due">
-                      Due every {chore.maxDays} days
+                      Due every <strong>{chore.maxDays} {chore.maxDays === 1 ? 'day' : 'days'}</strong>
                     </p>
                   )}
                   <div className="item-actions">
@@ -385,11 +391,13 @@ export function ChoreColumn({
                                   }}
                                   title="Click to edit date"
                                 >
-                                  {format(completionDate, 'MMM d, yyyy h:mm a')}
+                                  {format(completionDate, 'MMM d, yyyy')}
                                 </span>
                               )}
                               <span className="history-who">
-                                {getCompletedByText(completion)}
+                                {completion.collaborative
+                                  ? <span className="together-chip">Together</span>
+                                  : getCompletedByText(completion)}
                               </span>
                               <button
                                 className="history-delete"
@@ -397,6 +405,7 @@ export function ChoreColumn({
                                   e.stopPropagation();
                                   onDeleteCompletion(completion.id);
                                 }}
+                                aria-label="Delete this entry"
                                 title="Delete this entry"
                               >
                                 ×

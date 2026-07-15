@@ -28,29 +28,28 @@ export function DueBanner({ chores }: DueBannerProps) {
   }
 
   const hasOverdue = overdueChores.length > 0;
+  const shown = hasOverdue ? overdueChores : dueChores;
+  const count = shown.length;
+  const headline = hasOverdue
+    ? `${count} overdue`
+    : `${count} due soon`;
 
   return (
     <div className={`due-banner ${hasOverdue ? 'overdue' : 'due-soon'}`}>
       <div className="due-banner-content">
-        <span className="due-banner-icon">{hasOverdue ? '⚠️' : '📋'}</span>
+        <span className="due-banner-icon" aria-hidden="true">{hasOverdue ? '⚠️' : '⏰'}</span>
         <div className="due-banner-text">
-          <strong>
-            {hasOverdue
-              ? `${overdueChores.length} overdue`
-              : `${dueChores.length} due soon`
-            }
-          </strong>
+          <strong>{headline}</strong>
           <span className="due-banner-items">
-            {dueChores.slice(0, 3).map(c =>
-              c.category ? `${c.category}: ${c.name}` : c.name
-            ).join(', ')}
-            {dueChores.length > 3 && ` +${dueChores.length - 3} more`}
+            {shown.slice(0, 3).map(c => c.name).join(', ')}
+            {shown.length > 3 && ` +${shown.length - 3} more`}
           </span>
         </div>
       </div>
       <button
         className="due-banner-dismiss"
         onClick={() => setDismissed(true)}
+        aria-label="Dismiss reminder"
         title="Dismiss"
       >
         ×

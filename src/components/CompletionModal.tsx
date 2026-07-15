@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
 import type { User } from '../lib/types';
+import { useEscape } from '../hooks/useEscape';
 import './CompletionModal.css';
 
 export type CompletedByOption = { type: 'user'; userId: string } | { type: 'together' };
@@ -13,10 +14,24 @@ interface CompletionModalProps {
   onClose: () => void;
 }
 
+function Avatar({ user, size = 'md' }: { user?: User; size?: 'md' | 'sm' }) {
+  const cls = `option-avatar ${size === 'sm' ? 'option-avatar-sm' : ''}`;
+  if (user?.photoURL) {
+    return <img className={cls} src={user.photoURL} alt="" />;
+  }
+  return (
+    <span className={`${cls} option-avatar-fallback`} aria-hidden="true">
+      {user?.displayName?.[0]?.toUpperCase() ?? '?'}
+    </span>
+  );
+}
+
 export function CompletionModal({ choreName, users, currentUserId, onComplete, onClose }: CompletionModalProps) {
   const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
   const [dateMode, setDateMode] = useState<'now' | 'custom'>('now');
   const [customDate, setCustomDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+
+  useEscape(onClose);
 
   const handleOverlayMouseDown = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -40,12 +55,15 @@ export function CompletionModal({ choreName, users, currentUserId, onComplete, o
     }
   };
 
-  // Get sorted list of users (current user first, then others alphabetically)
+  // Current user first, then others alphabetically
   const sortedUsers = Array.from(users.entries()).sort(([idA, userA], [idB, userB]) => {
     if (idA === currentUserId) return -1;
     if (idB === currentUserId) return 1;
     return (userA.displayName || '').localeCompare(userB.displayName || '');
   });
+
+  const currentUser = users.get(currentUserId);
+  const partner = sortedUsers.find(([id]) => id !== currentUserId)?.[1];
 
   return (
     <div
@@ -53,8 +71,14 @@ export function CompletionModal({ choreName, users, currentUserId, onComplete, o
       onMouseDown={handleOverlayMouseDown}
       onMouseUp={handleOverlayMouseUp}
     >
-      <div className="completion-modal" onMouseDown={() => setMouseDownOnOverlay(false)}>
-        <h3>Mark "{choreName}" as done</h3>
+      <div
+        className="completion-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="completion-modal-title"
+        onMouseDown={() => setMouseDownOnOverlay(false)}
+      >
+        <h3 id="completion-modal-title">Mark “{choreName}” as done</h3>
 
         <div className="completion-when">
           <span className="when-label">When?</span>
@@ -91,9 +115,9 @@ export function CompletionModal({ choreName, users, currentUserId, onComplete, o
               className={`completion-option ${userId === currentUserId ? '' : 'other-user'}`}
               onClick={() => handleComplete({ type: 'user', userId })}
             >
-              <span className="option-icon">👤</span>
+              <Avatar user={user} />
               <span className="option-text">
-                {userId === currentUserId ? 'Me' : user.displayName?.split(' ')[0] || 'User'}
+                {userId === currentUserId ? 'Me' : user.displayName?.split(' ')[0] || 'Partner'}
               </span>
             </button>
           ))}
@@ -102,7 +126,10 @@ export function CompletionModal({ choreName, users, currentUserId, onComplete, o
               className="completion-option collaborative"
               onClick={() => handleComplete({ type: 'together' })}
             >
-              <span className="option-icon">👥</span>
+              <span className="option-avatar-pair" aria-hidden="true">
+                <Avatar user={currentUser} size="sm" />
+                <Avatar user={partner} size="sm" />
+              </span>
               <span className="option-text">Together</span>
             </button>
           )}

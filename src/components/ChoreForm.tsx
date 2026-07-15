@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { ChoreWithStatus, Completion } from '../lib/types';
 import { format } from 'date-fns';
+import { useEscape } from '../hooks/useEscape';
 import './ChoreForm.css';
 
 interface ChoreFormProps {
@@ -36,6 +37,8 @@ export function ChoreForm({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
   const [editingCompletionId, setEditingCompletionId] = useState<string | null>(null);
+
+  useEscape(onClose);
 
   useEffect(() => {
     if (chore) {
@@ -90,14 +93,20 @@ export function ChoreForm({
       onMouseDown={handleOverlayMouseDown}
       onMouseUp={handleOverlayMouseUp}
     >
-      <div className="modal-content" onMouseDown={() => setMouseDownOnOverlay(false)}>
+      <div
+        className="modal-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="chore-form-title"
+        onMouseDown={() => setMouseDownOnOverlay(false)}
+      >
         <div className="modal-header">
-          <h2>
+          <h2 id="chore-form-title">
             {isEditing
               ? 'Edit Task'
               : `Add Task to ${presetCategory}`}
           </h2>
-          <button className="close-button" onClick={onClose}>
+          <button className="close-button" onClick={onClose} aria-label="Close">
             &times;
           </button>
         </div>
@@ -110,7 +119,7 @@ export function ChoreForm({
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g., Living Room, Bedroom, Kitchen"
+              placeholder="e.g., Living Room, Bedroom"
               autoFocus
             />
           </div>
@@ -192,16 +201,16 @@ export function ChoreForm({
                           onClick={() => onUpdateCompletionDate && setEditingCompletionId(completion.id)}
                           title={onUpdateCompletionDate ? 'Click to edit date' : undefined}
                         >
-                          {format(completionDate, 'MMM d, yyyy h:mm a')}
+                          {format(completionDate, 'MMM d, yyyy')}
                         </span>
                       )}
                       <span className="history-who">
                         {completion.collaborative
-                          ? 'Together'
+                          ? <span className="together-chip">Together</span>
                           : completion.completedBy.map(id => {
                               if (id === currentUserId) return 'You';
                               const user = users?.get(id);
-                              return user?.displayName?.split(' ')[0] || 'Unknown';
+                              return user?.displayName?.split(' ')[0] || 'Partner';
                             }).join(', ')}
                       </span>
                       {onDeleteCompletion && (
@@ -209,6 +218,7 @@ export function ChoreForm({
                           type="button"
                           className="history-delete"
                           onClick={() => onDeleteCompletion(completion.id)}
+                          aria-label="Delete this entry"
                           title="Delete this entry"
                         >
                           &times;

@@ -8,7 +8,10 @@ export function LoginScreen({ onSignIn }: LoginScreenProps) {
   return (
     <div className="login-screen">
       <div className="login-card">
-        <h1 className="login-title">Chore Tracker</h1>
+        <h1 className="login-title">
+          <span className="login-icon" aria-hidden="true">✨</span>
+          <span className="login-wordmark">Choresy</span>
+        </h1>
         <p className="login-subtitle">
           Keep track of household chores with your partner
         </p>
