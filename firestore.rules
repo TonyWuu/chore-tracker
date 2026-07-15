@@ -1,11 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // TODO: Replace with actual UIDs after first login
-    // Find your UID in Firebase Console > Authentication > Users
     function isHouseholdMember() {
       return request.auth != null &&
-             request.auth.uid in ['USER_1_UID', 'USER_2_UID'];
+             request.auth.uid in ['xEuUHmWcIWMARbDRRm92wnqdJNm2', 'f6sjxhcoQfNyJHuJb15wkVWvOl92'];
     }
 
     match /chores/{choreId} {
@@ -16,9 +14,13 @@ service cloud.firestore {
       allow read, write: if isHouseholdMember();
     }
 
+    match /categories/{categoryId} {
+      allow read, write: if isHouseholdMember();
+    }
+
     match /users/{userId} {
       allow read: if isHouseholdMember();
-      allow write: if request.auth.uid == userId;
+      allow write: if isHouseholdMember() && request.auth.uid == userId;
     }
   }
 }
